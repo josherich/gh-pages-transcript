@@ -1,0 +1,7 @@
+env.py
+client_secret.json
+queue.json
+.python-version
+.sesskey
+*.mp3
+*.mpeg
