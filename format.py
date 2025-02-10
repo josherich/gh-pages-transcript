@@ -1,7 +1,11 @@
 from env import *
 from openai import OpenAI
+from google import genai
 
 openai_client = OpenAI()
+g_client = genai.Client(api_key=os.getenv("G_TOKEN"))
+
+lm_provider = os.getenv("LM_PROVIDER", "google")
 
 def get_template():
     template = """add paragraphs to the text while keeping all the content, remove timestamps if any
@@ -13,17 +17,23 @@ def get_template():
 def format_transcript(transcription):
     content = get_template().format(content=transcription)
     print(f"------------ Runtime prompt:\n{content[0:100]} ... (length: {len(content)})")
-    response = openai_client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": content,
-            }
-        ],
-        model="gpt-4o-mini",
-        max_completion_tokens=16384, # max tokens for GPT-4o-mini
-    )
-    return response.choices[0].message.content
+    if lm_provider == "openai":
+        response = openai_client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": content,
+                }
+            ],
+            model="gpt-4o-mini",
+            max_completion_tokens=16384, # max tokens for GPT-4o-mini
+        )
+        return response.choices[0].message.content
+    elif lm_provider == "google":
+        response = g_client.models.generate_content(model='gemini-2.0-flash', contents=content)
+        return response.text
+    else:
+        raise Exception(f"Unsupported language model provider: {lm_provider}")
 
 if __name__ == "__main__":
     transcription = """0.919 - 7.241: our next speaker is Dr Norman JY Norman
