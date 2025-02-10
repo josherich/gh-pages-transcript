@@ -118,6 +118,7 @@ async def consumer():
                                 break
                         print(f"Consumer: Completed fetching raw transcription {item['url']}: {result[0:20]}")
                 else:
+                    result = item["transcript"]
                     print(f"Consumer: Fetching raw transcription from json {item['url']}: {result[0:20]}")
 
                 formatted_result = format_transcript(result) # format using llm
