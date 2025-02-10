@@ -13,6 +13,7 @@ os.environ['PCUSER'] = '' # Pocketcasts username
 os.environ['PCPW'] = '' # Pocketcasts password
 os.environ['GH_TOKEN'] = '' # GitHub token
 os.environ["OPENAI_API_KEY"] = '' # OpenAI API key
+os.environ['WHISPER_LOCAL'] = '~/whisper.cpp' # optional: whisper.cpp repo path
 ```
 
 3. Install dependencies

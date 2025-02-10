@@ -1,11 +1,13 @@
+import os
+import subprocess
 import requests
 from openai import OpenAI
 from pydub import AudioSegment
 from pydub.utils import make_chunks
-import os
 from env import *
 
 client = OpenAI()
+whisper_local = os.getenv("WHISPER_LOCAL", None)
 
 def download_audio(url, filename):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
@@ -13,7 +15,7 @@ def download_audio(url, filename):
     if response.status_code == 200:
         with open(filename, "wb") as file:
             file.write(response.content)
-        return split_mp3(filename)
+        return filename if whisper_local else split_mp3(filename)
     else:
         raise Exception(f"Failed to download file: {response.status_code}")
 
@@ -24,11 +26,33 @@ def transcribe_audio(file_path):
         print(f"Transcription for {file_path}: {response.text}")
         return response.text
 
+def transcribe_audio_with_local_whisper(file_path):
+    print(f"Transcribing w/ local whisper {file_path}")
+    convert_cmd = [
+        "ffmpeg", "-y", "-i", file_path,
+        "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", "temp_audio.wav"
+    ]
+    if not file_path.endswith(".wav"):
+        subprocess.run(convert_cmd, check=True)
+        file_path = "temp_audio.wav"
+
+    whisper_cmd = [
+        f"{whisper_local}/build/bin/whisper-cli", "-f", file_path,
+        "-m", f"{whisper_local}/models/ggml-large-v3-turbo-q5_0.bin",
+        "-t", "8", "--output-txt", "--no-prints", "-fa"
+    ]
+    subprocess.run(whisper_cmd, check=True)
+
+    with open("temp_audio.wav.txt", "r") as f:
+        transcription = f.read()
+
+    return [transcription]
+
 def transcribe_from_url(audio_url):
     local_filename = "temp_audio.mp3"
     try:
         part_names = download_audio(audio_url, local_filename)
-        transcriptions = [transcribe_audio(part_name) for part_name in part_names]
+        transcriptions = transcribe_audio_with_local_whisper(local_filename) if whisper_local else [transcribe_audio(part_name) for part_name in part_names]
         transcription_lines = "/n".join(transcriptions)
         return transcription_lines
     except Exception as e:
@@ -76,4 +100,4 @@ def split_mp3(input_path, output_prefix="output_part_", target_mb=20):
 if __name__ == "__main__":
     # Example Usage
     input_mp3 = "temp_audio.mp3"  # Replace with your file path
-    transcribe_from_url("http://alioss.gcores.com/uploads/audio/9451ecf4-5800-4325-b5c5-8df13608c18b.mp3")
+    print(transcribe_from_url("http://alioss.gcores.com/uploads/audio/9451ecf4-5800-4325-b5c5-8df13608c18b.mp3"))
