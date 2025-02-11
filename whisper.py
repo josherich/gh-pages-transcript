@@ -11,11 +11,13 @@ whisper_local = os.getenv("WHISPER_LOCAL", None)
 
 def download_audio(url, filename):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
+    url_extension = url.split(".")[-1]
+    filename_w_extension = f"{filename}.{url_extension}"
     response = requests.get(url, allow_redirects=True, headers=headers)
     if response.status_code == 200:
-        with open(filename, "wb") as file:
+        with open(filename_w_extension, "wb") as file:
             file.write(response.content)
-        return filename if whisper_local else split_mp3(filename)
+        return filename_w_extension if whisper_local else split_mp3(filename_w_extension)
     else:
         raise Exception(f"Failed to download file: {response.status_code}")
 
@@ -39,7 +41,7 @@ def transcribe_audio_with_local_whisper(file_path):
     whisper_cmd = [
         f"{whisper_local}/build/bin/whisper-cli", "-f", file_path,
         "-m", f"{whisper_local}/models/ggml-large-v3-turbo-q5_0.bin",
-        "-t", "8", "--output-txt", "--no-prints", "-fa"
+        "-t", "8", "--output-txt", "--no-prints"
     ]
     subprocess.run(whisper_cmd, check=True)
 
@@ -49,10 +51,10 @@ def transcribe_audio_with_local_whisper(file_path):
     return [transcription]
 
 def transcribe_from_url(audio_url):
-    local_filename = "temp_audio.mp3"
+    local_filename = "temp_audio"
     try:
         part_names = download_audio(audio_url, local_filename)
-        transcriptions = transcribe_audio_with_local_whisper(local_filename) if whisper_local else [transcribe_audio(part_name) for part_name in part_names]
+        transcriptions = transcribe_audio_with_local_whisper(part_names) if whisper_local else [transcribe_audio(part_name) for part_name in part_names]
         transcription_lines = "/n".join(transcriptions)
         return transcription_lines
     except Exception as e:
