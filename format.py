@@ -8,7 +8,7 @@ g_client = genai.Client(api_key=os.getenv("G_TOKEN"))
 lm_provider = os.getenv("LM_PROVIDER", "google")
 
 def get_template():
-    template = """add paragraphs to the text while keeping all the content, remove timestamps if any
+    template = """add paragraphs to the text while keeping all the content word by word:
 
 {content}
 """
