@@ -14,7 +14,7 @@ def get_template():
 """
     return template
 
-def format_transcript(transcription, n=2):
+def format_transcript(transcription, n=3):
     """split transcript into n parts and format each part"""
     lines = transcription.split("\n")
     line_num = len(lines)
@@ -24,10 +24,13 @@ def format_transcript(transcription, n=2):
 
     part_size = line_num // n
     parts = [lines[i:i+part_size] for i in range(0, line_num, part_size)]
-    formatted_parts = [format_transcript_part("\n".join(part)) for part in parts]
+    formatted_parts = [format_transcript_part("\n".join(part).strip()) for part in parts]
     return "\n".join(formatted_parts)
 
 def format_transcript_part(transcription):
+    if len(transcription) == 0:
+        return ""
+
     content = get_template().format(content=transcription)
     print(f"------------ Runtime prompt -----------\n{content[0:100]} ... \n(length: {len(content)})")
     print(f'---------------------------------------\n')
