@@ -24,33 +24,47 @@ def format_transcript(transcription, n=3):
 
     part_size = line_num // n
     parts = [lines[i:i+part_size] for i in range(0, line_num, part_size)]
-    formatted_parts = [format_transcript_part("\n".join(part).strip()) for part in parts]
+    formatted_parts = [format_transcript_part("\n".join(part).strip(), i+1) for i, part in enumerate(parts)]
     return "\n".join(formatted_parts)
 
-def format_transcript_part(transcription):
+def format_transcript_part(transcription, part_n=1):
     if len(transcription) == 0:
         return ""
 
     content = get_template().format(content=transcription)
     print(f"------------ Runtime prompt -----------\n{content[0:100]} ... \n(length: {len(content)})")
     print(f'---------------------------------------\n')
-    if lm_provider == "openai":
-        response = openai_client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": content,
-                }
-            ],
-            model="gpt-4o-mini",
-            max_completion_tokens=16384, # max tokens for GPT-4o-mini
-        )
-        return response.choices[0].message.content
-    elif lm_provider == "google":
-        response = g_client.models.generate_content(model='gemini-2.0-flash', contents=content)
-        return response.text
-    else:
-        raise Exception(f"Unsupported language model provider: {lm_provider}")
+    try:
+        if lm_provider == "openai":
+            response = openai_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": content,
+                    }
+                ],
+                model="gpt-4o-mini",
+                max_completion_tokens=16384, # max tokens for GPT-4o-mini
+            )
+            res = response.choices[0].message.content
+            if len(res.strip()) == 0:
+                raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
+
+            print(f"------------ Generated content -----------\n{res[0:100]} ... \n(length: {len(res)})")
+            return res
+        elif lm_provider == "google":
+            response = g_client.models.generate_content(model='gemini-2.0-flash', contents=content)
+            res = response.text
+            if len(res.strip()) == 0:
+                raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
+
+            print(f"------------ Generated content -----------\n{res[0:100]} ... \n(length: {len(res)})")
+            return res
+        else:
+            raise Exception(f"Unsupported language model provider: {lm_provider}")
+    except Exception as e:
+        print(f"Failed to generate content part {part_n}: {e}")
+        raise Exception(f"Failed to generate content part {part_n}: {e}")
 
 if __name__ == "__main__":
     transcription = """0.919 - 7.241: our next speaker is Dr Norman JY Norman
