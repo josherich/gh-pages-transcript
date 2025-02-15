@@ -14,7 +14,6 @@ def start_queue():
     except KeyboardInterrupt:
         print("Shutting down job queue...")
 
-
 EPISODES_FILE = "queue.json"
 
 def load_episodes():
@@ -29,9 +28,6 @@ def load_episodes():
 def save_episodes(data):
     with open(EPISODES_FILE, "w") as f:
         json.dump(data, f, indent=2)
-
-# Load episodes on startup
-episodes = load_episodes()
 
 app, rt = fast_app()
 
@@ -67,12 +63,13 @@ def episode_form(i, ep):
 
 @rt("/")
 def get():
+    episodes = load_episodes()
     forms = [episode_form(i, ep) for i, ep in enumerate(episodes)]
     return Container(Button('Pull History', hx_post='/pull', style='width: 100%; margin:1em 0; padding: 1em 0;'), *forms, style="max-width:800px; margin:auto; padding:1rem;")
 
 @rt("/update")
 def post(id: int, status: str, url: str):
-
+    episodes = load_episodes()
     episodes[id]["status"] = status
     episodes[id]["url"] = url
     save_episodes(episodes)
