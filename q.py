@@ -93,7 +93,7 @@ async def consumer():
     while True:
         try:
             urls = load_queue()
-            todo_items = [item for item in urls if item["status"] == "todo"]
+            todo_items = [item for item in urls if item["status"] == "queued"]
 
             if not todo_items:
                 print("Consumer: No URLs to process, sleeping...")

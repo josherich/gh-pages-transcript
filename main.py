@@ -43,6 +43,7 @@ def episode_form(i, ep):
                     Option("error", value="error", selected=(ep["status"]=="error")),
                     Option("todo",  value="todo",  selected=(ep["status"]=="todo")),
                     Option("queued",value="queued",selected=(ep["status"]=="queued")),
+                    Option("done",  value="done",  selected=(ep["status"]=="done")),
                     name="status"
                 ),
                 style="margin: 0.5rem 0;"
