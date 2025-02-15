@@ -83,6 +83,6 @@ def post():
     pull_history()
     return RedirectResponse('/', status_code=303)
 
-serve()
+serve(port=int(os.getenv('PORT', 5001)))
 
 # start_queue()
