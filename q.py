@@ -26,6 +26,32 @@ async def get_caption_worker(url: str, type='pocketcasts') -> None:
     print(f"Processed caption for URL {type}: {url}")
     return transcription
 
+def pull_history():
+    print("Fetching new Podcasts episode URLs...")
+    urls = get_pocketcasts_history()
+    current_urls = load_queue()
+    before_len = len(current_urls)
+    current_url_set = {item['url'] for item in current_urls}
+
+    # --------- Add Pocketcasts URLs ---------
+    for item in urls:
+        if item['url'] not in current_url_set:
+            current_urls.append({ 'type': 'pocketcasts', 'url': item['url'], 'status': 'todo', 'title': item['title'], 'published_date': item['published'].split('T')[0]})
+
+    after_len = len(current_urls)
+    print(f"Added {after_len - before_len} new Pocketcasts URLs to queue")
+
+    # ----------- Add Youtube URLs -----------
+    print("Fetching new Youtube liked video URLs...")
+    yt_urls = get_youtube_liked_videos()
+    for item in yt_urls:
+        if item['url'] not in current_url_set: # skip updating current_url_set since it's now all youtube urls
+            current_urls.append({ 'type': 'youtube', 'url': item['url'], 'status': 'todo', 'title': item['title'], 'published_date': item['published_date']})
+
+    save_queue(current_urls)
+    after_len_2 = len(current_urls)
+    print(f"Added {after_len_2 - after_len} new Youtube URLs to queue")
+
 def load_queue():
     try:
         if not QUEUE_FILE.exists():
@@ -53,31 +79,7 @@ async def producer():
         # Run at 12:00 ET
         if now.hour == 12 and now.minute == 0:
             try:
-                print("Fetching new Podcasts episode URLs...")
-                urls = get_pocketcasts_history()
-                current_urls = load_queue()
-                before_len = len(current_urls)
-                current_url_set = {item['url'] for item in current_urls}
-
-                # --------- Add Pocketcasts URLs ---------
-                for item in urls:
-                    if item['url'] not in current_url_set:
-                        current_urls.append({ 'type': 'pocketcasts', 'url': item['url'], 'status': 'todo', 'title': item['title'], 'published_date': item['published'].split('T')[0]})
-
-                after_len = len(current_urls)
-                print(f"Added {after_len - before_len} new Pocketcasts URLs to queue")
-
-                # ----------- Add Youtube URLs -----------
-                print("Fetching new Youtube liked video URLs...")
-                yt_urls = get_youtube_liked_videos()
-                for item in yt_urls:
-                    if item['url'] not in current_url_set: # skip updating current_url_set since it's now all youtube urls
-                        current_urls.append({ 'type': 'youtube', 'url': item['url'], 'status': 'todo', 'title': item['title'], 'published_date': item['published_date']})
-
-                save_queue(current_urls)
-                after_len_2 = len(current_urls)
-                print(f"Added {after_len_2 - after_len} new Youtube URLs to queue")
-
+                pull_history()
             except Exception as e:
                 print(f"Error in producer: {e}")
                 asyncio.sleep(60)
