@@ -41,7 +41,7 @@ def transcribe_audio_with_local_whisper(file_path):
     whisper_cmd = [
         f"{whisper_local}/build/bin/whisper-cli", "-f", file_path,
         "-m", f"{whisper_local}/models/ggml-large-v3-turbo-q5_0.bin",
-        "-t", "8", "--output-txt", "--no-prints"
+        "-t", "8", "--output-txt"
     ]
     subprocess.run(whisper_cmd, check=True)
 
