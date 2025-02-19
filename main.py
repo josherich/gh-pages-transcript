@@ -24,6 +24,7 @@ def load_episodes(status = None):
         episodes = json.load(f)
 
     # sort by published date
+    # use index as id if not present
     episodes = [{'id': i, **ep} for i, ep in enumerate(episodes)]
     episodes.sort(key=lambda x: x['published_date'], reverse=True)
     if status:
@@ -107,12 +108,18 @@ def get(status: str = 'todo'):
     )
 
 @rt("/update")
-def post(id: int, status: str, url: str):
+def post(id: str, status: str, url: str):
     episodes = load_episodes()
-    episodes[id]["status"] = status
-    episodes[id]["url"] = url
+    updated_ep = None
+    for ep in episodes:
+        if str(ep['id']) == id:
+            ep['status'] = status
+            ep['url'] = url
+            updated_ep = ep
+            break
+
     save_episodes(episodes)
-    return episode_form(id, episodes[id])
+    return episode_form(id, updated_ep)
 
 @rt("/new")
 def post(title: str, url: str):
