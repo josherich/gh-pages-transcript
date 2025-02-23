@@ -112,7 +112,7 @@ def post(id: str, status: str, url: str):
     episodes = load_episodes()
     updated_ep = None
     for ep in episodes:
-        if str(ep['id']) == id:
+        if ep['url'] == url:
             ep['status'] = status
             ep['url'] = url
             updated_ep = ep

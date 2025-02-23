@@ -19,7 +19,7 @@ def get_template():
 layout: post
 title: "{title}"
 date: {date} 00:00:01
-categories: short
+categories: podcast
 tags: [podcast_script]
 ---
 
