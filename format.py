@@ -16,7 +16,7 @@ def get_template():
     template = """add paragraphs to the text
 - keep all the content word by word
 - do not add any content or words
-- remove timestamps
+- remove timestamps (e.g. start second - duration second)
 - fix typos and punctuations
 - only give the final result
 (给以下文字分段
