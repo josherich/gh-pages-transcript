@@ -8,6 +8,9 @@ ollama_client = OpenAI(
     # required but ignored
     api_key='ollama',
 )
+basement_client = OpenAI(
+    base_url='http://192.168.1.31:1200/v1/',
+)
 g_client = genai.Client(api_key=os.getenv("G_TOKEN"))
 
 lm_provider = os.getenv("LM_PROVIDER", "google")
@@ -48,7 +51,7 @@ def format_transcript_part(transcription, part_n=1):
         return ""
 
     content = get_template().format(content=transcription)
-    print(f"------------ Runtime prompt -----------\n{content[0:100]} ... \n(length: {len(content)})")
+    print(f"------------ Runtime prompt {part_n} -----------\n{content[0:100]} ... \n(length: {len(content)})")
     print(f'---------------------------------------\n')
     try:
         if lm_provider == "openai":
@@ -87,6 +90,23 @@ def format_transcript_part(transcription, part_n=1):
         elif lm_provider == "google":
             response = g_client.models.generate_content(model='gemini-2.0-flash', contents=content)
             res = response.text
+            if len(res.strip()) == 0:
+                raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
+
+            print(f"------------ Generated content -----------\n{res[0:100]} ... \n(length: {len(res)})")
+            return res
+        elif lm_provider == "basement":
+            response = basement_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": content,
+                    }
+                ],
+                model="deepseek-ai/deepseek-llm-7b-chat",
+                max_completion_tokens=2096, # max tokens
+            )
+            res = response.choices[0].message.content
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
 

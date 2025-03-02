@@ -107,6 +107,7 @@ async def consumer():
                 if "transcript" not in item:
                     result = await get_caption_worker(item["url"], item['type'])
                     if result == None:
+                        urls = load_queue()
                         for queue_item in urls:
                             if queue_item["url"] == item["url"]:
                                 queue_item["status"] = 'error'
@@ -127,12 +128,13 @@ async def consumer():
                 pr_url, file_path = create_branch_and_pr(item["title"], formatted_result, item['published_date'])
                 print(f"Consumer: Created PR: {pr_url}")
 
+                urls = load_queue()
                 for queue_item in urls:
                     if queue_item["url"] == item["url"]:
                         queue_item["status"] = "done"
                         break
-
                 save_queue(urls)
+
             except Exception as e:
                 print(f"Error processing {item['url']}: {e}")
                 traceback.print_exc()
