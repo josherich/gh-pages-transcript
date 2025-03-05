@@ -15,13 +15,13 @@ from format import format_transcript
 
 QUEUE_FILE = Path('queue.json')
 
-async def get_caption_worker(url: str, type='pocketcasts') -> None:
+async def get_caption_worker(url: str, type='pocketcasts') -> str:
     print(f"Processing caption for URL {type}: {url}")
     transcription = None
     if type == 'pocketcasts':
         transcription = transcribe_from_url(url)
     elif type == 'youtube':
-        transcription = download_caption(url)
+        transcription = await download_caption(url)
 
     print(f"Processed caption for URL {type}: {url}")
     return transcription

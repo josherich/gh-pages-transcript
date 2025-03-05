@@ -128,7 +128,7 @@ def post(title: str, url: str):
         "id": uuid.uuid4().hex,
         "title": title,
         "url": url,
-        "type": "youtube" if "youtube" in url else "pocketcasts",
+        "type": "youtube" if ("youtube" in url or "bilibili" in url) else "pocketcasts",
         "status": "todo",
         "published_date": datetime.now().strftime("%Y-%m-%d")
     })

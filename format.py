@@ -20,12 +20,14 @@ def get_template():
 - keep all the content word by word
 - do not add any content or words
 - remove timestamps (e.g. start second - duration second)
+- remove filter words (e.g. um, uh, like, you know)
 - fix typos and punctuations
 - only give the final result
 (给以下文字分段
 - 原封不动保留所有文
 - 不添加原文以外的任何文
 - 删除时间戳
+- 删除填充词（如：嗯，啊，就是）
 - 只修正错别字和标点，
 - 只输出最终结果):
 
