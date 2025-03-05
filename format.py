@@ -1,15 +1,16 @@
+import os
 from env import *
 from openai import OpenAI
 from google import genai
 
 openai_client = OpenAI()
 ollama_client = OpenAI(
-    base_url='http://localhost:11434/v1/',
+    base_url=os.getenv("OLLAMA_URL"),
     # required but ignored
     api_key='ollama',
 )
 basement_client = OpenAI(
-    base_url='http://192.168.1.31:1200/v1/',
+    base_url=os.getenv("BASEMENT_URL"),
 )
 g_client = genai.Client(api_key=os.getenv("G_TOKEN"))
 

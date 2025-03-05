@@ -12,8 +12,17 @@ import os
 os.environ['PCUSER'] = '' # Pocketcasts username
 os.environ['PCPW'] = '' # Pocketcasts password
 os.environ['GH_TOKEN'] = '' # GitHub token
-os.environ["OPENAI_API_KEY"] = '' # OpenAI API key
 os.environ['WHISPER_LOCAL'] = '~/whisper.cpp' # optional: whisper.cpp repo path
+
+os.environ['LM_PROVIDER'] = 'openai' # optional: language model provider. openai|google|ollama|basement
+os.environ["OPENAI_API_KEY"] = '' # OpenAI API key
+os.environ['G_TOKEN'] = '' # Google API key
+os.environ['BASEMENT_URL'] = '' # optional: basement API URL
+os.environ['OLLAMA_URL'] = '' # optional: ollama API URL
+
+os.environ['BILIBILI_SESSDATA'] = '' # optional: Bilibili cookies SESSDATA
+os.environ['BILIBILI_BUVID3'] = '' # optional: Bilibili cookies BUVID3
+os.environ['BILIBILI_BILI_JCT'] = '' # optional: Bilibili cookies BILI_JCT
 ```
 
 3. Install dependencies
