@@ -16,6 +16,12 @@ g_client = genai.Client(api_key=os.getenv("G_TOKEN"))
 
 lm_provider = os.getenv("LM_PROVIDER", "google")
 
+# Here are some writing samples to ground your style and tone:
+# {samples}
+samples = [
+
+]
+
 def get_template():
     template = """add paragraphs to the text
 - keep all the content word by word
@@ -32,6 +38,22 @@ def get_template():
 - 只修正错别字和标点，
 - 只输出最终结果):
 
+{content}
+"""
+    return template
+
+def get_rewrite_template():
+    template = """Rewrite the following transcript part to a blog post.
+- don't overuse bullet points, although some are okay.
+- If you think a particular picture or screenshot might be interesting at a certain point, go ahead and put a placeholder with some kind of caption that indicates  what the picture might be.
+- This is part of the transcript, do not add introduction or conclusion if the part is in the middle.
+
+(将以下转录文字段落改写成博客文章段落
+- 不要过多使用列表，但是一些是可以的。
+- 如果您认为特定的图片或截图在某个地方可能很有趣，请放置一个占位符，并附上一些说明，指出图片可能是什么。
+- 这是转录文字的一部分，如果这部分在中间，请不要添加介绍或结论):
+
+transcript part(部分转录文字):
 {content}
 """
     return template
@@ -56,6 +78,9 @@ def format_transcript_part(transcription, part_n=1):
     content = get_template().format(content=transcription)
     print(f"------------ Runtime prompt {part_n} -----------\n{content[0:100]} ... \n(length: {len(content)})")
     print(f'---------------------------------------\n')
+    return answer_prompt(content, part_n)
+
+def answer_prompt(content, part_n=1):
     try:
         if lm_provider == "openai":
             response = openai_client.chat.completions.create(
@@ -121,13 +146,40 @@ def format_transcript_part(transcription, part_n=1):
         print(f"Failed to generate content part {part_n}: {e}")
         raise Exception(f"Failed to generate content part {part_n}: {e}")
 
+def rewrite_transcript(transcription, n=3):
+    lines = transcription.split("\n")
+    line_num = len(lines)
+
+    if line_num < 200:
+        return rewrite_transcript_part(transcription)
+
+    part_size = line_num // n
+    parts = [lines[i:i+part_size] for i in range(0, line_num, part_size)]
+    formatted_parts = [rewrite_transcript_part("\n".join(part).strip(), i+1) for i, part in enumerate(parts)]
+    return "\n".join(formatted_parts)
+
+def rewrite_transcript_part(transcription, part_n=1):
+    if len(transcription) == 0:
+        return ""
+
+    content = get_rewrite_template().format(content=transcription)
+    print(f"------------ Runtime prompt {part_n} -----------\n{content[0:100]} ... \n(length: {len(content)})")
+    print(f'---------------------------------------\n')
+    return answer_prompt(content, part_n)
+
 if __name__ == "__main__":
     transcription = 'test'
     with open('tests/cn-1.txt', 'r') as f:
         transcription = f.read()
 
     res = format_transcript(transcription)
-    print('-----------------\n')
+    print('----------------- format transcript cn-1 ---------------\n')
+    print('before n of lines: ', transcription.count('\n'))
+    print('after n of lines: ', res.count('\n'))
+    print(res)
+
+    res = rewrite_transcript(res)
+    print('----------------- rewrite transcript cn-1 --------------\n')
     print('before n of lines: ', transcription.count('\n'))
     print('after n of lines: ', res.count('\n'))
     print(res)
@@ -136,7 +188,13 @@ if __name__ == "__main__":
         transcription = f.read()
 
     res = format_transcript(transcription)
-    print('-----------------\n')
+    print('----------------- format transcript en-1 ---------------\n')
+    print('before n of lines: ', transcription.count('\n'))
+    print('after n of lines: ', res.count('\n'))
+    print(res)
+
+    res = rewrite_transcript(res)
+    print('----------------- rewrite transcript en-1 --------------\n')
     print('before n of lines: ', transcription.count('\n'))
     print('after n of lines: ', res.count('\n'))
     print(res)
