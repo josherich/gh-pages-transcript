@@ -11,7 +11,7 @@ from yt_liked import get_youtube_liked_videos
 from yt_subtitle import download_caption
 from whisper import transcribe_from_url
 from create_pr import create_branch_and_pr
-from format import format_transcript
+from format import format_transcript, rewrite_transcript
 
 QUEUE_FILE = Path('queue.json')
 
@@ -125,7 +125,8 @@ async def consumer():
                     print(f"Consumer: Fetching raw transcription from json {item['url']}: {result[0:20]}")
 
                 formatted_result = format_transcript(result) # format using llm
-                pr_url, file_path = create_branch_and_pr(item["title"], formatted_result, item['published_date'])
+                blog_post = rewrite_transcript(formatted_result) # rewrite to blog post
+                pr_url, file_path = create_branch_and_pr(item["title"], formatted_result + '\n\n---\n\n' + blog_post, item['published_date'])
                 print(f"Consumer: Created PR: {pr_url}")
 
                 urls = load_queue()

@@ -43,15 +43,28 @@ def get_template():
     return template
 
 def get_rewrite_template():
-    template = """Rewrite the following transcript part to a blog post.
-- don't overuse bullet points, although some are okay.
-- If you think a particular picture or screenshot might be interesting at a certain point, go ahead and put a placeholder with some kind of caption that indicates  what the picture might be.
+    template = """Rewrite the following transcript part for better readability.
+- Important!: rewrite MUST be done one paragraph at a time. Do not combine multiple paragraphs into one. Do not skip any paragraphs. Do not add any new information.
+- Use markdown syntax when it helps to improve readability.
+- Don't overuse bullet points, although some are okay.
+- If there are multiple speakers, add proper spearker labels, you can infer speaker's name from the context.
+- if it's a conversation, keep the conversation tone.
+- If you think a particular picture or screenshot might be interesting at a certain point, go ahead and put a placeholder with some kind of caption that indicates what the picture might be.
 - This is part of the transcript, do not add introduction or conclusion if the part is in the middle.
+- Use previous finished part if present, to keep consistency and improve transition.
 
-(将以下转录文字段落改写成博客文章段落
+(改写以下转录文字（部分），以提高可读性。
+- 重要！：改写必须逐段进行。不要将多个段落合并为一个。不要跳过任何段落。不要添加任何新信息。
+- 在有助于提高可读性的情况下使用 markdown 语法。
 - 不要过多使用列表，但是一些是可以的。
+- 如果有多个发言者，请添加说话人标签。
+- 如果这是对话，请保持对话的语气。
 - 如果您认为特定的图片或截图在某个地方可能很有趣，请放置一个占位符，并附上一些说明，指出图片可能是什么。
-- 这是转录文字的一部分，如果这部分在中间，请不要添加介绍或结论):
+- 这是转录文字的一部分，如果这部分在中间，请不要添加介绍或结论。
+- 如果有之前已完成的部分，请使用以保持一致性和改进过渡。):
+
+(Optional) Here's a previous finished part for consistency and transition(这是上一个已完成的结果，请保持一致性和过渡):
+{previous}
 
 transcript part(部分转录文字):
 {content}
@@ -155,14 +168,20 @@ def rewrite_transcript(transcription, n=3):
 
     part_size = line_num // n
     parts = [lines[i:i+part_size] for i in range(0, line_num, part_size)]
-    formatted_parts = [rewrite_transcript_part("\n".join(part).strip(), i+1) for i, part in enumerate(parts)]
+
+    previous_part = ''
+    formatted_parts = []
+    for i, part in enumerate(parts):
+        formatted_parts.append(rewrite_transcript_part("\n".join(part).strip(), i+1, previous_part))
+        previous_part = formatted_parts[-1]
+
     return "\n".join(formatted_parts)
 
-def rewrite_transcript_part(transcription, part_n=1):
+def rewrite_transcript_part(transcription, part_n=1, previous=''):
     if len(transcription) == 0:
         return ""
 
-    content = get_rewrite_template().format(content=transcription)
+    content = get_rewrite_template().format(content=transcription, previous=previous)
     print(f"------------ Runtime prompt {part_n} -----------\n{content[0:100]} ... \n(length: {len(content)})")
     print(f'---------------------------------------\n')
     return answer_prompt(content, part_n)
