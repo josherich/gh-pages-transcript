@@ -71,6 +71,44 @@ transcript part(部分转录文字):
 """
     return template
 
+def get_extract_toc_template():
+    template = """generate a table of contents for the following text
+- also give the first sentence for each section
+- give each section's title and level
+
+{content}
+"""
+    return template
+
+def get_extract_toc_schema():
+    return {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "first_sentence": {
+                  "type": "string"
+                },
+                "section_title": {
+                  "type": "string"
+                },
+                "section_level": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "first_sentence",
+                "section_title",
+                "section_level"
+              ]
+            }
+          }
+        }
+      }
+
 def format_transcript(transcription, n=3):
     """split transcript into n parts and format each part"""
     lines = transcription.split("\n")
@@ -92,6 +130,15 @@ def format_transcript_part(transcription, part_n=1):
     print(f"------------ Runtime prompt {part_n} -----------\n{content[0:100]} ... \n(length: {len(content)})")
     print(f'---------------------------------------\n')
     return answer_prompt(content, part_n)
+
+def answer_prompt_w_schema(content, schema):
+    response = g_client.models.generate_content(model='gemini-2.0-flash', contents=content, config={
+      'responseSchema': schema,
+      'response_mime_type': 'application/json'
+    })
+    res = response.text
+    return res
+
 
 def answer_prompt(content, part_n=1):
     try:
@@ -186,6 +233,12 @@ def rewrite_transcript_part(transcription, part_n=1, previous=''):
     print(f'---------------------------------------\n')
     return answer_prompt(content, part_n)
 
+def extract_toc(text):
+    runtime_prompt = get_extract_toc_template().format(content=text)
+    print(f"------------ Runtime prompt -----------\n{runtime_prompt[0:100]} ... \n(length: {len(runtime_prompt)})")
+    print(f'---------------------------------------\n')
+    return answer_prompt_w_schema(runtime_prompt, get_extract_toc_schema())
+
 if __name__ == "__main__":
     transcription = 'test'
     with open('tests/cn-1.txt', 'r') as f:
@@ -197,11 +250,15 @@ if __name__ == "__main__":
     print('after n of lines: ', res.count('\n'))
     print(res)
 
-    res = rewrite_transcript(res)
+    rewrite = rewrite_transcript(res)
     print('----------------- rewrite transcript cn-1 --------------\n')
     print('before n of lines: ', transcription.count('\n'))
-    print('after n of lines: ', res.count('\n'))
-    print(res)
+    print('after n of lines: ', rewrite.count('\n'))
+    print(rewrite)
+
+    toc = extract_toc(res)
+    print('----------------- extract toc cn-1 ---------------\n')
+    print(toc)
 
     with open('tests/en-1.txt', 'r') as f:
         transcription = f.read()
@@ -212,8 +269,13 @@ if __name__ == "__main__":
     print('after n of lines: ', res.count('\n'))
     print(res)
 
-    res = rewrite_transcript(res)
+    rewrite = rewrite_transcript(res)
     print('----------------- rewrite transcript en-1 --------------\n')
     print('before n of lines: ', transcription.count('\n'))
-    print('after n of lines: ', res.count('\n'))
-    print(res)
+    print('after n of lines: ', rewrite.count('\n'))
+    print(rewrite)
+
+    toc = extract_toc(res)
+    print('----------------- extract toc en-1 ---------------\n')
+    print(toc)
+
