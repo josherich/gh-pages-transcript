@@ -73,8 +73,9 @@ transcript part(部分转录文字):
 
 def get_extract_toc_template():
     template = """generate a table of contents for the following text
-- also give the first sentence for each section
-- give each section's title and level
+- give the first sentence, or at least 10 words (exact words) for each section, put it in index_sentences
+- organize contents to sections and subsections
+- give each section's title and list level (1 to 5)
 
 {content}
 """
@@ -89,7 +90,7 @@ def get_extract_toc_schema():
             "items": {
               "type": "object",
               "properties": {
-                "first_sentence": {
+                "index_sentences": {
                   "type": "string"
                 },
                 "section_title": {
@@ -100,7 +101,7 @@ def get_extract_toc_schema():
                 }
               },
               "required": [
-                "first_sentence",
+                "index_sentences",
                 "section_title",
                 "section_level"
               ]
