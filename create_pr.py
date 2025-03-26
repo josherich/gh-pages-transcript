@@ -91,7 +91,7 @@ def create_branch_and_pr(title, transcription, date):
     return pr_url, file_path
 
 def format_pr_content(title, url, transcript, rewritten, toc):
-    return f'\n[{title.gsub("|", " ")}]({url})\n\n' + transcript + '\n\n---\n\n > This is an experimental rewrite\n' + rewritten + f'\n\n<script>window.tocIndex = {toc}\n</script>'
+    return f'\n[{title.replace("|", " ")}]({url})\n\n' + transcript + '\n\n---\n\n > This is an experimental rewrite\n' + rewritten + f'\n\n<script>window.tocIndex = {toc}\n</script>'
 
 if __name__ == "__main__":
     title = "Test Podcast"
