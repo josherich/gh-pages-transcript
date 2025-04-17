@@ -15,11 +15,11 @@ from format import format_transcript, rewrite_transcript, extract_toc
 
 QUEUE_FILE = Path('queue.json')
 
-async def get_caption_worker(url: str, type='pocketcasts') -> str:
+async def get_caption_worker(url: str, show_notes: str, type='pocketcasts'):
     print(f"Processing caption for URL {type}: {url}")
     transcription = None
     if type == 'pocketcasts':
-        transcription = transcribe_from_url(url)
+        transcription = transcribe_from_url(url, show_notes)
     elif type == 'youtube':
         transcription = await download_caption(url)
 
@@ -28,7 +28,7 @@ async def get_caption_worker(url: str, type='pocketcasts') -> str:
 
 def pull_history():
     print("Fetching new Podcasts episode URLs...")
-    urls = get_pocketcasts_history()
+    urls, _ = get_pocketcasts_history()
     current_urls = load_queue()
     before_len = len(current_urls)
     current_url_set = {item['url'] for item in current_urls}
@@ -36,7 +36,15 @@ def pull_history():
     # --------- Add Pocketcasts URLs ---------
     for item in urls:
         if item['url'] not in current_url_set:
-            current_urls.append({ 'type': 'pocketcasts', 'url': item['url'], 'status': 'todo', 'title': item['title'], 'published_date': item['published'].split('T')[0]})
+            current_urls.append({
+                'type': 'pocketcasts',
+                'url': item['url'],
+                'status': 'todo',
+                'title': item['title'],
+                'author': item['author'],
+                'pod_notes': item['pod_notes'],
+                'episode_notes': item['episode_notes'],
+                'published_date': item['published'].split('T')[0]})
 
     after_len = len(current_urls)
     print(f"Added {after_len - before_len} new Pocketcasts URLs to queue")
@@ -46,7 +54,12 @@ def pull_history():
     yt_urls = get_youtube_liked_videos()
     for item in yt_urls:
         if item['url'] not in current_url_set: # skip updating current_url_set since it's now all youtube urls
-            current_urls.append({ 'type': 'youtube', 'url': item['url'], 'status': 'todo', 'title': item['title'], 'published_date': item['published_date']})
+            current_urls.append({
+                'type': 'youtube',
+                'url': item['url'],
+                'status': 'todo',
+                'title': item['title'],
+                'published_date': item['published_date']})
 
     save_queue(current_urls)
     after_len_2 = len(current_urls)
@@ -105,7 +118,8 @@ async def consumer():
 
             try:
                 if "transcript" not in item:
-                    result = await get_caption_worker(item["url"], item['type'])
+                    show_notes = f"Podcast title: {item['pod_notes']}\nShow notes: {item['episode_notes']}" if item['type'] == 'pocketcasts' else ''
+                    result = await get_caption_worker(item["url"], show_notes, item['type'])
                     if result == None:
                         urls = load_queue()
                         for queue_item in urls:

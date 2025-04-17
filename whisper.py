@@ -28,8 +28,8 @@ def transcribe_audio(file_path):
         print(f"Transcription for {file_path}: {response.text}")
         return response.text
 
-def transcribe_audio_with_local_whisper(file_path):
-    print(f"Transcribing w/ local whisper {file_path}")
+def transcribe_audio_with_local_whisper(file_path, show_notes):
+    print(f"Transcribing w/ local whisper {file_path} with show notes {show_notes}")
     convert_cmd = [
         "ffmpeg", "-y", "-i", file_path,
         "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", "temp_audio.wav"
@@ -41,6 +41,7 @@ def transcribe_audio_with_local_whisper(file_path):
     whisper_cmd = [
         f"{whisper_local}/build/bin/whisper-cli", "-f", file_path,
         "-m", f"{whisper_local}/models/ggml-large-v3-turbo-q5_0.bin",
+        "--prompt", f'"{show_notes}"',
         "-t", "8", "--output-txt"
     ]
     subprocess.run(whisper_cmd, check=True)
@@ -50,11 +51,11 @@ def transcribe_audio_with_local_whisper(file_path):
 
     return [transcription]
 
-def transcribe_from_url(audio_url):
+def transcribe_from_url(audio_url, show_notes):
     local_filename = "temp_audio"
     try:
         part_names = download_audio(audio_url, local_filename)
-        transcriptions = transcribe_audio_with_local_whisper(part_names) if whisper_local else [transcribe_audio(part_name) for part_name in part_names]
+        transcriptions = transcribe_audio_with_local_whisper(part_names, show_notes) if whisper_local else [transcribe_audio(part_name) for part_name in part_names]
         transcription_lines = "/n".join(transcriptions)
         return transcription_lines
     except Exception as e:
@@ -102,4 +103,4 @@ def split_mp3(input_path, output_prefix="output_part_", target_mb=20):
 if __name__ == "__main__":
     # Example Usage
     input_mp3 = "temp_audio.mp3"  # Replace with your file path
-    print(transcribe_from_url("http://alioss.gcores.com/uploads/audio/9451ecf4-5800-4325-b5c5-8df13608c18b.mp3"))
+    print(transcribe_from_url("http://alioss.gcores.com/uploads/audio/9451ecf4-5800-4325-b5c5-8df13608c18b.mp3", 'gcores'))

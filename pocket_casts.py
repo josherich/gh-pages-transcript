@@ -1,5 +1,14 @@
 import os
 import requests
+import json
+from pathlib import Path
+
+from env import *
+
+WHISPER_CONTEXT_FILE = Path('whisper_context.json')
+whisper_context = {}
+with open(WHISPER_CONTEXT_FILE, 'r') as f:
+    whisper_context = json.load(f)
 
 pocketcasts_user = os.environ['PCUSER']
 pocketcasts_pw = os.environ['PCPW']
@@ -25,6 +34,27 @@ samples = [{
     "bookmarks": []
 }]
 
+# https://github.com/furgoose/Pocket-Casts/blob/master/pocketcasts/api.py
+episode_notes_cache: dict[str, str] = {}
+def get_pocketcasts_episode_notes(pod_uuid, episode_uuid):
+    if episode_uuid in episode_notes_cache:
+        return episode_notes_cache[episode_uuid]
+
+    print(f'Fetching show notes for {pod_uuid} ...')
+    notes_url = f'https://podcast-api.pocketcasts.com/mobile/show_notes/full/{pod_uuid}'
+    response = requests.get(notes_url, allow_redirects=True)
+    response_data = response.json()
+    episodes = response_data['podcast']['episodes']
+    for ep in episodes:
+        episode_notes_cache[ep['uuid']] = ep['show_notes']
+
+    return episode_notes_cache.get(episode_uuid, None)
+
+def get_show_notes(pod_title, pod_uuid, episode_uuid):
+    author_notes = whisper_context[pod_title] if pod_title in whisper_context else pod_title
+    episode_notes = get_pocketcasts_episode_notes(pod_uuid, episode_uuid)
+    return author_notes, episode_notes
+
 def get_pocketcasts_history():
     login_url = "https://api.pocketcasts.com/user/login"
     login_payload = {
@@ -43,4 +73,17 @@ def get_pocketcasts_history():
 
     history_response = requests.post(history_url, headers=history_headers)
     history = history_response.json()
-    return history["episodes"]
+    episodes = history['episodes']
+
+    for ep in episodes:
+        ep['pod_notes'], ep['episode_notes'] = get_show_notes(ep['podcastTitle'], ep['podcastUuid'], ep['uuid'])
+
+    return episodes, token
+
+if __name__ == "__main__":
+    episodes, token = get_pocketcasts_history()
+    episode = episodes[0]
+    print('episode: ', episode)
+    author_notes, episode_notes = get_show_notes(episode['podcastTitle'], episode['podcastUuid'], episode['uuid'])
+    print('author_notes: ', author_notes)
+    print('episode_notes: ', episode_notes)
