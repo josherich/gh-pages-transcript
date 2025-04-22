@@ -16,12 +16,19 @@ def authenticate_youtube():
         auth_url, __ = flow.authorization_url(prompt="consent")
 
         print(f"Open this URL in your browser: {auth_url}")
-        code = input('Enter the authorization code: ')
-        token = flow.fetch_token(code=code)
-        print(f"Obtained token: {token}")
-        credential = flow.credentials
+        return None
 
     return build("youtube", "v3", credentials=credential)
+
+def authenticate_youtube_from_code(code):
+    global credential
+    if credential is not None:
+        return
+    flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+    flow.redirect_uri = 'http://localhost:5002/oauth'
+    token = flow.fetch_token(code=code)
+    print(f"Obtained token: {token}")
+    credential = flow.credentials
 
 def get_liked_videos(youtube):
     request = youtube.playlistItems().list(

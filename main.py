@@ -4,11 +4,13 @@ import uuid
 
 from fasthtml.common import *
 from fastcore.utils import *
-from q import pull_history
 import asyncio
+import json
 
 from q import main
-import json
+from q import pull_history
+from yt_liked import authenticate_youtube_from_code, authenticate_youtube
+
 
 def start_queue():
     try:
@@ -101,7 +103,7 @@ def get(status: str = 'todo'):
             A(B("error") if status == 'error' else 'error', href="/?status=error"), " | ",
             A(B("skip") if status == 'skip' else 'skip', href="/?status=skip"),
         ),
-        Button('Pull History', hx_post='/pull', style='width: 100%; margin:1em 0; padding: 0.5em 0;'),
+        Button('Pull History', hx_post='/pull', hx_swap='none', style='width: 100%; margin:1em 0; padding: 0.5em 0;'),
         new_episode_form(),
         Div(*forms, id="episodes"),
         style="max-width:800px; margin:auto; padding:1rem;"
@@ -140,6 +142,14 @@ def post():
     pull_history()
     return RedirectResponse('/', status_code=303)
 
+@rt("/oauth")
+def get(request):
+    code = request.query_params.get('code')
+    print('code: ', code)
+    authenticate_youtube_from_code(code)
+    return RedirectResponse('/', status_code=303)
+
 serve(port=int(os.getenv('PORT', 5001)))
 
+authenticate_youtube()
 # start_queue()
