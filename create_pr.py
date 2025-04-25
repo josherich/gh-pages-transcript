@@ -9,7 +9,7 @@ GITHUB_TOKEN = os.environ['GH_TOKEN']
 
 REPO_NAME = "josherich/blog"
 BRANCH_NAME = "gh-pages"
-POSTS_FOLDER = "_posts"
+POSTS_FOLDER = "_posts/podcast"
 
 BASE_URL = "https://api.github.com/repos"
 
@@ -90,8 +90,12 @@ def create_branch_and_pr(title, transcription, date):
 
     return pr_url, file_path
 
-def format_pr_content(title, url, transcript, rewritten, toc):
-    return f'\n[{title.replace("|", " ")}]({url})\n\n' + transcript + '\n\n---\n\n> This is an experimental rewrite\n\n' + rewritten + f'\n\n<script>window.tocIndex = {toc}\n</script>'
+def format_pr_content(title, url, transcript, rewritten, toc, faq):
+    return (f'\n[{title.replace("|", " ")}]({url})\n\n' +
+        transcript +
+        '\n\n---\n\n> This is an experimental rewrite\n\n' +
+        rewritten +
+        f'\n\n<script>window.tocIndex = {toc};\nwindow.faq = {faq};\n</script>')
 
 if __name__ == "__main__":
     title = "Test Podcast"

@@ -110,6 +110,47 @@ def get_extract_toc_schema():
         }
       }
 
+def get_faq_template():
+    template = """Generate a list of questions (5 to 10) and answers for the following text
+- give the first sentence, or at least 10 words (exact words) for each answer's source, put it in index_of_source so that the answer's source can be located.
+- ask questions about main arguments or points of interest.
+- ask questions about unintuitive things in the content.
+- ask questions about potential contradictions.
+- ask whys and hows questions not directly addressed by the content.
+
+{content}
+"""
+    return template
+
+def get_faq_schema():
+    return {
+        "type": "object",
+        "properties": {
+          "qas": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string"
+                },
+                "index_of_source": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "question",
+                "answer",
+                "index_of_source"
+              ]
+            }
+          }
+        }
+      }
+
 def format_transcript(transcription, n=3):
     """split transcript into n parts and format each part"""
     lines = transcription.split("\n")
@@ -133,7 +174,7 @@ def format_transcript_part(transcription, part_n=1):
     return answer_prompt(content, part_n)
 
 def answer_prompt_w_schema(content, schema):
-    response = g_client.models.generate_content(model='gemini-2.0-flash', contents=content, config={
+    response = g_client.models.generate_content(model='gemini-2.5-flash-preview-04-17', contents=content, config={
       'responseSchema': schema,
       'response_mime_type': 'application/json'
     })
@@ -239,6 +280,12 @@ def extract_toc(text):
     print(f"------------ Runtime prompt -----------\n{runtime_prompt[0:100]} ... \n(length: {len(runtime_prompt)})")
     print(f'---------------------------------------\n')
     return answer_prompt_w_schema(runtime_prompt, get_extract_toc_schema())
+
+def extract_faq(text):
+    runtime_prompt = get_faq_template().format(content=text)
+    print(f"------------ Runtime prompt -----------\n{runtime_prompt[0:100]} ... \n(length: {len(runtime_prompt)})")
+    print(f'---------------------------------------\n')
+    return answer_prompt_w_schema(runtime_prompt, get_faq_schema())
 
 if __name__ == "__main__":
     transcription = 'test'
