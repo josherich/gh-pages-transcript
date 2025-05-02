@@ -140,7 +140,8 @@ async def consumer():
                     print(f"Consumer: Fetching raw transcription from json {item['url']}: {result[0:20]}")
 
                 formatted_result = format_transcript(result) # format using llm
-                blog_post = rewrite_transcript(formatted_result) # rewrite to blog post
+                # blog_post = rewrite_transcript(formatted_result) # rewrite to blog post
+                blog_post = ''
                 toc = extract_toc(formatted_result) # extract table of contents
                 faq = extract_faq(formatted_result) # extract faq
                 pr_url, file_path = create_branch_and_pr(item["title"], format_pr_content(item['title'], item['url'], formatted_result, blog_post, toc, faq), item['published_date'])
