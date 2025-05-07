@@ -157,6 +157,13 @@ async def consumer():
             except Exception as e:
                 print(f"Error processing {item['url']}: {e}")
                 traceback.print_exc()
+                # mark error and skip, e.g. yt fail to download subtitle
+                urls = load_queue()
+                for queue_item in urls:
+                    if queue_item["url"] == item["url"]:
+                        queue_item["status"] = "error"
+                        break
+                save_queue(urls)
                 await asyncio.sleep(60)
 
         except Exception as e:
