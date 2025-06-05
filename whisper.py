@@ -1,5 +1,6 @@
 import os
 import subprocess
+import asyncio
 import requests
 from openai import OpenAI
 from pydub import AudioSegment
@@ -10,52 +11,83 @@ client = OpenAI()
 whisper_local = os.getenv("WHISPER_LOCAL", None)
 
 def download_audio(url, filename):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
+    headers = {
+        'User-Agent': (
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/56.0.2924.76 Safari/537.36'
+        )
+    }
     url_extension = url.split(".")[-1]
-    filename_w_extension = f"{filename}.{url_extension}"
+    filename_with_ext = f"{filename}.{url_extension}"
+
     response = requests.get(url, allow_redirects=True, headers=headers)
-    if response.status_code == 200:
-        with open(filename_w_extension, "wb") as file:
-            file.write(response.content)
-        return filename_w_extension if whisper_local else split_mp3(filename_w_extension)
-    else:
+    if response.status_code != 200:
         raise Exception(f"Failed to download file: {response.status_code}")
+
+    with open(filename_with_ext, "wb") as file:
+        file.write(response.content)
+    if whisper_local:
+        return filename_with_ext
+    else:
+        return split_mp3(filename_with_ext)
 
 def transcribe_audio(file_path):
     print(f"Transcribing {file_path}")
     with open(file_path, "rb") as audio_file:
-        response = client.audio.transcriptions.create(model="whisper-1", file=audio_file)
+        response = client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file
+        )
         print(f"Transcription for {file_path}: {response.text}")
         return response.text
 
-def transcribe_audio_with_local_whisper(file_path, show_notes):
+async def transcribe_audio_with_local_whisper(file_path, show_notes):
     print(f"Transcribing w/ local whisper {file_path} with show notes {show_notes}")
-    convert_cmd = [
-        "ffmpeg", "-y", "-i", file_path,
-        "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", "temp_audio.wav"
-    ]
+
     if not file_path.endswith(".wav"):
+        convert_cmd = [
+            "ffmpeg", "-y", "-i", file_path,
+            "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", "temp_audio.wav"
+        ]
         subprocess.run(convert_cmd, check=True)
         file_path = "temp_audio.wav"
 
     whisper_cmd = [
-        f"{whisper_local}/build/bin/whisper-cli", "-f", file_path,
+        f"{whisper_local}/build/bin/whisper-cli",
+        "-f", file_path,
         "-m", f"{whisper_local}/models/ggml-large-v3-turbo-q5_0.bin",
         "--prompt", f'"{show_notes}"',
-        "-t", "8", "--output-txt"
+        "-t", "8",
+        "--output-txt"
     ]
-    subprocess.run(whisper_cmd, check=True)
 
+    proc = await asyncio.create_subprocess_exec(
+        *whisper_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    stdout, stderr = await proc.communicate()
+
+    if stdout:
+        print(f'[stdout]\n{stdout.decode()}')
+    if stderr:
+        print(f'[stderr]\n{stderr.decode()}')
+
+    # FIXME: Race condition: might be overwritten by the other process
     with open("temp_audio.wav.txt", "r") as f:
         transcription = f.read()
 
     return [transcription]
 
-def transcribe_from_url(audio_url, show_notes):
+async def transcribe_from_url(audio_url, show_notes):
     local_filename = "temp_audio"
     try:
         part_names = download_audio(audio_url, local_filename)
-        transcriptions = transcribe_audio_with_local_whisper(part_names, show_notes) if whisper_local else [transcribe_audio(part_name) for part_name in part_names]
+        if whisper_local:
+            transcriptions = await transcribe_audio_with_local_whisper(part_names, show_notes)
+        else:
+            transcriptions = [transcribe_audio(part_name) for part_name in part_names]
         transcription_lines = "/n".join(transcriptions)
         return transcription_lines
     except Exception as e:

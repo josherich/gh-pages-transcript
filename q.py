@@ -20,7 +20,7 @@ async def get_caption_worker(url: str, show_notes: str, type='pocketcasts'):
     print(f"Processing caption for URL {type}: {url}")
     transcription = None
     if type == 'pocketcasts':
-        transcription = transcribe_from_url(url, show_notes)
+        transcription = await transcribe_from_url(url, show_notes)
     elif type == 'youtube':
         transcription = await download_caption(url)
 
@@ -100,9 +100,9 @@ async def producer():
 
         await asyncio.sleep(60)
 
-async def consumer():
+async def consumer(name):
     """Consumer that processes URLs from the queue"""
-    print("Starting consumer...")
+    print(f"Starting consumer {name}...")
 
     while True:
         try:
@@ -110,12 +110,16 @@ async def consumer():
             todo_items = [item for item in urls if item["status"] == "queued"]
 
             if not todo_items:
-                print("Consumer: No URLs to process, sleeping...")
+                print(f"Consumer {name}: No URLs to process, sleeping...")
                 await asyncio.sleep(60)
                 continue
 
+            # FIXME: Race condition: the other consumer could grab the same item
             item = todo_items[0]
-            print(f"Consumer: Processing {item['url']}")
+            item["status"] = "processing"
+            save_queue(urls)
+
+            print(f"Consumer {name}: Processing {item['url']}")
 
             try:
                 if "transcript" not in item:
@@ -137,14 +141,14 @@ async def consumer():
                         print(f"Consumer: Completed fetching raw transcription {item['url']}: {result[0:20]}")
                 else:
                     result = item["transcript"]
-                    print(f"Consumer: Fetching raw transcription from json {item['url']}: {result[0:20]}")
+                    print(f"Consumer {name}: Fetching raw transcription from json {item['url']}: {result[0:20]}")
 
                 formatted_result = await format_transcript(result) # format using llm
                 blog_post = ''
                 toc = extract_toc(formatted_result) # extract table of contents
                 faq = extract_faq(formatted_result) # extract faq
                 pr_url, file_path = create_branch_and_pr(item["title"], format_pr_content(item['title'], item['url'], formatted_result, blog_post, toc, faq), item['published_date'])
-                print(f"Consumer: Created PR: {pr_url}")
+                print(f"Consumer {name}: Created PR: {pr_url}")
 
                 urls = load_queue()
                 for queue_item in urls:
@@ -154,7 +158,7 @@ async def consumer():
                 save_queue(urls)
 
             except Exception as e:
-                print(f"Error processing {item['url']}: {e}")
+                print(f"Consumer {name}: Error processing {item['url']}: {e}")
                 traceback.print_exc()
                 # mark error and skip, e.g. yt fail to download subtitle
                 urls = load_queue()
@@ -166,19 +170,21 @@ async def consumer():
                 await asyncio.sleep(60)
 
         except Exception as e:
-            print(f"Consumer error: {e}")
+            print(f"Consumer {name}: error: {e}")
             await asyncio.sleep(60)
 
 async def main():
     producer_task = asyncio.create_task(producer())
-    consumer_task = asyncio.create_task(consumer())
+    consumer_task1 = asyncio.create_task(consumer(1))
+    consumer_task2 = asyncio.create_task(consumer(2))
 
     try:
-        await asyncio.gather(producer_task, consumer_task)
+        await asyncio.gather(producer_task, consumer_task1, consumer_task2)
     except asyncio.CancelledError:
         producer_task.cancel()
-        consumer_task.cancel()
-        await asyncio.gather(producer_task, consumer_task, return_exceptions=True)
+        consumer_task1.cancel()
+        consumer_task2.cancel()
+        await asyncio.gather(producer_task, consumer_task1, consumer_task2, return_exceptions=True)
 
 if __name__ == "__main__":
     try:
