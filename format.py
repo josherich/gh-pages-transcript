@@ -2,6 +2,7 @@ import os
 from env import *
 from openai import OpenAI
 from google import genai
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 openai_client = OpenAI()
 ollama_client = OpenAI(
@@ -153,15 +154,20 @@ def get_faq_schema():
 
 def format_transcript(transcription, n=3):
     """split transcript into n parts and format each part"""
-    lines = transcription.split("\n")
-    line_num = len(lines)
-
-    if line_num < 200:
-        return format_transcript_part(transcription)
-
-    part_size = line_num // n
-    parts = [lines[i:i+part_size] for i in range(0, line_num, part_size)]
-    formatted_parts = [format_transcript_part("\n".join(part).strip(), i+1) for i, part in enumerate(parts)]
+    if not transcription:
+        return ""
+        
+    # Initialize the text splitter
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=5000,
+        chunk_overlap=0
+    )
+    
+    # Split the text into chunks
+    chunks = text_splitter.split_text(transcription)
+    
+    # Format each chunk
+    formatted_parts = [format_transcript_part(chunk.strip(), i+1) for i, chunk in enumerate(chunks)]
     return "\n".join(formatted_parts)
 
 def format_transcript_part(transcription, part_n=1):
