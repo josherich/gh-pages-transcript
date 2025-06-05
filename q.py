@@ -139,8 +139,7 @@ async def consumer():
                     result = item["transcript"]
                     print(f"Consumer: Fetching raw transcription from json {item['url']}: {result[0:20]}")
 
-                formatted_result = format_transcript(result) # format using llm
-                # blog_post = rewrite_transcript(formatted_result) # rewrite to blog post
+                formatted_result = await format_transcript(result) # format using llm
                 blog_post = ''
                 toc = extract_toc(formatted_result) # extract table of contents
                 faq = extract_faq(formatted_result) # extract faq

@@ -1,16 +1,17 @@
 import os
 from env import *
-from openai import OpenAI
+from openai import AsyncOpenAI
 from google import genai
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+import asyncio
 
-openai_client = OpenAI()
-ollama_client = OpenAI(
+openai_client = AsyncOpenAI()
+ollama_client = AsyncOpenAI(
     base_url=os.getenv("OLLAMA_URL"),
     # required but ignored
     api_key='ollama',
 )
-basement_client = OpenAI(
+basement_client = AsyncOpenAI(
     base_url=os.getenv("BASEMENT_URL"),
 )
 g_client = genai.Client(api_key=os.getenv("G_TOKEN"))
@@ -152,46 +153,61 @@ def get_faq_schema():
         }
       }
 
-def format_transcript(transcription, n=3):
+async def run_with_limit(tasks, concurrency_limit):
+    """Run a list of callables with a concurrency limit."""
+    semaphore = asyncio.Semaphore(concurrency_limit)
+
+    async def sem_task(func):
+        async with semaphore:
+            return await func()
+
+    return await asyncio.gather(*[asyncio.create_task(sem_task(t)) for t in tasks])
+
+async def format_transcript(transcription, n=3):
     """split transcript into n parts and format each part"""
     if not transcription:
         return ""
-        
-    # Initialize the text splitter
+
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=5000,
         chunk_overlap=0
     )
-    
-    # Split the text into chunks
     chunks = text_splitter.split_text(transcription)
-    
-    # Format each chunk
-    formatted_parts = [format_transcript_part(chunk.strip(), i+1) for i, chunk in enumerate(chunks)]
+
+    tasks = [lambda n=chunk,idx=i: format_transcript_part(n, idx+1) for i, chunk in enumerate(chunks)]
+    formatted_parts = await run_with_limit(tasks, concurrency_limit=n)
     return "\n".join(formatted_parts)
 
-def format_transcript_part(transcription, part_n=1):
+async def format_transcript_part(transcription, part_n=1):
     if len(transcription) == 0:
         return ""
 
     content = get_template().format(content=transcription)
-    print(f"------------ Runtime prompt {part_n} -----------\n{content[0:100]} ... \n(length: {len(content)})")
-    print(f'---------------------------------------\n')
-    return answer_prompt(content, part_n)
+    print(f"------------ Runtime prompt {part_n} -----------")
+    print(f"{content[0:100]} ... \n(length: {len(content)})")
+    print(f'------------------------------------------------')
+    return await answer_prompt(content, part_n)
 
 def answer_prompt_w_schema(content, schema):
-    response = g_client.models.generate_content(model='gemini-2.5-flash-preview-04-17', contents=content, config={
-      'responseSchema': schema,
-      'response_mime_type': 'application/json'
-    })
+    response = g_client.models.generate_content(
+        model='gemini-2.5-flash-preview-04-17',
+        contents=content,
+        config={
+            'responseSchema': schema,
+            'response_mime_type': 'application/json'
+        }
+    )
     res = response.text
     return res
 
+def print_res_summary(res, part_n=1):
+    print(f"------------ Generated content {part_n} -----------")
+    print(f"{res[0:100]} ... \n(length: {len(res)})")
 
-def answer_prompt(content, part_n=1):
+async def answer_prompt(content, part_n=1):
     try:
         if lm_provider == "openai":
-            response = openai_client.chat.completions.create(
+            response = await openai_client.chat.completions.create(
                 messages=[
                     {
                         "role": "user",
@@ -205,10 +221,10 @@ def answer_prompt(content, part_n=1):
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
 
-            print(f"------------ Generated content -----------\n{res[0:100]} ... \n(length: {len(res)})")
+            print_res_summary(res, part_n)
             return res
         elif lm_provider == "ollama":
-            response = ollama_client.chat.completions.create(
+            response = await ollama_client.chat.completions.create(
                 messages=[
                     {
                         "role": "user",
@@ -221,18 +237,18 @@ def answer_prompt(content, part_n=1):
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
 
-            print(f"------------ Generated content -----------\n{res[0:100]} ... \n(length: {len(res)})")
+            print_res_summary(res, part_n)
             return res
         elif lm_provider == "google":
-            response = g_client.models.generate_content(model='gemini-2.0-flash', contents=content)
+            response = await g_client.aio.models.generate_content(model='gemini-2.0-flash', contents=content)
             res = response.text
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
 
-            print(f"------------ Generated content -----------\n{res[0:100]} ... \n(length: {len(res)})")
+            print_res_summary(res, part_n)
             return res
         elif lm_provider == "basement":
-            response = basement_client.chat.completions.create(
+            response = await basement_client.chat.completions.create(
                 messages=[
                     {
                         "role": "user",
@@ -246,7 +262,7 @@ def answer_prompt(content, part_n=1):
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
 
-            print(f"------------ Generated content -----------\n{res[0:100]} ... \n(length: {len(res)})")
+            print_res_summary(res, part_n)
             return res
         else:
             raise Exception(f"Unsupported language model provider: {lm_provider}")
