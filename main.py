@@ -67,8 +67,7 @@ def episode_form(i, ep):
                 style="margin: 0.25rem 0; font-size: 0.8rem;"
             ),
             Div(
-                "URL: ",
-                Input(type="text", name="url", value=ep["url"], style="font-size: 0.8rem; padding: 2px 4px;"),
+                Input(type="text", name="url", value=ep["url"], style="font-size: 0.8rem; margin: 0; padding: 0.5em 1em; height: initial;"),
                 style="margin-bottom: 0.25rem; font-size: 0.8rem;"
             ),
             Textarea(ep["transcript"], name="transcript", style="font-size: 0.8rem; padding: 4px;") if 'transcript' in ep else None,
