@@ -40,35 +40,43 @@ def save_episodes(data):
 app, rt = fast_app()
 
 def episode_form(i, ep):
+    def status_button(status, label):
+        is_active = ep["status"] == status
+        return Button(
+            label,
+            hx_post="/update",
+            hx_swap="outerHTML",
+            hx_target=f"#episode-{i}",
+            name="status",
+            value=status,
+            style=f"margin-right: 0.25rem; background-color: {'#4CAF50' if is_active else '#f0f0f0'}; color: {'white' if is_active else 'black'}; border: 1px solid #ccc; padding: 2px 6px; border-radius: 2px; font-size: 0.8rem;"
+        )
+
     return Card(
         Form(
-            Div(f"Type: {ep['type']}"),
-            Div(f"Published: {ep['published_date']}"),
-            Div(f"Title: {ep['title']}"),
+            Div(f"Type: {ep['type']}", style="font-size: 0.8rem; margin-bottom: 0.25rem;"),
+            Div(f"Published: {ep['published_date']}", style="font-size: 0.8rem; margin-bottom: 0.25rem;"),
+            Div(f"Title: {ep['title']}", style="font-size: 0.9rem; font-weight: bold; margin-bottom: 0.25rem;"),
             Div(
                 "Status: ",
-                Select(
-                    Option("error", value="error", selected=(ep["status"]=="error")),
-                    Option("todo",  value="todo",  selected=(ep["status"]=="todo")),
-                    Option("queued",value="queued",selected=(ep["status"]=="queued")),
-                    Option("done",  value="done",  selected=(ep["status"]=="done")),
-                    Option("skip", value="skip", selected=(ep["status"]=="skip")),
-                    name="status"
-                ),
-                style="margin: 0.5rem 0;"
+                status_button("error", "error"),
+                status_button("todo", "todo"),
+                status_button("queued", "queued"),
+                status_button("done", "done"),
+                status_button("skip", "skip"),
+                style="margin: 0.25rem 0; font-size: 0.8rem;"
             ),
             Div(
                 "URL: ",
-                Input(type="text", name="url", value=ep["url"]),
-                style="margin-bottom: 0.5rem;"
+                Input(type="text", name="url", value=ep["url"], style="font-size: 0.8rem; padding: 2px 4px;"),
+                style="margin-bottom: 0.25rem; font-size: 0.8rem;"
             ),
-            Textarea(ep["transcript"], name="transcript") if 'transcript' in ep else None,
+            Textarea(ep["transcript"], name="transcript", style="font-size: 0.8rem; padding: 4px;") if 'transcript' in ep else None,
             Hidden(name="id", value=str(i)),
-            Button("Save"),
-            hx_post="/update", hx_swap="outerHTML", hx_target=f"#episode-{i}"
+            id=f"episode-{i}"
         ),
         id=f"episode-{i}",
-        style="margin-bottom:1rem; padding:1rem; border:1px solid #ccc;"
+        style="margin-bottom:0.5rem; padding:0.5rem; border:1px solid #ccc; font-size: 0.8rem;"
     )
 
 def new_episode_form():
