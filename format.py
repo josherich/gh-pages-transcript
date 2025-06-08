@@ -120,6 +120,13 @@ def get_faq_template():
 - ask questions about potential contradictions.
 - ask whys and hows questions not directly addressed by the content.
 
+为以下内容生成一系列问题（5到10个）和答案
+- 将每个答案的来源的第一句原文放在index_of_source中，以便定位答案的来源。
+- 针对主要论点或感兴趣的点提出问题。
+- 针对内容中反直觉的内容提出问题。
+- 针对潜在的矛盾提出问题。
+- 针对原文未回答或含糊的内容提出问题。
+
 {content}
 """
     return template
