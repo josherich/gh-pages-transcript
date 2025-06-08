@@ -1,7 +1,5 @@
 import os
 import re
-import requests
-import datetime
 from github import Github
 from env import *
 
@@ -93,8 +91,7 @@ def create_branch_and_pr(title, transcription, date):
 def format_pr_content(title, url, transcript, rewritten, toc, faq):
     return (f'\n[{title.replace("|", " ")}]({url})\n\n' +
         transcript +
-        '\n\n---\n\n> This is an experimental rewrite\n\n' +
-        rewritten +
+        ('\n\n---\n\n> This is an experimental rewrite\n\n' + rewritten) if rewritten else '' +
         f'\n\n<script>window.tocIndex = {toc};\nwindow.faq = {faq};\n</script>')
 
 if __name__ == "__main__":
