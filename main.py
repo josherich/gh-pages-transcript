@@ -6,11 +6,16 @@ from fasthtml.common import *
 from fastcore.utils import *
 import asyncio
 import json
+import argparse
+import boto3
 
 from q import main
 from q import pull_history
 from yt_liked import authenticate_youtube_from_code, authenticate_youtube
 
+MODE = 'local'
+sqs = boto3.client('sqs', region_name='us-west-1')
+queue_url = os.getenv('QUEUE_URL')
 
 def start_queue():
     try:
@@ -127,6 +132,11 @@ def post(id: str, status: str, url: str):
             updated_ep = ep
             break
 
+    if MODE == 'sqs' and status == 'queued':
+        print(f"Sending message to queue {queue_url}: {updated_ep}")
+        response = sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(updated_ep), MessageGroupId=updated_ep['type'])
+        print("SQS MessageId: ", response['MessageId'])
+
     save_episodes(episodes)
     return episode_form(id, updated_ep)
 
@@ -159,4 +169,12 @@ def get(request):
 serve(port=int(os.getenv('PORT', 5001)))
 
 authenticate_youtube()
-# start_queue()
+
+parser = argparse.ArgumentParser(description="Transcript Queue")
+parser.add_argument("--mode", choices=["local", "sqs"], default='local', help="local queue or SQS queue")
+args = parser.parse_args()
+
+MODE = args.mode
+print('Mode: ', MODE)
+
+
