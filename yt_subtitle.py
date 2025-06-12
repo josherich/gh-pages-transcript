@@ -6,8 +6,10 @@ import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 from bilibili_api import video, Credential
 
+ytt_api = YouTubeTranscriptApi()
+
 def format_caption(caption):
-    return "\n".join([f"{line['start']} - {line['duration']}: {line['text']}" for line in caption])
+    return "\n".join([f"{line.start} - {line.duration}: {line.text}" for line in caption])
 
 async def download_caption(video_url):
     if "youtube" in video_url:
@@ -19,8 +21,19 @@ async def download_caption(video_url):
 
 def download_caption_youtube(video_url):
     video_id = video_url.split("v=")[1]
-    captions = YouTubeTranscriptApi.get_transcript(video_id)
-    caption_lines = format_caption(captions)
+    transcript_list = ytt_api.list(video_id)
+
+    try:
+        transcript = transcript_list.find_manually_created_transcript(['en'])
+    except Exception as e:
+        try:
+            transcript = transcript_list.find_generated_transcript(['en'])
+        except Exception as e:
+            print('Runtime error while parsing youtube video subtitle:', e)
+            raise e
+
+    transcript = transcript.fetch()
+    caption_lines = format_caption(transcript.snippets)
     return caption_lines
 
 SESSDATA = os.getenv("BILIBILI_SESSDATA")

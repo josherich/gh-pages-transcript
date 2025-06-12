@@ -20,5 +20,5 @@ dependencies = [
     "pygithub>=2.5.0",
     "python-fasthtml>=0.12.1",
     "pytube>=15.0.0",
-    "youtube-transcript-api>=0.6.3",
+    "youtube-transcript-api==1.1.0",
 ]
