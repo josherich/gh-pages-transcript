@@ -181,6 +181,7 @@ async def sqs_consumer(name):
             response = sqs.receive_message(
                 QueueUrl=queue_url,
                 MaxNumberOfMessages=1,
+                WaitTimeSeconds=2,
             )
             messages = response.get('Messages', [])
             message = messages[0] if messages else None
