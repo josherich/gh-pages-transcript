@@ -7,11 +7,13 @@ from fastcore.utils import *
 import asyncio
 import json
 import argparse
+from urllib.parse import urlparse, parse_qs
 import boto3
 
 from q import main
 from q import pull_history
-from yt_liked import authenticate_youtube_from_code, authenticate_youtube
+from yt_liked import authenticate_youtube_from_code, authenticate_youtube, get_youtube_playlist_videos
+
 
 MODE = 'local'
 sqs = boto3.client('sqs', region_name='us-west-1')
@@ -142,15 +144,33 @@ def post(id: str, status: str, url: str):
 
 @rt("/new")
 def post(title: str, url: str):
+    is_playlist = "youtube.com/playlist" in url
+
+    parsed_url = urlparse(url)
+    query_string = parsed_url.query
+    query_params = parse_qs(query_string)
+
     episodes = load_episodes()
-    episodes.insert(0, {
-        "id": uuid.uuid4().hex,
-        "title": title,
-        "url": url,
-        "type": "youtube" if ("youtube" in url or "bilibili" in url) else "pocketcasts",
-        "status": "todo",
-        "published_date": datetime.now().strftime("%Y-%m-%d")
-    })
+    if is_playlist:
+        videos = [{
+            "id": uuid.uuid4().hex,
+            "title": video['title'],
+            "url": video['url'],
+            "type": "youtube",
+            "status": "todo",
+            "published_date": video['published_date']
+        } for video in get_youtube_playlist_videos(query_params['list'][0])]
+    else:
+        videos = [{
+            "id": uuid.uuid4().hex,
+            "title": title,
+            "url": url,
+            "type": "youtube" if ("youtube" in url or "bilibili" in url) else "pocketcasts",
+            "status": "todo",
+            "published_date": datetime.now().strftime("%Y-%m-%d")
+        }]
+
+    episodes.extend(videos)
     save_episodes(episodes)
     return RedirectResponse('/', status_code=303)
 
