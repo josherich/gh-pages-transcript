@@ -136,7 +136,7 @@ def post(id: str, status: str, url: str):
 
     if MODE == 'sqs' and status == 'queued':
         print(f"Sending message to queue {queue_url}: {updated_ep}")
-        response = sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(updated_ep), MessageGroupId=updated_ep['type'])
+        response = sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(updated_ep))
         print("SQS MessageId: ", response['MessageId'])
 
     save_episodes(episodes)
