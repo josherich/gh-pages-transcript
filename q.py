@@ -1,7 +1,6 @@
 import json
 import asyncio
 from datetime import datetime
-from pathlib import Path
 import argparse
 import traceback
 from dataclasses import dataclass
@@ -15,8 +14,12 @@ from yt_subtitle import download_caption
 from whisper import transcribe_from_url
 from create_pr import create_branch_and_pr, format_pr_content
 from format import format_transcript, extract_toc, extract_faq
+from db import LocalStorageDb
 
-QUEUE_FILE = Path('queue.json')
+# Initialize database
+db = LocalStorageDb({'namespace': 'transcript_queue', 'storage_path': './data'})
+db.add_collection('episodes')
+
 sqs = boto3.client('sqs', region_name='us-west-1')
 queue_url = os.getenv('QUEUE_URL')
 
@@ -72,14 +75,13 @@ class Youtube:
 def pull_history():
     print("Fetching new Podcasts episode URLs...")
     all_messages = []
-    urls, _ = get_pocketcasts_history()
-    current_urls = load_queue()
-    before_len = len(current_urls)
-    current_url_set = {item['url'] for item in current_urls}
 
     # --------- Add Pocketcasts URLs ---------
+    urls, _ = get_pocketcasts_history()
+    i = 0
     for item in urls:
-        if item['url'] not in current_url_set:
+        if not db.episodes.find_one({'url': item['url']}):
+            i += 1
             all_messages.append(PocketCast(
                 url=item['url'],
                 title=item['title'],
@@ -88,7 +90,7 @@ def pull_history():
                 episode_notes=item['episode_notes'],
                 published_date=item['published'].split('T')[0]
             ))
-            current_urls.append({
+            episode_data = {
                 'type': 'pocketcasts',
                 'url': item['url'],
                 'status': 'todo',
@@ -96,48 +98,34 @@ def pull_history():
                 'author': item['author'],
                 'pod_notes': item['pod_notes'],
                 'episode_notes': item['episode_notes'],
-                'published_date': item['published'].split('T')[0]})
-
-    after_len = len(current_urls)
-    print(f"Added {after_len - before_len} new Pocketcasts URLs to queue")
+                'published_date': item['published'].split('T')[0]
+            }
+            db.episodes.upsert(episode_data)
+    print(f"Added {i} new Pocketcasts URLs to queue")
 
     # ----------- Add Youtube URLs -----------
     print("Fetching new Youtube liked video URLs...")
     yt_urls = get_youtube_liked_videos()
+    i = 0
     for item in yt_urls:
-        if item['url'] not in current_url_set: # skip updating current_url_set since it's now all youtube urls
+        if not db.episodes.find_one({'url': item['url']}):
+            i += 1
             all_messages.append(Youtube(
                 url=item['url'],
                 title=item['title'],
                 published_date=item['published_date']
             ))
-            current_urls.append({
+            episode_data = {
                 'type': 'youtube',
                 'url': item['url'],
                 'status': 'todo',
                 'title': item['title'],
-                'published_date': item['published_date']})
+                'published_date': item['published_date']
+            }
+            db.episodes.upsert(episode_data)
 
-    save_queue(current_urls)
-    after_len_2 = len(current_urls)
-    print(f"Added {after_len_2 - after_len} new Youtube URLs to queue")
+    print(f"Added {i} new Youtube URLs to queue")
     return all_messages
-
-def load_queue():
-    try:
-        if not QUEUE_FILE.exists():
-            save_queue([])
-            return []
-
-        with open(QUEUE_FILE, 'r') as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        print(f"Error loading queue file: {QUEUE_FILE}")
-        save_queue([])
-
-def save_queue(queue):
-    with open(QUEUE_FILE, 'w') as f:
-        json.dump(queue, f, indent=2)
 
 async def producer(mode):
     """Producer that fetches URLs and adds them to the queue"""
@@ -158,12 +146,15 @@ async def producer(mode):
         await asyncio.sleep(60)
 
 def move_to_status(url, status):
-    urls = load_queue()
-    for queue_item in urls:
-        if queue_item["url"] == url:
-            queue_item["status"] = status
-            break
-    save_queue(urls)
+    try:
+        # Find the item by URL and update its status
+        item = db.episodes.find_one({'url': url})
+        if not item:
+            raise Exception(f"Can not find episode: ")
+        item['status'] = status
+        db.episodes.upsert(item)
+    except Exception as e:
+        print(f"Error updating status for {url}: {e}")
 
 def move_to_processing(url):
     move_to_status(url, 'processing')
@@ -237,21 +228,16 @@ async def local_consumer(name):
 
     while True:
         try:
-            urls = load_queue()
-            todo_items = [item for item in urls if item["status"] == "queued"]
-
-            if not todo_items:
+            # FIXME: Race condition: the other consumer could grab the same item
+            item = db.episodes.find_one({ 'status': 'queued' })
+            if not item:
                 print(f"Consumer {name}: No URLs to process, sleeping...")
                 await asyncio.sleep(60)
                 continue
 
-            # FIXME: Race condition: the other consumer could grab the same item
-            item = todo_items[0]
-
             move_to_processing(item["url"])
 
             print(f"Consumer {name}: Processing {item['url']}")
-
             try:
                 if "transcript" not in item:
                     show_notes = ''
@@ -263,10 +249,10 @@ async def local_consumer(name):
                         move_to_error(item["url"])
                         raise Exception(f"Failed to fetch raw transcription for {item['url']}")
                     else:
-                        for queue_item in urls:
-                            if queue_item["url"] == item["url"]:
-                                queue_item["transcript"] = result
-                                break
+                        # Update the item with transcript
+                        item = db.queue.find_one({'url': item['url']})
+                        item['transcript'] = result
+                        db.episodes.upsert(item)
                         print(f"Consumer: Completed fetching raw transcription {item['url']}: {result[0:20]}")
                 else:
                     result = item["transcript"]

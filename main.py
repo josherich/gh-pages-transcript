@@ -13,6 +13,7 @@ import boto3
 from q import main
 from q import pull_history
 from yt_liked import authenticate_youtube_from_code, authenticate_youtube, get_youtube_playlist_videos
+from db import LocalStorageDb
 
 
 MODE = 'local'
@@ -25,24 +26,18 @@ def start_queue():
     except KeyboardInterrupt:
         print("Shutting down job queue...")
 
-EPISODES_FILE = "queue.json"
+# Initialize database
+db = LocalStorageDb({'namespace': 'transcript_queue', 'storage_path': './data'})
+db.add_collection('episodes')
 
 def load_episodes(status = None):
-    episodes = []
-    with open(EPISODES_FILE, "r") as f:
-        episodes = json.load(f)
+    selector = {'status': status} if status else {}
+    episodes = db.episodes.find(selector, {'sort': {'published_date': -1}}).fetch()
 
-    # sort by published date
-    # use index as id if not present
-    episodes = [{'id': i, **ep} for i, ep in enumerate(episodes)]
-    episodes.sort(key=lambda x: x['published_date'], reverse=True)
-    if status:
-        episodes = [ep for ep in episodes if ep['status'] == status]
     return episodes
 
-def save_episodes(data):
-    with open(EPISODES_FILE, "w") as f:
-        json.dump(data, f, indent=2)
+def insert_episode(ep):
+    db.episodes.upsert(ep)
 
 app, rt = fast_app()
 
@@ -108,7 +103,7 @@ def new_episode_form():
 @rt("/")
 def get(status: str = 'todo'):
     episodes = load_episodes(status)
-    forms = [episode_form(ep['id'], ep) for ep in episodes]
+    forms = [episode_form(ep['_id'], ep) for ep in episodes]
     return Container(
         Span(
             A(B("todo") if status == 'todo' else 'todo', href="/?status=todo"), " | ",
@@ -125,22 +120,16 @@ def get(status: str = 'todo'):
 
 @rt("/update")
 def post(id: str, status: str, url: str):
-    episodes = load_episodes()
-    updated_ep = None
-    for ep in episodes:
-        if ep['url'] == url:
-            ep['status'] = status
-            ep['url'] = url
-            updated_ep = ep
-            break
+    ep = db.episodes.find_one({ '_id': id })
+    ep['status'] = status
 
     if MODE == 'sqs' and status == 'queued':
-        print(f"Sending message to queue {queue_url}: {updated_ep}")
-        response = sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(updated_ep))
+        print(f"Sending message to queue {queue_url}: {ep}")
+        response = sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(ep))
         print("SQS MessageId: ", response['MessageId'])
 
-    save_episodes(episodes)
-    return episode_form(id, updated_ep)
+    insert_episode(ep)
+    return episode_form(id, ep)
 
 @rt("/new")
 def post(title: str, url: str):
@@ -150,9 +139,8 @@ def post(title: str, url: str):
     query_string = parsed_url.query
     query_params = parse_qs(query_string)
 
-    episodes = load_episodes()
     if is_playlist:
-        videos = [{
+        episodes = [{
             "id": uuid.uuid4().hex,
             "title": video['title'],
             "url": video['url'],
@@ -161,7 +149,7 @@ def post(title: str, url: str):
             "published_date": video['published_date']
         } for video in get_youtube_playlist_videos(query_params['list'][0])]
     else:
-        videos = [{
+        episodes = [{
             "id": uuid.uuid4().hex,
             "title": title,
             "url": url,
@@ -170,8 +158,8 @@ def post(title: str, url: str):
             "published_date": datetime.now().strftime("%Y-%m-%d")
         }]
 
-    episodes.extend(videos)
-    save_episodes(episodes)
+    for ep in episodes:
+        insert_episode(ep)
     return RedirectResponse('/', status_code=303)
 
 @rt("/pull")

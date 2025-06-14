@@ -28,7 +28,7 @@ os.environ['BILIBILI_BILI_JCT'] = '' # optional: Bilibili cookies BILI_JCT
 3. Install dependencies
 
 ```sh
-pip install pytz python-fasthtml PyGithub openai google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client youtube-transcript-api
+pip install python-fasthtml PyGithub openai google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client youtube-transcript-api boto3
 ```
 
 ## Usage
