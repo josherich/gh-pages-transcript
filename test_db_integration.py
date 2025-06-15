@@ -75,6 +75,9 @@ def test_basic_ops():
     alice = users.find_one({'_id': '1'})
     print("Alice:", alice)
 
+    alice = users.find_one({'name': 'Alice'})
+    print("Alice:", alice)
+
     # Find no match
     nomatch = users.find({'name': 'John'}).fetch()
     print("No matching users:", nomatch)
@@ -92,6 +95,12 @@ def test_basic_ops():
     # Check remaining users
     remaining = users.find().fetch()
     print("Remaining users:", [u['name'] for u in remaining])
+
+    # reload
+    db = LocalStorageDb({'namespace': 'myapp', 'storage_path': './test_data'})
+    db.add_collection('users')
+    alice = db.users.find_one({'name': 'Alexis'})
+    print("Alice:", alice)
 
 def test_basic_functionality():
     """Test basic LocalStorageDb functionality"""

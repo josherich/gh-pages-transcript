@@ -145,25 +145,25 @@ async def producer(mode):
 
         await asyncio.sleep(60)
 
-def move_to_status(url, status):
+def move_to_status(id, status):
     try:
         # Find the item by URL and update its status
-        item = db.episodes.find_one({'url': url})
+        item = db.episodes.find_one({'_id': id})
         if not item:
             raise Exception(f"Can not find episode: ")
         item['status'] = status
         db.episodes.upsert(item)
     except Exception as e:
-        print(f"Error updating status for {url}: {e}")
+        print(f"Error updating status for {id}: {e}")
 
-def move_to_processing(url):
-    move_to_status(url, 'processing')
+def move_to_processing(id):
+    move_to_status(id, 'processing')
 
-def move_to_done(url):
-    move_to_status(url, 'done')
+def move_to_done(id):
+    move_to_status(id, 'done')
 
-def move_to_error(url):
-    move_to_status(url, 'error')
+def move_to_error(id):
+    move_to_status(id, 'error')
 
 async def sqs_consumer(name):
     print(f"Starting sqs consumer {name}...")
@@ -182,7 +182,7 @@ async def sqs_consumer(name):
             else:
                 print(message['Body'])
                 item = json.loads(message['Body'])
-                move_to_processing(item["url"])
+                move_to_processing(item["_id"])
                 print(f"Consumer {name}: Processing message {item}")
                 try:
                     show_notes = ''
@@ -191,7 +191,7 @@ async def sqs_consumer(name):
 
                     result = await get_caption_worker(item["url"], show_notes, item['type'])
                     if result == None:
-                        move_to_error(item["url"])
+                        move_to_error(item["_id"])
                         raise Exception(f"Failed to fetch raw transcription for {item['url']}")
 
                     formatted_result = await format_transcript(result) # format using llm
@@ -205,12 +205,11 @@ async def sqs_consumer(name):
                     )
                     print(f"Consumer {name}: Created PR: {pr_url}")
 
-                    move_to_done(item["url"])
-
                     sqs.delete_message(
                         QueueUrl=queue_url,
                         ReceiptHandle=message['ReceiptHandle']
                     )
+                    move_to_done(item["_id"])
                 except ParseError as e:
                     print(f"Excepted no element found in xml.etree.ElementTree.ParseError: {e}")
                     print(f"SQS message will be visibile after 30 minutes.")
@@ -218,7 +217,7 @@ async def sqs_consumer(name):
         except Exception as e:
             print(f"Consumer {name}: error: {e}")
             traceback.print_exc()
-            move_to_error(item["url"])
+            move_to_error(item["_id"])
             await asyncio.sleep(60)
 
 
@@ -235,7 +234,7 @@ async def local_consumer(name):
                 await asyncio.sleep(60)
                 continue
 
-            move_to_processing(item["url"])
+            move_to_processing(item["_id"])
 
             print(f"Consumer {name}: Processing {item['url']}")
             try:
@@ -246,11 +245,11 @@ async def local_consumer(name):
 
                     result = await get_caption_worker(item["url"], show_notes, item['type'])
                     if result == None:
-                        move_to_error(item["url"])
+                        move_to_error(item["_id"])
                         raise Exception(f"Failed to fetch raw transcription for {item['url']}")
                     else:
                         # Update the item with transcript
-                        item = db.queue.find_one({'url': item['url']})
+                        item = db.episodes.find_one({'url': item['url']})
                         item['transcript'] = result
                         db.episodes.upsert(item)
                         print(f"Consumer: Completed fetching raw transcription {item['url']}: {result[0:20]}")
@@ -269,13 +268,13 @@ async def local_consumer(name):
                 )
                 print(f"Consumer {name}: Created PR: {pr_url}")
 
-                move_to_done(item["url"])
+                move_to_done(item["_id"])
 
             except Exception as e:
                 print(f"Consumer {name}: Error processing {item['url']}: {e}")
                 traceback.print_exc()
                 # mark error and skip, e.g. yt fail to download subtitle
-                move_to_error(item["url"])
+                move_to_error(item["_id"])
                 await asyncio.sleep(60)
 
         except Exception as e:
