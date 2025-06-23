@@ -28,13 +28,21 @@ def get_template():
     template = """add paragraphs to the text
 - keep all the content word by word
 - do not add any content or words
+- add bold text to important terms, names, locations, phrases and sentences using markdown
+- add quote to direct quotes using markdown
+- add bullet points, list and code block using markdown
+- only use markdown when you are confident it would help readability
 - remove timestamps (e.g. start second - duration second)
 - remove filter words (e.g. um, uh, like, you know)
 - fix typos and punctuations
 - only give the final result
 (给以下文字分段
-- 原封不动保留所有文
-- 不添加原文以外的任何文
+- 原封不动保留所有文本
+- 不添加原文以外的任何文本
+- 根据语义用markdown加粗重要的人名，地点，短语或句子，
+- 根据语义用markdown填加引用（直接引用）
+- 根据语义用markdown填加列表和代码块
+- 仅当对阅读很有帮助时使用markdown
 - 删除时间戳
 - 删除填充词（如：嗯，啊，就是）
 - 只修正错别字和标点，
@@ -317,42 +325,45 @@ def extract_faq(text):
     return answer_prompt_w_schema(runtime_prompt, get_faq_schema())
 
 if __name__ == "__main__":
-    transcription = 'test'
-    with open('tests/cn-1.txt', 'r') as f:
-        transcription = f.read()
+    async def main():
+        transcription = 'test'
+        with open('tests/cn-1.txt', 'r') as f:
+            transcription = f.read()
 
-    res = format_transcript(transcription)
-    print('----------------- format transcript cn-1 ---------------\n')
-    print('before n of lines: ', transcription.count('\n'))
-    print('after n of lines: ', res.count('\n'))
-    print(res)
+        res = await format_transcript(transcription)
+        print('----------------- format transcript cn-1 ---------------\n')
+        print('before n of lines: ', transcription.count('\n'))
+        print('after n of lines: ', res.count('\n'))
+        print(res)
 
-    rewrite = rewrite_transcript(res)
-    print('----------------- rewrite transcript cn-1 --------------\n')
-    print('before n of lines: ', transcription.count('\n'))
-    print('after n of lines: ', rewrite.count('\n'))
-    print(rewrite)
+        # rewrite = rewrite_transcript(res)
+        # print('----------------- rewrite transcript cn-1 --------------\n')
+        # print('before n of lines: ', transcription.count('\n'))
+        # print('after n of lines: ', rewrite.count('\n'))
+        # print(rewrite)
 
-    toc = extract_toc(res)
-    print('----------------- extract toc cn-1 ---------------\n')
-    print(toc)
+        toc = extract_toc(res)
+        print('----------------- extract toc cn-1 ---------------\n')
+        print(toc)
 
-    with open('tests/en-1.txt', 'r') as f:
-        transcription = f.read()
+        with open('tests/en-1.txt', 'r') as f:
+            transcription = f.read()
 
-    res = format_transcript(transcription)
-    print('----------------- format transcript en-1 ---------------\n')
-    print('before n of lines: ', transcription.count('\n'))
-    print('after n of lines: ', res.count('\n'))
-    print(res)
+        res = await format_transcript(transcription)
+        print('----------------- format transcript en-1 ---------------\n')
+        print('before n of lines: ', transcription.count('\n'))
+        print('after n of lines: ', res.count('\n'))
+        print(res)
 
-    rewrite = rewrite_transcript(res)
-    print('----------------- rewrite transcript en-1 --------------\n')
-    print('before n of lines: ', transcription.count('\n'))
-    print('after n of lines: ', rewrite.count('\n'))
-    print(rewrite)
+        # rewrite = rewrite_transcript(res)
+        # print('----------------- rewrite transcript en-1 --------------\n')
+        # print('before n of lines: ', transcription.count('\n'))
+        # print('after n of lines: ', rewrite.count('\n'))
+        # print(rewrite)
 
-    toc = extract_toc(res)
-    print('----------------- extract toc en-1 ---------------\n')
-    print(toc)
+        toc = extract_toc(res)
+        print('----------------- extract toc en-1 ---------------\n')
+        print(toc)
+
+    asyncio.run(main())
 
