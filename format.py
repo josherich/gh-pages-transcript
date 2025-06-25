@@ -28,10 +28,10 @@ def get_template():
     template = """add paragraphs to the text
 - keep all the content word by word
 - do not add any content or words
-- add bold text to important terms, names, locations, phrases and sentences using markdown
-- add quote to direct quotes using markdown
-- add bullet points, list and code block using markdown
-- only use markdown when you are confident it would help readability
+- add sparsely bold text to important terms, names, locations, phrases and sentences using markdown
+- add sparsely quote to direct quotes using markdown
+- add sparsely bullet points, list and code block using markdown
+- only use markdown when you are confident it's high-value and helps readability
 - remove timestamps (e.g. start second - duration second)
 - remove filter words (e.g. um, uh, like, you know)
 - fix typos and punctuations
@@ -39,12 +39,13 @@ def get_template():
 (给以下文字分段
 - 原封不动保留所有文本
 - 不添加原文以外的任何文本
-- 根据语义用markdown加粗重要的人名，地点，短语或句子，
-- 根据语义用markdown填加引用（直接引用）
-- 根据语义用markdown填加列表和代码块
+- 根据语义谨慎使用markdown加粗重要的人名，地点，短语或句子，
+- 根据语义谨慎使用markdown填加引用（直接引用）
+- 根据语义谨慎使用markdown填加列表和代码块
 - 仅当对阅读很有帮助时使用markdown
 - 删除时间戳
 - 删除填充词（如：嗯，啊，就是）
+- 删除多余的换行
 - 只修正错别字和标点，
 - 只输出最终结果):
 
