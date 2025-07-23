@@ -1,4 +1,6 @@
 import os
+import re
+import unicodedata
 import google.auth
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -8,7 +10,25 @@ credential = None
 SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-def authenticate_youtube():
+def slugify(text):
+    # Normalize unicode characters to closest ASCII equivalent
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
+
+    # Lowercase
+    text = text.lower()
+
+    # Replace spaces and underscores with hyphens
+    text = re.sub(r'[\s_]+', '-', text)
+
+    # Remove characters that aren't alphanumeric or hyphens
+    text = re.sub(r'[^a-z0-9\-]', '', text)
+
+    # Remove leading/trailing and multiple hyphens
+    text = re.sub(r'-{2,}', '-', text).strip('-')
+
+    return text
+
+def authenticate_youtube(use_local=False):
     global credential
     flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
     if credential is None:
@@ -16,7 +36,16 @@ def authenticate_youtube():
         auth_url, __ = flow.authorization_url(prompt="consent")
 
         print(f"Open this URL in your browser: {auth_url}")
-        return None
+
+        if use_local:
+            code = input('Enter the authorization code: ')
+            token = flow.fetch_token(code=code)
+            print(f"Obtained token: {token}")
+            credential = flow.credentials
+
+            return build("youtube", "v3", credentials=credential)
+        else:
+            return None
 
     return build("youtube", "v3", credentials=credential)
 
@@ -40,12 +69,20 @@ def get_liked_videos(youtube):
 
     video_list = []
     for item in response.get("items", []):
+        prog_slug = slugify(item["snippet"]["videoOwnerChannelTitle"])
         video_title = item["snippet"]["title"]
         published_date = item["snippet"]["publishedAt"].split("T")[0]
         video_id = item["snippet"]["resourceId"]["videoId"]
         video_url = f"https://www.youtube.com/watch?v={video_id}"
-        print(f"Title: {video_title}, URL: https://www.youtube.com/watch?v={video_id}")
-        video_list.append({'title': video_title, 'id': video_id, 'url': video_url, 'published_date': published_date})
+        # print(f"Title: {video_title}, URL: https://www.youtube.com/watch?v={video_id}")
+        # print(f"channel name slugify: {prog_slug}")
+        video_list.append({
+            'id': video_id,
+            'url': video_url,
+            'title': video_title,
+            'prog_slug': prog_slug,
+            'published_date': published_date
+        })
 
     return video_list
 
@@ -66,7 +103,12 @@ def get_playlist_videos(youtube, playlist_id):
         video_id = item["snippet"]["resourceId"]["videoId"]
         video_url = f"https://www.youtube.com/watch?v={video_id}"
         print(f"Title: {video_title}, URL: https://www.youtube.com/watch?v={video_id}")
-        video_list.append({'title': video_title, 'id': video_id, 'url': video_url, 'published_date': published_date})
+        video_list.append({
+            'id': video_id,
+            'url': video_url,
+            'title': video_title,
+            'published_date': published_date
+        })
 
     return video_list
 
@@ -79,6 +121,6 @@ def get_youtube_playlist_videos(playlist_id):
     return get_playlist_videos(youtube, playlist_id)
 
 if __name__ == "__main__":
-    youtube = authenticate_youtube()
+    youtube = authenticate_youtube(use_local=True)
     liked_videos = get_liked_videos(youtube)
     print(liked_videos)

@@ -1,6 +1,7 @@
 import os
 import subprocess
 import asyncio
+import traceback
 import requests
 from openai import OpenAI
 from pydub import AudioSegment
@@ -69,10 +70,11 @@ async def transcribe_audio_with_local_whisper(file_path, show_notes):
     )
     stdout, stderr = await proc.communicate()
 
+    print(f'[{whisper_cmd!r} exited with {proc.returncode}]')
     if stdout:
-        print(f'[stdout]\n{stdout.decode()}')
+        print(f"[stdout]\n{stdout.decode('utf-8', errors='ignore')}")
     if stderr:
-        print(f'[stderr]\n{stderr.decode()}')
+        print(f"[stderr]\n{stderr.decode('utf-8', errors='ignore')}")
 
     # FIXME: Race condition: might be overwritten by the other process
     with open("temp_audio.wav.txt", "r") as f:
@@ -91,6 +93,8 @@ async def transcribe_from_url(audio_url, show_notes):
         transcription_lines = "/n".join(transcriptions)
         return transcription_lines
     except Exception as e:
+        print(f"Error during transcription: {e}")
+        print(f"stack trace: {traceback.format_exc()}")
         return None
 
 def split_mp3(input_path, output_prefix="output_part_", target_mb=20):

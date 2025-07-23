@@ -17,7 +17,7 @@ def get_template():
 layout: post
 title: "{title}"
 date: {date} 00:00:01
-categories: podcast
+categories: podcast {channel_title}
 tags: [podcast_script]
 ---
 
@@ -37,11 +37,11 @@ def normalize_title_to_branch(title: str) -> str:
     branch_name = branch_name.strip("-")
     return branch_name
 
-def create_markdown_file(title, transcription, date):
+def create_markdown_file(title, transcription, date, channel_title=None):
     """Creates a new markdown file content using the transcription."""
     normalized_title = normalize_title_to_branch(title)
     filename = f"{date}-{normalized_title}.md"
-    content = get_template().format(title=title, date=date, content=transcription)
+    content = get_template().format(title=title, date=date, content=transcription, channel_title=channel_title or "untitled")
     branch_name = f"{date}-{normalized_title}"
     return filename, content, branch_name
 
@@ -79,9 +79,9 @@ def create_pull_request(repo, filename, branch_name):
     )
     return pr.html_url
 
-def create_branch_and_pr(title, transcription, date):
+def create_branch_and_pr(title, transcription, date, channel_title=None):
     repo = get_repo()
-    filename, content, branch_name = create_markdown_file(title, transcription, date)
+    filename, content, branch_name = create_markdown_file(title, transcription, date, channel_title)
 
     file_path = commit_file(repo, filename, content, branch_name)
     pr_url = create_pull_request(repo, filename, branch_name)

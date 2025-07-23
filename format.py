@@ -206,7 +206,7 @@ async def format_transcript_part(transcription, part_n=1):
 
 def answer_prompt_w_schema(content, schema):
     response = g_client.models.generate_content(
-        model='gemini-2.5-flash-preview-04-17',
+        model='gemini-2.5-flash',
         contents=content,
         config={
             'responseSchema': schema,
@@ -230,7 +230,7 @@ async def answer_prompt(content, part_n=1):
                         "content": content,
                     }
                 ],
-                model="gpt-4o-mini",
+                model="gpt-4.1-mini",
                 max_completion_tokens=16384, # max tokens for GPT-4o-mini
             )
             res = response.choices[0].message.content

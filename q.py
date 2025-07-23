@@ -38,6 +38,7 @@ async def get_caption_worker(url: str, show_notes: str, type='pocketcasts'):
 class PocketCast:
     url: str
     title: str
+    prog_slug: str
     author: str
     pod_notes: str
     episode_notes: str
@@ -60,6 +61,7 @@ class PocketCast:
 class Youtube:
     url: str
     title: str
+    prog_slug: str
     published_date: str
     status: str = 'todo'
     type: str = 'youtube'
@@ -85,6 +87,7 @@ def pull_history():
             all_messages.append(PocketCast(
                 url=item['url'],
                 title=item['title'],
+                prog_slug=item['podcastSlug'],
                 author=item['author'],
                 pod_notes=item['pod_notes'],
                 episode_notes=item['episode_notes'],
@@ -95,6 +98,7 @@ def pull_history():
                 'url': item['url'],
                 'status': 'todo',
                 'title': item['title'],
+                'prog_slug': item['podcastSlug'],
                 'author': item['author'],
                 'pod_notes': item['pod_notes'],
                 'episode_notes': item['episode_notes'],
@@ -113,6 +117,7 @@ def pull_history():
             all_messages.append(Youtube(
                 url=item['url'],
                 title=item['title'],
+                prog_slug=item['prog_slug'],
                 published_date=item['published_date']
             ))
             episode_data = {
@@ -120,6 +125,7 @@ def pull_history():
                 'url': item['url'],
                 'status': 'todo',
                 'title': item['title'],
+                'prog_slug': item['prog_slug'],
                 'published_date': item['published_date']
             }
             db.episodes.upsert(episode_data)
@@ -201,7 +207,8 @@ async def sqs_consumer(name):
                     pr_url, _ = create_branch_and_pr(
                         item["title"],
                         format_pr_content(item['title'], item['url'], formatted_result, blog_post, toc, faq),
-                        item['published_date']
+                        item['published_date'],
+                        item["prog_slug"] if 'prog_slug' in item else None
                     )
                     print(f"Consumer {name}: Created PR: {pr_url}")
 
@@ -264,7 +271,8 @@ async def local_consumer(name):
                 pr_url, _ = create_branch_and_pr(
                     item["title"],
                     format_pr_content(item['title'], item['url'], formatted_result, blog_post, toc, faq),
-                    item['published_date']
+                    item['published_date'],
+                    item["prog_slug"] if 'prog_slug' in item else None
                 )
                 print(f"Consumer {name}: Created PR: {pr_url}")
 
