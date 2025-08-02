@@ -155,6 +155,8 @@ class Collection:
 
     def _find_fetch(self, selector: Any, options: Dict) -> List[Dict]:
         """Internal method to fetch documents"""
+        if self.namespace:
+            self.load_storage()
         # Deep clone to prevent modification
         results = copy.deepcopy(list(self.items.values()))
         return self._process_find(results, selector, options)
