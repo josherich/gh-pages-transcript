@@ -69,8 +69,11 @@ def episode_form(i, ep):
                 style="margin: 0.25rem 0; font-size: 0.8rem;"
             ),
             Div(
-                Input(type="text", name="url", value=ep["url"], style="font-size: 0.8rem; margin: 0; padding: 0.5em 1em; height: initial;"),
-                style="margin-bottom: 0.25rem; font-size: 0.8rem;"
+                Input(type="text", name="url", value=ep["url"], id=f"url-{i}", style="font-size: 0.8rem; margin: 0; padding: 0.5em 1em; height: initial; flex:1;"),
+                Button("▶", type="button",
+                    onclick=f"playEpisodeUrl(document.getElementById('url-{i}').value, {repr(ep.get('title',''))})",
+                    style="margin-left:0.25rem; padding:2px 7px; font-size:0.8rem; height:initial; cursor:pointer; background:#f0f0f0; border:1px solid #ccc; border-radius:2px;"),
+                style="display:flex; align-items:center; margin-bottom: 0.25rem; font-size: 0.8rem;"
             ),
             Textarea(ep["transcript"], name="transcript", style="font-size: 0.8rem; padding: 4px;") if 'transcript' in ep else None,
             Hidden(name="id", value=str(i)),
@@ -84,37 +87,83 @@ def new_episode_form():
     return Card(
         Form(
             Div(
-                "Title: ",
-                Input(type="text", name="title"),
-                style="margin-bottom: 0.5rem;"
+                Input(type="text", name="title", placeholder="Title", style="font-size:0.8rem; padding:2px 6px; height:initial; margin-right:0.25rem; flex:1;"),
+                Input(type="text", name="url", placeholder="URL", style="font-size:0.8rem; padding:2px 6px; height:initial; margin-right:0.25rem; flex:2;"),
+                Button("Add", style="font-size:0.8rem; padding:2px 8px; height:initial;"),
+                style="display:flex; align-items:center;"
             ),
-            Div(
-                "URL: ",
-                Input(type="text", name="url"),
-                style="margin-bottom: 0.5rem;"
-            ),
-            Button("Submit"),
             hx_post="/new", hx_swap="none", hx_target=f"#episodes"
         ),
         id=f"episode-new",
-        style="margin-bottom:1rem; padding:1rem; border:1px solid #ccc;"
+        style="margin-bottom:0.5rem; padding:0.35rem 0.5rem; border:1px solid #ccc; font-size:0.8rem;"
     )
 
+def load_episodes_filtered(status=None, source=None):
+    selector = {}
+    if status:
+        selector['status'] = status
+    if source:
+        selector['type'] = source
+    return db.episodes.find(selector, {'sort': {'published_date': -1}}).fetch()
+
 @rt("/")
-def get(status: str = 'todo'):
-    episodes = load_episodes(status)
+def get(status: str = 'todo', source: str = ''):
+    episodes = load_episodes_filtered(status, source if source else None)
     forms = [episode_form(ep['_id'], ep) for ep in episodes]
+
+    def status_link(s, label):
+        href = f"/?status={s}" + (f"&source={source}" if source else "")
+        return A(B(label) if status == s else label, href=href)
+
+    def source_link(s, label):
+        href = f"/?status={status}" + (f"&source={s}" if s else "")
+        return A(B(label) if source == s else label, href=href)
+
     return Container(
-        Span(
-            A(B("todo") if status == 'todo' else 'todo', href="/?status=todo"), " | ",
-            A(B("queued") if status == 'queued' else 'queued', href="/?status=queued"), " | ",
-            A(B("done") if status == 'done' else 'done', href="/?status=done"), " | ",
-            A(B("error") if status == 'error' else 'error', href="/?status=error"), " | ",
-            A(B("skip") if status == 'skip' else 'skip', href="/?status=skip"),
+        Div(
+            Span(
+                status_link('todo', 'todo'), " | ",
+                status_link('queued', 'queued'), " | ",
+                status_link('done', 'done'), " | ",
+                status_link('error', 'error'), " | ",
+                status_link('skip', 'skip'),
+                style="font-size:0.85rem;"
+            ),
+            Span(
+                " \u2502 ",
+                source_link('', 'all'), " | ",
+                source_link('youtube', 'youtube'), " | ",
+                source_link('pocketcasts', 'pocketcasts'),
+                style="font-size:0.85rem; color:#555;"
+            ),
+            style="margin-bottom:0.5rem;"
         ),
-        Button('Pull History', hx_post='/pull', hx_swap='none', style='width: 100%; margin:1em 0; padding: 0.5em 0;'),
+        Button('Pull History', hx_post='/pull', hx_swap='none', style='width: 100%; margin:0.5em 0; padding: 0.35em 0; font-size:0.85rem;'),
         new_episode_form(),
         Div(*forms, id="episodes"),
+        # Floating audio player
+        Div(
+            Div(
+                Span("▶ Audio Player", style="font-size:0.8rem; font-weight:bold;"),
+                Button("✕", type="button", onclick="document.getElementById('floating-player').style.display='none'", style="float:right; background:none; border:none; cursor:pointer; font-size:0.9rem; padding:0; line-height:1;"),
+                style="margin-bottom:0.5rem; overflow:hidden;"
+            ),
+            NotStr('<audio id="player-audio" controls style="width:280px; height:32px;"></audio>'),
+            Div(id="player-title", style="font-size:0.75rem; color:#555; margin-top:0.35rem; max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"),
+            id="floating-player",
+            style="display:none; position:fixed; right:1rem; bottom:1rem; background:white; border:1px solid #ccc; border-radius:8px; padding:0.75rem; box-shadow:0 2px 12px rgba(0,0,0,0.18); z-index:9999; min-width:310px;"
+        ),
+        Script("""
+function playEpisodeUrl(url, title) {
+    var audio = document.getElementById('player-audio');
+    var player = document.getElementById('floating-player');
+    var titleEl = document.getElementById('player-title');
+    audio.src = url;
+    titleEl.textContent = title || url;
+    player.style.display = 'block';
+    audio.play().catch(function(){});
+}
+"""),
         style="max-width:800px; margin:auto; padding:1rem;"
     )
 
