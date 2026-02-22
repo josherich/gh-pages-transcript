@@ -1,5 +1,4 @@
 env.py
-.env
 client_secret.json
 queue.json
 .python-version
