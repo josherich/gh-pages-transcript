@@ -1,6 +1,9 @@
 from env import *
 from datetime import datetime
 import uuid
+import hashlib
+import hmac
+import secrets
 
 from fasthtml.common import *
 from fastcore.utils import *
@@ -19,6 +22,30 @@ from db import LocalStorageDb
 MODE = 'local'
 sqs = boto3.client('sqs', region_name='us-west-1')
 queue_url = os.getenv('QUEUE_URL')
+
+# Session secret for signing cookies
+SESSKEY_PATH = '.sesskey'
+if os.path.exists(SESSKEY_PATH):
+    with open(SESSKEY_PATH) as f:
+        SESSION_SECRET = f.read().strip()
+else:
+    SESSION_SECRET = secrets.token_hex(32)
+    with open(SESSKEY_PATH, 'w') as f:
+        f.write(SESSION_SECRET)
+
+LOGIN_USERNAME = os.getenv('username', '')
+LOGIN_PASSWORD = os.getenv('password', '')
+
+def make_session_token(username):
+    return hmac.new(SESSION_SECRET.encode(), username.encode(), hashlib.sha256).hexdigest()
+
+def check_auth(req, sess):
+    token = sess.get('auth_token', '')
+    user = sess.get('username', '')
+    if not token or not user or token != make_session_token(user):
+        return RedirectResponse('/login', status_code=303)
+
+beforeware = Beforeware(check_auth, skip=[r'/login', r'/oauth'])
 
 def start_queue():
     try:
@@ -39,7 +66,45 @@ def load_episodes(status = None):
 def insert_episode(ep):
     db.episodes.upsert(ep)
 
-app, rt = fast_app()
+app, rt = fast_app(before=beforeware, secret_key=SESSION_SECRET)
+
+def login_page(error=''):
+    return Html(
+        Head(Title("Login")),
+        Body(
+            NotStr('''<dialog id="login-modal" style="border:1px solid #ccc; border-radius:8px; padding:1.5rem; max-width:340px; width:90%;">
+  <h3 style="margin:0 0 1rem 0; font-size:1rem;">Login</h3>
+  <form method="post" action="/login">
+    <div style="margin-bottom:0.75rem;">
+      <label for="username" style="display:block; font-size:0.85rem; margin-bottom:0.25rem;">Username</label>
+      <input type="text" id="username" name="username" required autofocus
+        style="width:100%; padding:0.4rem; font-size:0.85rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:0.75rem;">
+      <label for="password" style="display:block; font-size:0.85rem; margin-bottom:0.25rem;">Password</label>
+      <input type="password" id="password" name="password" required
+        style="width:100%; padding:0.4rem; font-size:0.85rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+    </div>
+    <div id="error-msg" style="color:red; font-size:0.8rem; margin-bottom:0.5rem;">''' + error + '''</div>
+    <button type="submit" style="width:100%; padding:0.5rem; font-size:0.85rem; cursor:pointer;">Log in</button>
+  </form>
+</dialog>
+<script>document.getElementById('login-modal').showModal();</script>'''),
+            style="margin:0; padding:0; background:#f5f5f5;"
+        )
+    )
+
+@rt("/login")
+def get():
+    return login_page()
+
+@rt("/login")
+def post(username: str, password: str, sess):
+    if username == LOGIN_USERNAME and password == LOGIN_PASSWORD:
+        sess['username'] = username
+        sess['auth_token'] = make_session_token(username)
+        return RedirectResponse('/', status_code=303)
+    return login_page(error='Invalid username or password')
 
 def episode_form(i, ep):
     def status_button(status, label):
