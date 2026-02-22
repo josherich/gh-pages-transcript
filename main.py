@@ -33,8 +33,8 @@ else:
     with open(SESSKEY_PATH, 'w') as f:
         f.write(SESSION_SECRET)
 
-LOGIN_USERNAME = username
-LOGIN_PASSWORD = password
+LOGIN_USERNAME = os.getenv('PCUSER')
+LOGIN_PASSWORD = os.getenv('PCPW')
 
 def make_session_token(username):
     return hmac.new(SESSION_SECRET.encode(), username.encode(), hashlib.sha256).hexdigest()
