@@ -142,7 +142,6 @@ def episode_form(i, ep):
             ),
             Textarea(ep["transcript"], name="transcript", style="font-size: 0.8rem; padding: 4px;") if 'transcript' in ep else None,
             Hidden(name="id", value=str(i)),
-            id=f"episode-{i}"
         ),
         id=f"episode-{i}",
         style="margin-bottom:0.5rem; padding:0.5rem; border:1px solid #ccc; font-size: 0.8rem;"
