@@ -101,6 +101,9 @@ class Collection:
             try:
                 with open(items_file, 'r') as f:
                     items_data = json.load(f)
+                    # Reset items before loading so that deletions and status
+                    # changes made by other processes are properly reflected
+                    self.items = {}
                     for item in items_data:
                         if '_id' in item:
                             self.items[item['_id']] = item
