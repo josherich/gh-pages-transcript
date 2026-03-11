@@ -189,6 +189,7 @@ def get(status: str = 'todo', source: str = ''):
             Span(
                 status_link('todo', 'todo'), " | ",
                 status_link('queued', 'queued'), " | ",
+                status_link('processing', 'processing'), " | ",
                 status_link('done', 'done'), " | ",
                 status_link('error', 'error'), " | ",
                 status_link('skip', 'skip'),
