@@ -147,7 +147,7 @@ async def producer(mode):
                 all_messages = pull_history()
             except Exception as e:
                 print(f"Error in producer: {e}")
-                asyncio.sleep(60)
+                await asyncio.sleep(60)
 
         await asyncio.sleep(60)
 
@@ -224,7 +224,8 @@ async def sqs_consumer(name):
         except Exception as e:
             print(f"Consumer {name}: error: {e}")
             traceback.print_exc()
-            move_to_error(item["_id"])
+            if 'item' in dir() and item:
+                move_to_error(item["_id"])
             await asyncio.sleep(60)
 
 
