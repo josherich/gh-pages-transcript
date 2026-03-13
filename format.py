@@ -230,7 +230,7 @@ async def answer_prompt(content, part_n=1):
                         "content": content,
                     }
                 ],
-                model="gpt-4.1-mini",
+                model="gpt-5-mini",
                 max_completion_tokens=16384, # max tokens for GPT-4o-mini
             )
             res = response.choices[0].message.content
@@ -256,7 +256,7 @@ async def answer_prompt(content, part_n=1):
             print_res_summary(res, part_n)
             return res
         elif lm_provider == "google":
-            response = await g_client.aio.models.generate_content(model='gemini-2.0-flash', contents=content)
+            response = await g_client.aio.models.generate_content(model='gemini-3-flash-preview', contents=content)
             res = response.text
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
