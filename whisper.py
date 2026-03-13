@@ -1,7 +1,9 @@
 import os
+import json
 import subprocess
 import asyncio
 import traceback
+import tempfile
 import requests
 from openai import OpenAI
 from pydub import AudioSegment
@@ -10,6 +12,7 @@ from env import *
 
 client = OpenAI()
 whisper_local = os.getenv("WHISPER_LOCAL", None)
+fireredasr2s_local = os.getenv("FIREREDASR2S_LOCAL", None)
 
 def download_audio(url, filename):
     headers = {
@@ -28,7 +31,7 @@ def download_audio(url, filename):
 
     with open(filename_with_ext, "wb") as file:
         file.write(response.content)
-    if whisper_local:
+    if whisper_local or fireredasr2s_local:
         return filename_with_ext
     else:
         return split_mp3(filename_with_ext)
@@ -82,11 +85,57 @@ async def transcribe_audio_with_local_whisper(file_path, show_notes):
 
     return [transcription]
 
+async def transcribe_audio_with_fireredasr2s(file_path):
+    print(f"Transcribing w/ FireRedASR2S {file_path}")
+
+    if not file_path.endswith(".wav"):
+        convert_cmd = [
+            "ffmpeg", "-y", "-i", file_path,
+            "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", "temp_audio.wav"
+        ]
+        subprocess.run(convert_cmd, check=True)
+        file_path = "temp_audio.wav"
+
+    outdir = tempfile.mkdtemp()
+    cli_path = os.path.join(fireredasr2s_local, "fireredasr2s", "fireredasr2s-cli")
+
+    env = os.environ.copy()
+    env["PYTHONPATH"] = f"{fireredasr2s_local}:{env.get('PYTHONPATH', '')}"
+    env["PATH"] = f"{os.path.join(fireredasr2s_local, 'fireredasr2s')}:{env.get('PATH', '')}"
+
+    fireredasr2s_cmd = [
+        "python", cli_path,
+        "--wav_paths", file_path,
+        "--outdir", outdir
+    ]
+
+    proc = await asyncio.create_subprocess_exec(
+        *fireredasr2s_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=env
+    )
+    stdout, stderr = await proc.communicate()
+
+    print(f'[{fireredasr2s_cmd!r} exited with {proc.returncode}]')
+    if stdout:
+        print(f"[stdout]\n{stdout.decode('utf-8', errors='ignore')}")
+    if stderr:
+        print(f"[stderr]\n{stderr.decode('utf-8', errors='ignore')}")
+
+    result_path = os.path.join(outdir, "result.jsonl")
+    with open(result_path, "r") as f:
+        results = [json.loads(line) for line in f if line.strip()]
+    transcription = " ".join(r.get("text", "") for r in results)
+    return [transcription]
+
 async def transcribe_from_url(audio_url, show_notes):
     local_filename = "temp_audio"
     try:
         part_names = download_audio(audio_url, local_filename)
-        if whisper_local:
+        if fireredasr2s_local:
+            transcriptions = await transcribe_audio_with_fireredasr2s(part_names)
+        elif whisper_local:
             transcriptions = await transcribe_audio_with_local_whisper(part_names, show_notes)
         else:
             transcriptions = [transcribe_audio(part_name) for part_name in part_names]
