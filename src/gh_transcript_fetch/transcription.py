@@ -55,10 +55,11 @@ async def transcribe_audio_with_local_whisper(file_path, show_notes, whisper_dir
         subprocess.run(convert_cmd, check=True)
         file_path = wav_path
 
+    model_name = os.getenv("WHISPER_MODEL_NAME", "ggml-large-v3-turbo.bin")
     whisper_cmd = [
         whisper_dir / "build" / "bin" / "whisper-cli",
         "-f", file_path,
-        "-m", whisper_dir / "models" / "ggml-large-v3-turbo-q5_0.bin",
+        "-m", whisper_dir / "models" / model_name,
         "--prompt", f'"{show_notes}"',
         "-t", "8",
         "--output-txt"

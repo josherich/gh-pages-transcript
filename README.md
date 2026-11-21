@@ -13,7 +13,8 @@ Install Python 3.11 or newer and run `uv sync --locked`. Install `ffmpeg` for au
 | `OPENAI_API_KEY` | Hosted Whisper transcription and OpenAI-compatible formatting for the OpenAI and Basement providers |
 | `G_TOKEN` | Gemini formatting, table of contents, and FAQ |
 | `LM_PROVIDER` | Formatting provider. Defaults to `google`; also supports `openai`, `ollama`, and `basement`. |
-| `WHISPER_LOCAL` | Optional path to a built whisper.cpp checkout with the `ggml-large-v3-turbo-q5_0.bin` model |
+| `WHISPER_LOCAL` | Optional path to a built whisper.cpp checkout |
+| `WHISPER_MODEL_NAME` | Model filename in the checkout's `models/` directory. Defaults to `ggml-large-v3-turbo.bin`. |
 | `OLLAMA_URL`, `BASEMENT_URL` | Base URLs for those formatting providers |
 | `BILIBILI_SESSDATA`, `BILIBILI_BUVID3`, `BILIBILI_BILI_JCT` | Optional Bilibili cookies |
 | `PORT`, `QUEUE_URL` | Web port (defaults to 5001) and SQS URL (for `--mode sqs`) |
