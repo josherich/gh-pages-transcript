@@ -1,17 +1,15 @@
 import os
 import requests
 import json
-from pathlib import Path
+from functools import cache
+from importlib.resources import files
 
-from env import *
 
-WHISPER_CONTEXT_FILE = Path('whisper_context.json')
-whisper_context = {}
-with open(WHISPER_CONTEXT_FILE, 'r') as f:
-    whisper_context = json.load(f)
+@cache
+def load_whisper_context():
+    resource = files(__package__).joinpath("whisper_context.json")
+    return json.loads(resource.read_text(encoding="utf-8"))
 
-pocketcasts_user = os.environ['PCUSER']
-pocketcasts_pw = os.environ['PCPW']
 
 samples = [{
     "uuid": "46002fcb-8a68-4ce9-8240-43d25fdd3ec5",
@@ -51,15 +49,15 @@ def get_pocketcasts_episode_notes(pod_uuid, episode_uuid):
     return episode_notes_cache.get(episode_uuid, None)
 
 def get_show_notes(pod_title, pod_uuid, episode_uuid):
-    author_notes = whisper_context[pod_title] if pod_title in whisper_context else pod_title
+    author_notes = load_whisper_context().get(pod_title, pod_title)
     episode_notes = get_pocketcasts_episode_notes(pod_uuid, episode_uuid)
     return author_notes, episode_notes
 
 def get_pocketcasts_history():
     login_url = "https://api.pocketcasts.com/user/login"
     login_payload = {
-        "email": pocketcasts_user,
-        "password": pocketcasts_pw,
+        "email": os.environ["PCUSER"],
+        "password": os.environ["PCPW"],
         "scope": "webplayer"
     }
     login_headers = {"Content-Type": "application/json"}

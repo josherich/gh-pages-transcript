@@ -1,4 +1,5 @@
 import json
+import os
 import asyncio
 from datetime import datetime
 import argparse
@@ -7,21 +8,13 @@ from dataclasses import dataclass
 import boto3
 from xml.etree.ElementTree import ParseError
 
-from env import *
-from pocket_casts import get_pocketcasts_history
-from yt_liked import get_youtube_liked_videos
-from yt_subtitle import download_caption
-from whisper import transcribe_from_url
-from create_pr import create_branch_and_pr, format_pr_content
-from format import format_transcript, extract_toc, extract_faq
-from db import LocalStorageDb
-
-# Initialize database
-db = LocalStorageDb({'namespace': 'transcript_queue', 'storage_path': './data'})
-db.add_collection('episodes')
-
-sqs = boto3.client('sqs', region_name='us-west-1')
-queue_url = os.getenv('QUEUE_URL')
+from .pocket_casts import get_pocketcasts_history
+from .youtube import get_youtube_liked_videos
+from .captions import download_caption
+from .transcription import transcribe_from_url
+from .publishing import create_branch_and_pr, format_pr_content
+from .formatting import format_transcript, extract_toc, extract_faq
+from .db import open_episode_db
 
 async def get_caption_worker(url: str, show_notes: str, type='pocketcasts'):
     print(f"Processing caption for URL {type}: {url}")
@@ -74,7 +67,7 @@ class Youtube:
             'type': self.type
         })
 
-def pull_history():
+def pull_history(db):
     print("Fetching new Podcasts episode URLs...")
     all_messages = []
 
@@ -133,7 +126,7 @@ def pull_history():
     print(f"Added {i} new Youtube URLs to queue")
     return all_messages
 
-async def producer(mode):
+async def producer(db):
     """Producer that fetches URLs and adds them to the queue"""
     print("Starting producer...")
 
@@ -144,14 +137,14 @@ async def producer(mode):
         # Run at 12:00
         if now.hour == 12 and now.minute == 0:
             try:
-                all_messages = pull_history()
+                pull_history(db)
             except Exception as e:
                 print(f"Error in producer: {e}")
                 await asyncio.sleep(60)
 
         await asyncio.sleep(60)
 
-def move_to_status(id, status):
+def move_to_status(db, id, status):
     try:
         # Find the item by URL and update its status
         item = db.episodes.find_one({'_id': id})
@@ -162,16 +155,16 @@ def move_to_status(id, status):
     except Exception as e:
         print(f"Error updating status for {id}: {e}")
 
-def move_to_processing(id):
-    move_to_status(id, 'processing')
+def move_to_processing(db, id):
+    move_to_status(db, id, 'processing')
 
-def move_to_done(id):
-    move_to_status(id, 'done')
+def move_to_done(db, id):
+    move_to_status(db, id, 'done')
 
-def move_to_error(id):
-    move_to_status(id, 'error')
+def move_to_error(db, id):
+    move_to_status(db, id, 'error')
 
-async def sqs_consumer(name):
+async def sqs_consumer(name, db, sqs, queue_url):
     print(f"Starting sqs consumer {name}...")
     while True:
         try:
@@ -188,7 +181,7 @@ async def sqs_consumer(name):
             else:
                 print(message['Body'])
                 item = json.loads(message['Body'])
-                move_to_processing(item["_id"])
+                move_to_processing(db, item["_id"])
                 print(f"Consumer {name}: Processing message {item}")
                 try:
                     show_notes = ''
@@ -197,7 +190,7 @@ async def sqs_consumer(name):
 
                     result = await get_caption_worker(item["url"], show_notes, item['type'])
                     if result == None:
-                        move_to_error(item["_id"])
+                        move_to_error(db, item["_id"])
                         raise Exception(f"Failed to fetch raw transcription for {item['url']}")
 
                     formatted_result = await format_transcript(result) # format using llm
@@ -216,7 +209,7 @@ async def sqs_consumer(name):
                         QueueUrl=queue_url,
                         ReceiptHandle=message['ReceiptHandle']
                     )
-                    move_to_done(item["_id"])
+                    move_to_done(db, item["_id"])
                 except ParseError as e:
                     print(f"Excepted no element found in xml.etree.ElementTree.ParseError: {e}")
                     print(f"SQS message will be visibile after 30 minutes.")
@@ -225,11 +218,11 @@ async def sqs_consumer(name):
             print(f"Consumer {name}: error: {e}")
             traceback.print_exc()
             if 'item' in dir() and item:
-                move_to_error(item["_id"])
+                move_to_error(db, item["_id"])
             await asyncio.sleep(60)
 
 
-async def local_consumer(name):
+async def local_consumer(name, db):
     """Consumer that processes URLs from the queue"""
     print(f"Starting local consumer {name}...")
 
@@ -242,7 +235,7 @@ async def local_consumer(name):
                 await asyncio.sleep(60)
                 continue
 
-            move_to_processing(item["_id"])
+            move_to_processing(db, item["_id"])
 
             print(f"Consumer {name}: Processing {item['url']}")
             try:
@@ -253,7 +246,7 @@ async def local_consumer(name):
 
                     result = await get_caption_worker(item["url"], show_notes, item['type'])
                     if result == None:
-                        move_to_error(item["_id"])
+                        move_to_error(db, item["_id"])
                         raise Exception(f"Failed to fetch raw transcription for {item['url']}")
                     else:
                         # Update the item with transcript
@@ -277,13 +270,13 @@ async def local_consumer(name):
                 )
                 print(f"Consumer {name}: Created PR: {pr_url}")
 
-                move_to_done(item["_id"])
+                move_to_done(db, item["_id"])
 
             except Exception as e:
                 print(f"Consumer {name}: Error processing {item['url']}: {e}")
                 traceback.print_exc()
                 # mark error and skip, e.g. yt fail to download subtitle
-                move_to_error(item["_id"])
+                move_to_error(db, item["_id"])
                 await asyncio.sleep(60)
 
         except Exception as e:
@@ -293,9 +286,16 @@ async def local_consumer(name):
 async def main(mode='local'):
     print('Mode: ', mode)
 
-    producer_task = asyncio.create_task(producer(mode))
-    consumer_task1 = asyncio.create_task(local_consumer(1) if mode == 'local' else sqs_consumer(1))
-    consumer_task2 = asyncio.create_task(local_consumer(2) if mode == 'local' else sqs_consumer(2))
+    db = open_episode_db()
+    if mode == "local":
+        consumers = [local_consumer(name, db) for name in (1, 2)]
+    else:
+        sqs = boto3.client("sqs", region_name="us-west-1")
+        queue_url = os.environ["QUEUE_URL"]
+        consumers = [sqs_consumer(name, db, sqs, queue_url) for name in (1, 2)]
+
+    producer_task = asyncio.create_task(producer(db))
+    consumer_task1, consumer_task2 = [asyncio.create_task(consumer) for consumer in consumers]
 
     try:
         await asyncio.gather(producer_task, consumer_task1, consumer_task2)
@@ -305,7 +305,7 @@ async def main(mode='local'):
         consumer_task2.cancel()
         await asyncio.gather(producer_task, consumer_task1, consumer_task2, return_exceptions=True)
 
-if __name__ == "__main__":
+def cli():
     try:
         parser = argparse.ArgumentParser(description="Transcript Queue")
         parser.add_argument("--mode", choices=["local", "sqs"], default='local', help="local queue or SQS queue")
@@ -314,3 +314,7 @@ if __name__ == "__main__":
         asyncio.run(main(mode=args.mode))
     except KeyboardInterrupt:
         print("Shutting down job queue...")
+
+
+if __name__ == "__main__":
+    cli()

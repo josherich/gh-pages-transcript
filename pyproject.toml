@@ -1,7 +1,7 @@
 [project]
 name = "gh-transcript-fetch"
 version = "0.1.0"
-description = "Add your description here"
+description = "Fetch media transcripts and publish them through GitHub pull requests"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -20,5 +20,21 @@ dependencies = [
     "pygithub>=2.5.0",
     "python-fasthtml>=0.12.1",
     "pytube>=15.0.0",
+    "requests>=2.32.3",
+    "uvicorn>=0.34.0",
     "youtube-transcript-api==1.1.0",
 ]
+
+[project.scripts]
+transcript-web = "gh_transcript_fetch.web:cli"
+transcript-worker = "gh_transcript_fetch.worker:cli"
+
+[build-system]
+requires = ["setuptools>=74"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+gh_transcript_fetch = ["whisper_context.json"]

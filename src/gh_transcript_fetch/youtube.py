@@ -4,7 +4,8 @@ import unicodedata
 import google.auth
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from env import *
+
+from .paths import youtube_client_secrets_path
 
 credential = None
 SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
@@ -30,7 +31,7 @@ def slugify(text):
 
 def authenticate_youtube(use_local=False):
     global credential
-    flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+    flow = InstalledAppFlow.from_client_secrets_file(str(youtube_client_secrets_path()), SCOPES)
     if credential is None:
         flow.redirect_uri = 'http://localhost:5002/oauth'
         auth_url, __ = flow.authorization_url(prompt="consent")
@@ -53,7 +54,7 @@ def authenticate_youtube_from_code(code):
     global credential
     if credential is not None:
         return
-    flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+    flow = InstalledAppFlow.from_client_secrets_file(str(youtube_client_secrets_path()), SCOPES)
     flow.redirect_uri = 'http://localhost:5002/oauth'
     token = flow.fetch_token(code=code)
     print(f"Obtained token: {token}")

@@ -1,9 +1,6 @@
 import os
 import re
 from github import Github
-from env import *
-
-GITHUB_TOKEN = os.environ['GH_TOKEN']
 
 REPO_NAME = "josherich/blog"
 BRANCH_NAME = "gh-pages"
@@ -47,7 +44,7 @@ def create_markdown_file(title, transcription, date, channel_title=None):
 
 def get_repo():
     """Authenticates with GitHub and returns the repository object."""
-    github = Github(GITHUB_TOKEN)
+    github = Github(os.environ["GH_TOKEN"])
     return github.get_repo(REPO_NAME)
 
 def commit_file(repo, filename, content, branch_name):

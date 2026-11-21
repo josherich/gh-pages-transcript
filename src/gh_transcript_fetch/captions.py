@@ -1,5 +1,4 @@
 import os
-from env import *
 import asyncio
 import requests
 

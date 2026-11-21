@@ -1,22 +1,23 @@
 import os
-from env import *
+from functools import cache
 from openai import AsyncOpenAI
 from google import genai
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import asyncio
 
-openai_client = AsyncOpenAI()
-ollama_client = AsyncOpenAI(
-    base_url=os.getenv("OLLAMA_URL"),
-    # required but ignored
-    api_key='ollama',
-)
-basement_client = AsyncOpenAI(
-    base_url=os.getenv("BASEMENT_URL"),
-)
-g_client = genai.Client(api_key=os.getenv("G_TOKEN"))
+@cache
+def get_openai_client(provider):
+    if provider == "ollama":
+        return AsyncOpenAI(base_url=os.getenv("OLLAMA_URL"), api_key="ollama")
+    if provider == "basement":
+        return AsyncOpenAI(base_url=os.getenv("BASEMENT_URL"))
+    return AsyncOpenAI()
 
-lm_provider = os.getenv("LM_PROVIDER", "google")
+
+@cache
+def get_google_client():
+    return genai.Client(api_key=os.getenv("G_TOKEN"))
+
 
 # Here are some writing samples to ground your style and tone:
 # {samples}
@@ -205,7 +206,7 @@ async def format_transcript_part(transcription, part_n=1):
     return await answer_prompt(content, part_n)
 
 def answer_prompt_w_schema(content, schema):
-    response = g_client.models.generate_content(
+    response = get_google_client().models.generate_content(
         model='gemini-2.5-flash',
         contents=content,
         config={
@@ -221,9 +222,10 @@ def print_res_summary(res, part_n=1):
     print(f"{res[0:100]} ... \n(length: {len(res)})")
 
 async def answer_prompt(content, part_n=1):
+    lm_provider = os.getenv("LM_PROVIDER", "google")
     try:
         if lm_provider == "openai":
-            response = await openai_client.chat.completions.create(
+            response = await get_openai_client(lm_provider).chat.completions.create(
                 messages=[
                     {
                         "role": "user",
@@ -240,7 +242,7 @@ async def answer_prompt(content, part_n=1):
             print_res_summary(res, part_n)
             return res
         elif lm_provider == "ollama":
-            response = await ollama_client.chat.completions.create(
+            response = await get_openai_client(lm_provider).chat.completions.create(
                 messages=[
                     {
                         "role": "user",
@@ -256,7 +258,7 @@ async def answer_prompt(content, part_n=1):
             print_res_summary(res, part_n)
             return res
         elif lm_provider == "google":
-            response = await g_client.aio.models.generate_content(model='gemini-3-flash-preview', contents=content)
+            response = await get_google_client().aio.models.generate_content(model='gemini-3-flash-preview', contents=content)
             res = response.text
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
@@ -264,7 +266,7 @@ async def answer_prompt(content, part_n=1):
             print_res_summary(res, part_n)
             return res
         elif lm_provider == "basement":
-            response = await basement_client.chat.completions.create(
+            response = await get_openai_client(lm_provider).chat.completions.create(
                 messages=[
                     {
                         "role": "user",
@@ -324,47 +326,3 @@ def extract_faq(text):
     print(f"------------ Runtime prompt -----------\n{runtime_prompt[0:100]} ... \n(length: {len(runtime_prompt)})")
     print(f'---------------------------------------\n')
     return answer_prompt_w_schema(runtime_prompt, get_faq_schema())
-
-if __name__ == "__main__":
-    async def main():
-        transcription = 'test'
-        with open('tests/cn-1.txt', 'r') as f:
-            transcription = f.read()
-
-        res = await format_transcript(transcription)
-        print('----------------- format transcript cn-1 ---------------\n')
-        print('before n of lines: ', transcription.count('\n'))
-        print('after n of lines: ', res.count('\n'))
-        print(res)
-
-        # rewrite = rewrite_transcript(res)
-        # print('----------------- rewrite transcript cn-1 --------------\n')
-        # print('before n of lines: ', transcription.count('\n'))
-        # print('after n of lines: ', rewrite.count('\n'))
-        # print(rewrite)
-
-        toc = extract_toc(res)
-        print('----------------- extract toc cn-1 ---------------\n')
-        print(toc)
-
-        with open('tests/en-1.txt', 'r') as f:
-            transcription = f.read()
-
-        res = await format_transcript(transcription)
-        print('----------------- format transcript en-1 ---------------\n')
-        print('before n of lines: ', transcription.count('\n'))
-        print('after n of lines: ', res.count('\n'))
-        print(res)
-
-        # rewrite = rewrite_transcript(res)
-        # print('----------------- rewrite transcript en-1 --------------\n')
-        # print('before n of lines: ', transcription.count('\n'))
-        # print('after n of lines: ', rewrite.count('\n'))
-        # print(rewrite)
-
-        toc = extract_toc(res)
-        print('----------------- extract toc en-1 ---------------\n')
-        print(toc)
-
-    asyncio.run(main())
-

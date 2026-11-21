@@ -8,3 +8,15 @@ queue.json
 *.wav*
 data
 temp_audio*
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+/build/
+/dist/
+/.venv/
+/.env
+/.pytest_cache/
+.ipynb_checkpoints/
+/chroma_langchain_db/
+/test_data/

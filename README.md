@@ -1,52 +1,53 @@
-# Github Pages Transcript
+# GitHub Pages Transcript
 
-A Python tool to fetch audio transcripts for my Pocketcasts listening history and Youtube liked video, process them, and create blog posts via GitHub pull requests.
+Fetch transcripts for Pocket Casts listening history and liked YouTube videos, format them, and publish them through GitHub pull requests.
 
 ## Setup
 
-1. Create a client_secret.json file with your Google API credentials
-2. Create a env.py file with the following environment variables:
+Install Python 3.11 or newer and run `uv sync --locked`. Install `ffmpeg` for audio transcription. Set the environment variables your workflow uses in your shell or in a private `.env` file.
 
-```python
-import os
-os.environ['PCUSER'] = '' # Pocketcasts username
-os.environ['PCPW'] = '' # Pocketcasts password
-os.environ['GH_TOKEN'] = '' # GitHub token
-os.environ['WHISPER_LOCAL'] = '~/whisper.cpp' # optional: whisper.cpp repo path
+| Settings | Purpose |
+| --- | --- |
+| `PCUSER`, `PCPW` | Pocket Casts credentials and web UI login |
+| `GH_TOKEN` | GitHub publishing |
+| `OPENAI_API_KEY` | Hosted Whisper transcription and OpenAI-compatible formatting for the OpenAI and Basement providers |
+| `G_TOKEN` | Gemini formatting, table of contents, and FAQ |
+| `LM_PROVIDER` | Formatting provider. Defaults to `google`; also supports `openai`, `ollama`, and `basement`. |
+| `WHISPER_LOCAL` | Optional path to a built whisper.cpp checkout with the `ggml-large-v3-turbo-q5_0.bin` model |
+| `OLLAMA_URL`, `BASEMENT_URL` | Base URLs for those formatting providers |
+| `BILIBILI_SESSDATA`, `BILIBILI_BUVID3`, `BILIBILI_BILI_JCT` | Optional Bilibili cookies |
+| `PORT`, `QUEUE_URL` | Web port (defaults to 5001) and SQS URL (for `--mode sqs`) |
 
-os.environ['LM_PROVIDER'] = 'openai' # optional: language model provider. openai|google|ollama|basement
-os.environ["OPENAI_API_KEY"] = '' # OpenAI API key
-os.environ['G_TOKEN'] = '' # Google API key
-os.environ['BASEMENT_URL'] = '' # optional: basement API URL
-os.environ['OLLAMA_URL'] = '' # optional: ollama API URL
+For YouTube history and playlist access, place the Google OAuth client JSON at the path below or set its override. The existing web OAuth callback is `http://localhost:5002/oauth`. Set `PORT=5002` when using that callback.
 
-os.environ['BILIBILI_SESSDATA'] = '' # optional: Bilibili cookies SESSDATA
-os.environ['BILIBILI_BUVID3'] = '' # optional: Bilibili cookies BUVID3
-os.environ['BILIBILI_BILI_JCT'] = '' # optional: Bilibili cookies BILI_JCT
-```
-
-3. Install dependencies
+## Run
 
 ```sh
-pip install python-fasthtml PyGithub openai google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client youtube-transcript-api boto3
+uv run --env-file .env transcript-web
+uv run --env-file .env transcript-worker
+uv run python -m unittest discover -s tests
 ```
 
-## Usage
+Omit `--env-file .env` if the variables are already exported. Both commands accept `--mode local` (the default) or `--mode sqs`. The web and worker commands replace `python main.py` and `python q.py` respectively.
 
-```sh
-python q.py
+## Paths
+
+| Purpose | Default | Override |
+| --- | --- | --- |
+| State root | `~/.local/state/gh-transcript-fetch/` | `GH_TRANSCRIPT_STATE_DIR` or `XDG_STATE_HOME` |
+| Queue JSON | `<state root>/queue/` | `GH_TRANSCRIPT_QUEUE_DIR` |
+| Web session key | `<state root>/session.key` | `GH_TRANSCRIPT_SESSION_KEY_FILE` |
+| YouTube OAuth client JSON | `~/.config/gh-transcript-fetch/client_secret.json` | `GH_TRANSCRIPT_YOUTUBE_CLIENT_SECRETS` or `XDG_CONFIG_HOME` |
+| RAG notebook’s Chroma store | `<state root>/chroma/` | Follows the state root |
+| Downloaded audio, conversion output, and chunks | A unique system temporary directory per job, cleaned up when the job ends | `TMPDIR` |
+| Published Markdown | `_posts/podcast/` in the target GitHub repository | |
+
+For an existing checkout, set these values to reuse its queue, session key, and OAuth client file. Use the same settings in both processes. You can also copy the existing files into the new default paths while both processes are stopped. Transfer the settings from your old `env.py` to your environment or `.env`.
+
+```dotenv
+GH_TRANSCRIPT_QUEUE_DIR=/absolute/path/to/checkout/data
+GH_TRANSCRIPT_SESSION_KEY_FILE=/absolute/path/to/checkout/.sesskey
+GH_TRANSCRIPT_YOUTUBE_CLIENT_SECRETS=/absolute/path/to/checkout/client_secret.json
 ```
 
-```sh
-python main.py
-```
-
-## Files
-
-```sh
-├── create_pr.py       # Handle GitHub PR creation
-├── whisper.py        # Audio transcription
-├── yt_subtitle.py    # YouTube subtitle processing
-├── pocket_casts.py   # Podcast processing
-└── env.py           # Environment configuration
-```
+Application code and the read-only Whisper context are in `src/gh_transcript_fetch/`. Database checks and sample transcripts live under `tests/`, the formatting example lives under `examples/`, and the RAG experiment lives under `notebooks/`.

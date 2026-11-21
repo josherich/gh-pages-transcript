@@ -614,7 +614,7 @@ wheels = [
 [[package]]
 name = "gh-transcript-fetch"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "bilibili-api-python" },
     { name = "boto3" },
@@ -631,6 +631,8 @@ dependencies = [
     { name = "pygithub" },
     { name = "python-fasthtml" },
     { name = "pytube" },
+    { name = "requests" },
+    { name = "uvicorn" },
     { name = "youtube-transcript-api" },
 ]
 
@@ -651,6 +653,8 @@ requires-dist = [
     { name = "pygithub", specifier = ">=2.5.0" },
     { name = "python-fasthtml", specifier = ">=0.12.1" },
     { name = "pytube", specifier = ">=15.0.0" },
+    { name = "requests", specifier = ">=2.32.3" },
+    { name = "uvicorn", specifier = ">=0.34.0" },
     { name = "youtube-transcript-api", specifier = "==1.1.0" },
 ]
 

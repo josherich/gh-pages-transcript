@@ -4,7 +4,8 @@ import copy
 from typing import Dict, List, Any, Optional, Union, Callable
 from pathlib import Path
 
-from selector import compile_document_selector
+from .paths import queue_directory
+from .selector import compile_document_selector
 
 class LocalStorageDb:
     """Python implementation of LocalStorageDb using JSON files instead of localStorage"""
@@ -12,7 +13,7 @@ class LocalStorageDb:
     def __init__(self, options: Optional[Dict] = None, success: Optional[Callable] = None, error: Optional[Callable] = None):
         self.collections: Dict[str, 'Collection'] = {}
         self.namespace: Optional[str] = None
-        self.storage_path: str = "."
+        self.storage_path: str | Path = "."
 
         if options:
             if options.get('namespace'):
@@ -68,7 +69,7 @@ class LocalStorageDb:
 class Collection:
     """Collection class that stores data in memory and optionally persists to JSON files"""
 
-    def __init__(self, name: str, namespace: Optional[str] = None, storage_path: str = "."):
+    def __init__(self, name: str, namespace: Optional[str] = None, storage_path: str | Path = "."):
         self.name = name
         self.namespace = namespace
         self.storage_path = storage_path
@@ -556,3 +557,10 @@ class FindResult:
             if error:
                 error(e)
 
+
+
+def open_episode_db() -> LocalStorageDb:
+    """Open the transcript queue using the shared application paths."""
+    db = LocalStorageDb({"namespace": "transcript_queue", "storage_path": queue_directory()})
+    db.add_collection("episodes")
+    return db
