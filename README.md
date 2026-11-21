@@ -19,7 +19,7 @@ Install Python 3.11 or newer and run `uv sync --locked`. Install `ffmpeg` for au
 | `BILIBILI_SESSDATA`, `BILIBILI_BUVID3`, `BILIBILI_BILI_JCT` | Optional Bilibili cookies |
 | `PORT`, `QUEUE_URL` | Web port (defaults to 5001) and SQS URL (for `--mode sqs`) |
 
-For YouTube history and playlist access, place the Google OAuth client JSON at the path below or set its override. The existing web OAuth callback is `http://localhost:5002/oauth`. Set `PORT=5002` when using that callback.
+For YouTube history and playlist access, place the Google OAuth client JSON at the path below or set its override. With the default callback, set `PORT=5002`, open the app at `http://localhost:5002`, and select **Pull History** to authorize YouTube. For a remote deployment, set `GH_TRANSCRIPT_YOUTUBE_REDIRECT_URI` to the app's HTTPS URL ending in `/oauth` and register that exact URL on the Google OAuth web client. Start authorization from that same app origin. Use the same state root for the web app and worker so the worker can reuse the saved authorization.
 
 ## Run
 
@@ -39,6 +39,7 @@ Omit `--env-file .env` if the variables are already exported. Both commands acce
 | SQLite queue | `<state root>/queue/episodes.sqlite3` | `GH_TRANSCRIPT_QUEUE_DIR` |
 | Web session key | `<state root>/session.key` | `GH_TRANSCRIPT_SESSION_KEY_FILE` |
 | YouTube OAuth client JSON | `~/.config/gh-transcript-fetch/client_secret.json` | `GH_TRANSCRIPT_YOUTUBE_CLIENT_SECRETS` or `XDG_CONFIG_HOME` |
+| YouTube authorization | `<state root>/youtube-token.json` | Follows the state root |
 | RAG notebook’s Chroma store | `<state root>/chroma/` | Follows the state root |
 | Downloaded audio, conversion output, and chunks | A unique system temporary directory per job, cleaned up when the job ends | `TMPDIR` |
 | Published Markdown | `_posts/podcast/` in the target GitHub repository | |

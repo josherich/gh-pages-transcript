@@ -1,15 +1,23 @@
 import os
+from pathlib import Path
 import re
+from tempfile import NamedTemporaryFile
 import unicodedata
-import google.auth
-from google_auth_oauthlib.flow import InstalledAppFlow
+
+from google.auth.exceptions import RefreshError
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
-from .paths import youtube_client_secrets_path
+from .paths import state_directory, youtube_client_secrets_path
 
-credential = None
 SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+
+class YouTubeAuthorizationRequired(Exception):
+    pass
+
 
 def slugify(text):
     # Normalize unicode characters to closest ASCII equivalent
@@ -29,36 +37,48 @@ def slugify(text):
 
     return text
 
-def authenticate_youtube(use_local=False):
-    global credential
-    flow = InstalledAppFlow.from_client_secrets_file(str(youtube_client_secrets_path()), SCOPES)
-    if credential is None:
-        flow.redirect_uri = 'http://localhost:5002/oauth'
-        auth_url, __ = flow.authorization_url(prompt="consent")
+def youtube_oauth_flow(**kwargs):
+    redirect_uri = os.getenv("GH_TRANSCRIPT_YOUTUBE_REDIRECT_URI") or "http://localhost:5002/oauth"
+    return Flow.from_client_secrets_file(
+        str(youtube_client_secrets_path()), SCOPES, redirect_uri=redirect_uri, **kwargs
+    )
 
-        print(f"Open this URL in your browser: {auth_url}")
 
-        if use_local:
-            code = input('Enter the authorization code: ')
-            token = flow.fetch_token(code=code)
-            print(f"Obtained token: {token}")
-            credential = flow.credentials
+def save_youtube_credentials(credentials):
+    if not credentials.refresh_token:
+        raise YouTubeAuthorizationRequired("Google did not grant offline access.")
+    directory = state_directory()
+    directory.mkdir(parents=True, exist_ok=True)
+    token_file = NamedTemporaryFile(mode="w", encoding="utf-8", dir=directory, delete=False)
+    try:
+        with token_file:
+            token_file.write(credentials.to_json())
+        os.replace(token_file.name, directory / "youtube-token.json")
+    finally:
+        Path(token_file.name).unlink(missing_ok=True)
 
-            return build("youtube", "v3", credentials=credential)
-        else:
-            return None
 
-    return build("youtube", "v3", credentials=credential)
+def authenticate_youtube():
+    path = state_directory() / "youtube-token.json"
+    try:
+        credentials = Credentials.from_authorized_user_file(path, SCOPES)
+    except (FileNotFoundError, ValueError) as exc:
+        raise YouTubeAuthorizationRequired from exc
+    return build("youtube", "v3", credentials=credentials)
 
-def authenticate_youtube_from_code(code):
-    global credential
-    if credential is not None:
-        return
-    flow = InstalledAppFlow.from_client_secrets_file(str(youtube_client_secrets_path()), SCOPES)
-    flow.redirect_uri = 'http://localhost:5002/oauth'
-    token = flow.fetch_token(code=code)
-    print(f"Obtained token: {token}")
-    credential = flow.credentials
+
+def execute_youtube_request(request):
+    try:
+        return request.execute()
+    except RefreshError as exc:
+        details = exc.args[1] if len(exc.args) > 1 else None
+        if isinstance(details, dict) and details.get("error") == "invalid_grant":
+            raise YouTubeAuthorizationRequired from exc
+        raise
+    except HttpError as exc:
+        if exc.resp.status == 401:
+            raise YouTubeAuthorizationRequired from exc
+        raise
 
 def get_liked_videos(youtube):
     request = youtube.playlistItems().list(
@@ -66,7 +86,7 @@ def get_liked_videos(youtube):
         playlistId="LL",  # 'LL' is the default playlist ID for Liked Videos
         maxResults=10  # Adjust as needed
     )
-    response = request.execute()
+    response = execute_youtube_request(request)
 
     video_list = []
     for item in response.get("items", []):
@@ -89,27 +109,27 @@ def get_liked_videos(youtube):
 
 def get_playlist_videos(youtube, playlist_id):
     print(f"playlist_id: {playlist_id}")
-    request = youtube.playlistItems().list(
+    playlist_items = youtube.playlistItems()
+    request = playlist_items.list(
         part="snippet",
         playlistId=playlist_id,
-        maxResults=100
+        maxResults=50,
     )
-    response = request.execute()
-
     video_list = []
-    for item in response.get("items", []):
-        print(item["snippet"])
-        video_title = item["snippet"]["title"]
-        published_date = item["snippet"]["publishedAt"].split("T")[0]
-        video_id = item["snippet"]["resourceId"]["videoId"]
-        video_url = f"https://www.youtube.com/watch?v={video_id}"
-        print(f"Title: {video_title}, URL: https://www.youtube.com/watch?v={video_id}")
-        video_list.append({
-            'id': video_id,
-            'url': video_url,
-            'title': video_title,
-            'published_date': published_date
-        })
+    for _ in range(2):
+        response = execute_youtube_request(request)
+        for item in response.get("items", []):
+            snippet = item["snippet"]
+            video_id = snippet["resourceId"]["videoId"]
+            video_list.append({
+                'id': video_id,
+                'url': f"https://www.youtube.com/watch?v={video_id}",
+                'title': snippet["title"],
+                'published_date': snippet["publishedAt"].split("T")[0],
+            })
+        request = playlist_items.list_next(request, response)
+        if request is None:
+            break
 
     return video_list
 
@@ -122,6 +142,7 @@ def get_youtube_playlist_videos(playlist_id):
     return get_playlist_videos(youtube, playlist_id)
 
 if __name__ == "__main__":
-    youtube = authenticate_youtube(use_local=True)
-    liked_videos = get_liked_videos(youtube)
-    print(liked_videos)
+    try:
+        print(get_youtube_liked_videos())
+    except YouTubeAuthorizationRequired:
+        raise SystemExit("Open the transcript web app and select Pull History to connect YouTube.")

@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import json
 import os
+import secrets
 from urllib.parse import parse_qs, urlparse
 import uuid
 
@@ -13,11 +14,16 @@ from fasthtml.common import (
     A, B, Body, Beforeware, Button, Card, Container, Div, FastHTML, Form, Head,
     Hidden, Html, HTTPException, Input, NotStr, RedirectResponse, Script, Span, Textarea, Title, picolink,
 )
+from oauthlib.oauth2 import OAuth2Error
+from requests import RequestException
+from starlette.responses import Response
 
 from .episode_queue import open_episode_db
 from .paths import load_session_key
-from .worker import pull_history
-from .youtube import authenticate_youtube_from_code, get_youtube_playlist_videos
+from .worker import pull_history, pull_youtube_history
+from .youtube import (
+    YouTubeAuthorizationRequired, get_youtube_playlist_videos, save_youtube_credentials, youtube_oauth_flow,
+)
 
 
 def create_app(mode="local"):
@@ -38,8 +44,30 @@ def create_app(mode="local"):
         if not token or not user or token != make_session_token(user):
             return RedirectResponse("/login", status_code=303)
 
-    beforeware = Beforeware(check_auth, skip=[r"/login", r"/oauth"])
+    beforeware = Beforeware(check_auth, skip=[r"/login"])
     app = FastHTML(before=beforeware, secret_key=session_secret, hdrs=(picolink,))
+
+    def redirect(request, url):
+        if request.headers.get("HX-Request") == "true":
+            return Response(status_code=204, headers={"HX-Redirect": url})
+        return RedirectResponse(url, status_code=303)
+
+    def youtube_notice(request, sess, message):
+        sess["youtube_notice"] = message
+        return redirect(request, "/")
+
+    def start_youtube_authorization(request, sess, playlist_id=None):
+        try:
+            flow = youtube_oauth_flow(autogenerate_code_verifier=True)
+            url, state = flow.authorization_url(prompt="consent")
+        except (OAuth2Error, OSError, ValueError):
+            return youtube_notice(request, sess, "YouTube authorization is unavailable. Check the OAuth client configuration.")
+        sess["youtube_oauth"] = {
+            "state": state,
+            "code_verifier": flow.code_verifier,
+            "playlist_id": playlist_id,
+        }
+        return redirect(request, url)
 
     def login_page(error=''):
         return Html(
@@ -137,9 +165,10 @@ def create_app(mode="local"):
         )
 
     @app.get("/")
-    def list_episodes(status: str = 'todo', source: str = ''):
+    def list_episodes(sess, status: str = 'todo', source: str = ''):
         episodes = db.list_episodes(status or None, source or None)
         forms = [episode_form(ep['_id'], ep) for ep in episodes]
+        notice = sess.pop("youtube_notice", None)
 
         def status_link(s, label):
             href = f"/?status={s}" + (f"&source={source}" if source else "")
@@ -150,6 +179,7 @@ def create_app(mode="local"):
             return A(B(label) if source == s else label, href=href)
 
         return Container(
+            Div(notice, role="alert") if notice else None,
             Div(
                 Span(
                     status_link('todo', 'todo'), " | ",
@@ -211,8 +241,19 @@ function playEpisodeUrl(url, title) {
 
         return episode_form(id, ep)
 
+    def add_youtube_playlist(playlist_id):
+        for video in get_youtube_playlist_videos(playlist_id):
+            db.add({
+                "id": uuid.uuid4().hex,
+                "title": video["title"],
+                "url": video["url"],
+                "type": "youtube",
+                "status": "todo",
+                "published_date": video["published_date"],
+            })
+
     @app.post("/new")
-    def add_episode(title: str, url: str):
+    def add_episode(title: str, url: str, request, sess):
         is_playlist = "youtube.com/playlist" in url
 
         parsed_url = urlparse(url)
@@ -220,38 +261,57 @@ function playEpisodeUrl(url, title) {
         query_params = parse_qs(query_string)
 
         if is_playlist:
-            episodes = [{
-                "id": uuid.uuid4().hex,
-                "title": video['title'],
-                "url": video['url'],
-                "type": "youtube",
-                "status": "todo",
-                "published_date": video['published_date']
-            } for video in get_youtube_playlist_videos(query_params['list'][0])]
+            if not query_params.get("list"):
+                raise HTTPException(status_code=400, detail="YouTube playlist ID is missing")
+            playlist_id = query_params["list"][0]
+            try:
+                add_youtube_playlist(playlist_id)
+            except YouTubeAuthorizationRequired:
+                return start_youtube_authorization(request, sess, playlist_id)
         else:
-            episodes = [{
+            db.add({
                 "id": uuid.uuid4().hex,
                 "title": title,
                 "url": url,
                 "type": "youtube" if ("youtube" in url or "bilibili" in url) else "pocketcasts",
                 "status": "todo",
                 "published_date": datetime.now().strftime("%Y-%m-%d")
-            }]
-
-        for ep in episodes:
-            db.add(ep)
-        return RedirectResponse('/', status_code=303)
+            })
+        return redirect(request, "/")
 
     @app.post("/pull")
-    def pull_episodes():
-        pull_history(db)
-        return RedirectResponse('/', status_code=303)
+    def pull_episodes(request, sess):
+        try:
+            pull_history(db)
+        except YouTubeAuthorizationRequired:
+            return start_youtube_authorization(request, sess)
+        return redirect(request, "/")
 
     @app.get("/oauth")
-    def youtube_callback(request):
-        code = request.query_params.get('code')
-        authenticate_youtube_from_code(code)
-        return RedirectResponse('/', status_code=303)
+    def youtube_callback(request, sess):
+        pending = sess.get("youtube_oauth")
+        state = request.query_params.get("state", "")
+        code = request.query_params.get("code")
+        if not pending or not secrets.compare_digest(state.encode(), pending["state"].encode()):
+            return youtube_notice(request, sess, "YouTube authorization session expired. Start the import again.")
+        sess.pop("youtube_oauth")
+        sess.pop("youtube_notice", None)
+        if request.query_params.get("error") or not code:
+            return youtube_notice(request, sess, "YouTube authorization was not completed. Start the import again to retry.")
+        try:
+            flow = youtube_oauth_flow(code_verifier=pending["code_verifier"])
+            flow.fetch_token(code=code, timeout=15)
+            save_youtube_credentials(flow.credentials)
+        except (OAuth2Error, RequestException, OSError, ValueError, YouTubeAuthorizationRequired):
+            return youtube_notice(request, sess, "Could not save YouTube authorization. Start the import again to retry.")
+        try:
+            if pending["playlist_id"] is None:
+                pull_youtube_history(db)
+            else:
+                add_youtube_playlist(pending["playlist_id"])
+        except YouTubeAuthorizationRequired:
+            return youtube_notice(request, sess, "YouTube rejected the connection. Start the import again to reconnect.")
+        return redirect(request, "/")
 
     return app
 

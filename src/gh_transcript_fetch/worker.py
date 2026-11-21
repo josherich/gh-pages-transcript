@@ -8,7 +8,7 @@ import boto3
 from xml.etree.ElementTree import ParseError
 
 from .pocket_casts import get_pocketcasts_history
-from .youtube import get_youtube_liked_videos
+from .youtube import YouTubeAuthorizationRequired, get_youtube_liked_videos
 from .captions import download_caption
 from .transcription import transcribe_from_url
 from .publishing import create_branch_and_pr, format_pr_content
@@ -44,6 +44,10 @@ def pull_history(db):
         }, only_if_new_url=True)
     print(f"Added {added} new Pocketcasts URLs to queue")
 
+    pull_youtube_history(db)
+
+
+def pull_youtube_history(db):
     print("Fetching new Youtube liked video URLs...")
     added = 0
     for item in get_youtube_liked_videos():
@@ -70,6 +74,8 @@ async def producer(db):
         if now.hour == 12 and now.minute == 0:
             try:
                 pull_history(db)
+            except YouTubeAuthorizationRequired:
+                print("YouTube authorization required. Open the transcript web app and select Pull History.")
             except Exception as e:
                 print(f"Error in producer: {e}")
                 await asyncio.sleep(60)
