@@ -1,0 +1,99 @@
+---
+import { render } from "astro:content";
+import Archive from "../layouts/Archive.astro";
+import { displayDate, getTranscripts, sitePath } from "../lib/transcripts";
+
+type Section = { section_title: string; index_sentences?: string };
+type Question = { question: string; answer: string; index_of_source?: string };
+
+export async function getStaticPaths() {
+  return (await getTranscripts()).map(({ entry, path, show }) => ({
+    params: { path },
+    props: { entry, show },
+  }));
+}
+
+const { entry, show } = Astro.props;
+const { title, description, date } = entry.data;
+const { Content, remarkPluginFrontmatter } = await render(entry);
+const toc = (Array.isArray(remarkPluginFrontmatter.toc) ? remarkPluginFrontmatter.toc : [])
+  .filter((section): section is Section => typeof section?.section_title === "string");
+const faq = (Array.isArray(remarkPluginFrontmatter.faq) ? remarkPluginFrontmatter.faq : [])
+  .filter((question): question is Question =>
+    typeof question?.question === "string" && typeof question?.answer === "string");
+const lang = /^\P{L}*\p{Script=Han}/u.test(title) ? "zh" : "en";
+---
+<Archive title={title} description={description} lang={lang}>
+  <article>
+    <p class="metadata">
+      <time datetime={date.toISOString().slice(0, 10)}>{displayDate(date)}</time>
+      {show && <a href={sitePath() + "?show=" + encodeURIComponent(show)}>{show}</a>}
+    </p>
+    <h1>{title}</h1>
+    {toc.length > 0 && (
+      <details>
+        <summary>Table of contents</summary>
+        <ol>
+          {toc.map((section) => <li><span data-excerpt={section.index_sentences}>{section.section_title}</span></li>)}
+        </ol>
+      </details>
+    )}
+    <div class="transcript"><Content /></div>
+    {faq.length > 0 && (
+      <details>
+        <summary>Questions and answers</summary>
+        <dl>
+          {faq.map((item) => (
+            <>
+              <dt><span data-excerpt={item.index_of_source}>{item.question}</span></dt>
+              <dd>{item.answer}</dd>
+            </>
+          ))}
+        </dl>
+      </details>
+    )}
+  </article>
+</Archive>
+
+<script>
+  const normalize = (text: string) => text.toLowerCase().replace(/[\p{P}\s]/gu, "");
+  const paragraphs = [...document.querySelectorAll<HTMLParagraphElement>(".transcript p")];
+  const texts = paragraphs.map((paragraph) => normalize(paragraph.textContent || ""));
+
+  for (const excerpt of document.querySelectorAll<HTMLElement>("[data-excerpt]")) {
+    const needle = normalize(excerpt.dataset.excerpt || "");
+    const index = needle ? texts.findIndex((text) => text.includes(needle)) : -1;
+    if (index < 0) continue;
+    const paragraph = paragraphs[index];
+    paragraph.id ||= "paragraph-" + (index + 1);
+    const link = document.createElement("a");
+    link.href = "#" + paragraph.id;
+    link.textContent = excerpt.textContent;
+    excerpt.replaceWith(link);
+  }
+</script>
+
+<style>
+  article { max-width: 49rem; margin-inline: auto; }
+  h1 { overflow-wrap: anywhere; margin-bottom: 1.5rem; }
+  .metadata { color: var(--subtle); display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin: 0 0 0.8rem; }
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.7rem 1rem; }
+  summary { cursor: pointer; font-weight: 600; }
+  ol, dl { margin: 0.6rem 0 0.4rem; }
+  ol { padding-inline-start: 1.5rem; }
+  li, dd { margin-bottom: 0.55rem; }
+  dt { font-weight: 600; }
+  dd { margin-inline-start: 0; }
+  .transcript { font-size: 1.1rem; line-height: 1.7; overflow-wrap: anywhere; }
+  .transcript :global(p:target) { background: var(--surface); scroll-margin-block: 1rem; }
+  .transcript :global(pre) { background: var(--surface); overflow: auto; padding: 0.9rem; }
+  .transcript :global(blockquote) {
+    color: var(--subtle);
+    border-inline-start: 3px solid var(--border);
+    margin-inline: 0;
+    padding-inline-start: 1rem;
+  }
+  .transcript :global(img), .transcript :global(iframe) { max-width: 100%; }
+  .transcript :global(table) { display: block; overflow: auto; border-collapse: collapse; }
+  .transcript :global(th), .transcript :global(td) { border: 1px solid var(--border); padding: 0.3rem 0.65rem; }
+</style>
