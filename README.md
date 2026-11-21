@@ -12,12 +12,19 @@ Install Python 3.11 or newer and run `uv sync --locked`. Install `ffmpeg` for au
 | `GH_TOKEN` | GitHub publishing |
 | `OPENAI_API_KEY` | Hosted Whisper transcription and OpenAI-compatible formatting for the OpenAI and Basement providers |
 | `G_TOKEN` | Gemini formatting, table of contents, and FAQ |
-| `LM_PROVIDER` | Formatting provider. Defaults to `google`; also supports `openai`, `ollama`, and `basement`. |
+| `LM_PROVIDER` | Formatting provider. Defaults to `google`; also supports `openai`, `ollama`, and `basement`. Google and OpenAI models are accessed through OpenRouter. |
+| `OPENROUTER_API_KEY` | OpenRouter API key for Google and OpenAI models. |
+| `GOOGLE_LM_MODEL` | Gemini model for formatting, table of contents, and FAQ. Defaults to `gemini-4-hydrogen`. |
+| `OPENAI_LM_MODEL` | OpenAI formatting model. Defaults to `gpt-6-luna`. |
+| `OLLAMA_LM_MODEL` | Ollama formatting model. Defaults to `qwen3.5:4b`. |
+| `BASEMENT_LM_MODEL` | Model ID served by your Basement endpoint. Defaults to `deepseek-ai/deepseek-llm-7b-chat`. |
 | `WHISPER_LOCAL` | Optional path to a built whisper.cpp checkout |
 | `WHISPER_MODEL_NAME` | Model filename in the checkout's `models/` directory. Defaults to `ggml-large-v3-turbo.bin`. |
 | `OLLAMA_URL`, `BASEMENT_URL` | Base URLs for those formatting providers |
 | `BILIBILI_SESSDATA`, `BILIBILI_BUVID3`, `BILIBILI_BILI_JCT` | Optional Bilibili cookies |
 | `PORT`, `QUEUE_URL` | Web port (defaults to 5001) and SQS URL (for `--mode sqs`) |
+
+For Ollama, pull the selected model on the server first. For the default, run `ollama pull qwen3.5:4b`.
 
 For YouTube history and playlist access, place the Google OAuth client JSON at the path below or set its override. With the default callback, set `PORT=5002`, open the app at `http://localhost:5002`, and select **Pull History** to authorize YouTube. For a remote deployment, set `GH_TRANSCRIPT_YOUTUBE_REDIRECT_URI` to the app's HTTPS URL ending in `/oauth` and register that exact URL on the Google OAuth web client. Start authorization from that same app origin. Use the same state root for the web app and worker so the worker can reuse the saved authorization.
 

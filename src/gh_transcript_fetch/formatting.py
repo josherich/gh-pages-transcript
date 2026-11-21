@@ -1,9 +1,14 @@
 import os
 from functools import cache
-from openai import AsyncOpenAI
-from google import genai
+from openai import AsyncOpenAI, OpenAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import asyncio
+
+DEFAULT_GOOGLE_MODEL = "gemini-4-hydrogen"
+DEFAULT_OPENAI_MODEL = "gpt-6-luna"
+DEFAULT_OLLAMA_MODEL = "qwen3.5:4b"
+DEFAULT_BASEMENT_MODEL = "deepseek-ai/deepseek-llm-7b-chat"
+
 
 @cache
 def get_openai_client(provider):
@@ -11,12 +16,18 @@ def get_openai_client(provider):
         return AsyncOpenAI(base_url=os.getenv("OLLAMA_URL"), api_key="ollama")
     if provider == "basement":
         return AsyncOpenAI(base_url=os.getenv("BASEMENT_URL"))
-    return AsyncOpenAI()
+    return AsyncOpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY"))
+
+
+def model_for(provider):
+    default = DEFAULT_GOOGLE_MODEL if provider == "google" else DEFAULT_OPENAI_MODEL
+    model = os.getenv(f"{provider.upper()}_LM_MODEL", default)
+    return model if "/" in model else f"{provider}/{model}"
 
 
 @cache
-def get_google_client():
-    return genai.Client(api_key=os.getenv("G_TOKEN"))
+def get_schema_client():
+    return OpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY"))
 
 
 # Here are some writing samples to ground your style and tone:
@@ -206,16 +217,16 @@ async def format_transcript_part(transcription, part_n=1):
     return await answer_prompt(content, part_n)
 
 def answer_prompt_w_schema(content, schema):
-    response = get_google_client().models.generate_content(
-        model='gemini-2.5-flash',
-        contents=content,
-        config={
-            'responseSchema': schema,
-            'response_mime_type': 'application/json'
-        }
+    provider = os.getenv("LM_PROVIDER", "google")
+    if provider not in ("google", "openai"):
+        raise ValueError("Structured output requires the google or openai provider")
+    response = get_schema_client().chat.completions.create(
+        model=model_for(provider),
+        messages=[{"role": "user", "content": content}],
+        response_format={"type": "json_schema", "json_schema": {"name": "response", "schema": schema}},
     )
-    res = response.text
-    return res
+    return response.choices[0].message.content
+
 
 def print_res_summary(res, part_n=1):
     print(f"------------ Generated content {part_n} -----------")
@@ -224,7 +235,8 @@ def print_res_summary(res, part_n=1):
 async def answer_prompt(content, part_n=1):
     lm_provider = os.getenv("LM_PROVIDER", "google")
     try:
-        if lm_provider == "openai":
+        if lm_provider in ("openai", "google"):
+            model = model_for(lm_provider)
             response = await get_openai_client(lm_provider).chat.completions.create(
                 messages=[
                     {
@@ -232,8 +244,8 @@ async def answer_prompt(content, part_n=1):
                         "content": content,
                     }
                 ],
-                model="gpt-5-mini",
-                max_completion_tokens=16384, # max tokens for GPT-4o-mini
+                model=model,
+                max_completion_tokens=16384,
             )
             res = response.choices[0].message.content
             if len(res.strip()) == 0:
@@ -249,17 +261,9 @@ async def answer_prompt(content, part_n=1):
                         "content": content,
                     }
                 ],
-                model="qwen2.5",
+                model=os.getenv("OLLAMA_LM_MODEL", DEFAULT_OLLAMA_MODEL),
             )
             res = response.choices[0].message.content
-            if len(res.strip()) == 0:
-                raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
-
-            print_res_summary(res, part_n)
-            return res
-        elif lm_provider == "google":
-            response = await get_google_client().aio.models.generate_content(model='gemini-3-flash-preview', contents=content)
-            res = response.text
             if len(res.strip()) == 0:
                 raise Exception(f"Failed to generate content part {part_n}: empty response, with provider {lm_provider}")
 
@@ -273,7 +277,7 @@ async def answer_prompt(content, part_n=1):
                         "content": content,
                     }
                 ],
-                model="deepseek-ai/deepseek-llm-7b-chat",
+                model=os.getenv("BASEMENT_LM_MODEL", DEFAULT_BASEMENT_MODEL),
                 max_completion_tokens=2096, # max tokens
             )
             res = response.choices[0].message.content
