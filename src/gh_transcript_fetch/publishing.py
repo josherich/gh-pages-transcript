@@ -4,7 +4,7 @@ import json
 import os
 import re
 
-from github import Github, GithubException, UnknownObjectException
+from github import Github, GithubException
 
 REPO_NAME = "josherich/gh-pages-transcript"
 BRANCH_NAME = "main"
@@ -47,7 +47,9 @@ def commit_file(repo, filename, content, branch_name):
 
     try:
         repo.get_branch(branch_name)
-    except UnknownObjectException:
+    except GithubException as error:
+        if error.status != 404:
+            raise
         base_branch = repo.get_branch(BRANCH_NAME)
         try:
             repo.create_git_ref(ref=f"refs/heads/{branch_name}", sha=base_branch.commit.sha)
@@ -58,7 +60,9 @@ def commit_file(repo, filename, content, branch_name):
 
     try:
         repo.get_contents(file_path, ref=branch_name)
-    except UnknownObjectException:
+    except GithubException as error:
+        if error.status != 404:
+            raise
         try:
             repo.create_file(file_path, f"Add transcript: {filename}", content, branch=branch_name)
         except GithubException as error:
