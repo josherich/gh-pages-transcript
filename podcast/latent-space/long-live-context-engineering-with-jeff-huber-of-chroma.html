@@ -1,0 +1,577 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Transcripts from podcasts and videos collected by Josherich."><link rel="canonical" href="https://podcast.josherich.me/podcast/latent-space/long-live-context-engineering-with-jeff-huber-of-chroma"><title>Long Live Context Engineering - with Jeff Huber of Chroma · Podcast Transcripts</title><style>:root{color-scheme:light dark;--background:#f8fafc;--foreground:#192234;--subtle:#495871;--border:#dbe2ed;--surface:#eef3fa;--accent:#2049a0;background:var(--background);color:var(--foreground);font-family:system-ui,sans-serif;font-size:1rem}@media (prefers-color-scheme:dark){:root{--background:#101621;--foreground:#edf1f7;--subtle:#aebbd0;--border:#303e54;--surface:#1a2537;--accent:#a7c7ff}}*,:before,:after{box-sizing:border-box}body{margin:0;line-height:1.55}a{color:var(--accent);text-underline-offset:.22em}a:hover{text-decoration-thickness:2px}:focus-visible{outline:2px solid var(--accent);outline-offset:3px}h1,h2,h3{text-wrap:pretty;line-height:1.17}h1{letter-spacing:-.025em;margin:0 0 .35em;font-family:Georgia,Noto Serif CJK SC,serif;font-size:clamp(2rem,6vw,3.6rem);font-weight:500}main,.site-header{max-width:65rem;margin-inline:auto;padding-inline:clamp(1rem,5vw,3rem)}main{padding-block:clamp(2rem,6vw,4rem) 5rem}.site-header{border-bottom:1px solid var(--border);justify-content:space-between;align-items:center;gap:1rem;min-height:4.2rem;font-size:.9rem;display:flex}.site-name{color:var(--foreground);font-weight:650}.skip-link{position:absolute;top:1rem;left:1rem;transform:translateY(-200%)}.skip-link:focus{background:var(--background);z-index:1;transform:none}[hidden]{display:none!important}
+article[data-astro-cid-h4qngm3k]{max-width:49rem;margin-inline:auto}h1[data-astro-cid-h4qngm3k]{overflow-wrap:anywhere;margin-bottom:1.5rem}.metadata[data-astro-cid-h4qngm3k]{color:var(--subtle);flex-wrap:wrap;gap:.5rem 1rem;margin:0 0 .8rem;display:flex}details[data-astro-cid-h4qngm3k]{background:var(--surface);border:1px solid var(--border);border-radius:.4rem;padding:.7rem 1rem}summary[data-astro-cid-h4qngm3k]{cursor:pointer;font-weight:600}ol[data-astro-cid-h4qngm3k],dl[data-astro-cid-h4qngm3k]{margin:.6rem 0 .4rem}ol[data-astro-cid-h4qngm3k]{padding-inline-start:1.5rem}li[data-astro-cid-h4qngm3k],dd[data-astro-cid-h4qngm3k]{margin-bottom:.55rem}dt[data-astro-cid-h4qngm3k]{font-weight:600}dd[data-astro-cid-h4qngm3k]{margin-inline-start:0}.transcript[data-astro-cid-h4qngm3k]{overflow-wrap:anywhere;font-size:1.1rem;line-height:1.7}.transcript[data-astro-cid-h4qngm3k] p:target{background:var(--surface);scroll-margin-block:1rem}.transcript[data-astro-cid-h4qngm3k] pre{background:var(--surface);padding:.9rem;overflow:auto}.transcript[data-astro-cid-h4qngm3k] blockquote{color:var(--subtle);border-inline-start:3px solid var(--border);margin-inline:0;padding-inline-start:1rem}.transcript[data-astro-cid-h4qngm3k] img,.transcript[data-astro-cid-h4qngm3k] iframe{max-width:100%}.transcript[data-astro-cid-h4qngm3k] table{border-collapse:collapse;display:block;overflow:auto}.transcript[data-astro-cid-h4qngm3k] th,.transcript[data-astro-cid-h4qngm3k] td{border:1px solid var(--border);padding:.3rem .65rem}
+</style></head><body><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><a class="site-name" href="/">Podcast Transcripts</a><a href="https://josherich.me">Josherich’s Blog</a></header><main id="main"><article data-astro-cid-h4qngm3k><p class="metadata" data-astro-cid-h4qngm3k><time datetime="2025-08-19" data-astro-cid-h4qngm3k>Aug 19, 2025</time><a href="/?show=latent-space" data-astro-cid-h4qngm3k>latent-space</a></p><h1 data-astro-cid-h4qngm3k>Long Live Context Engineering - with Jeff Huber of Chroma</h1><details data-astro-cid-h4qngm3k><summary data-astro-cid-h4qngm3k>Table of contents</summary><ol data-astro-cid-h4qngm3k><li data-astro-cid-h4qngm3k><span data-excerpt="Hey everyone. Welcome to the Latent Space Podcast in the new studio." data-astro-cid-h4qngm3k>Introduction and Guest Welcome</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="But I think the reason that Chroma got started is because we had worked for many years in applied machine learning, and we've seen how demos were easy to build, but building a production reliable system was incredibly challenging, and that the gap between demo and production didn't really feel like engineering." data-astro-cid-h4qngm3k>Chroma&#39;s Origins: From Alchemy to Engineering in ML</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="And so that coupled with, like, a thesis that, like, latent space was a very important tool." data-astro-cid-h4qngm3k>The Latent Space as an Important Tool</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="What we realized along the way was search was really a key workload to how AI applications were going to get built." data-astro-cid-h4qngm3k>Chroma&#39;s Core Focus: Retrieval Engine for AI Applications</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah, I think that, you know, that modern search infrastructure for AI, we're going to maybe unpack that for a couple of seconds." data-astro-cid-h4qngm3k>Defining Modern Search Infrastructure for AI</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So, modern is in contrast to traditional, and mostly what that means is, like, modern distributed systems." data-astro-cid-h4qngm3k>Modern Distributed Systems in Chroma</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="And then the for AI piece, actually, I think it matters in four kind of different ways:" data-astro-cid-h4qngm3k>Four Ways AI Impacts Search Systems</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Back in 2023, I think the VectorDB category was kind of one of the hottest ones." data-astro-cid-h4qngm3k>Staying Focused Amidst AI Hype</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="There are different ways to build a startup. And so, you know, there are different schools of thought here." data-astro-cid-h4qngm3k>Two Schools of Thought in Startup Building</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="But we felt like no, really what we want Chroma to be known for is our developer experience." data-astro-cid-h4qngm3k>Prioritizing Developer Experience for Chroma Cloud 2</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="When you're building the team, how do you message that? If I go back maybe a year and a half ago, I could join Chroma, I could join all these different companies." data-astro-cid-h4qngm3k>Recruiting and Building Team Culture</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I always want to put some headline numbers up front. So I'm just trying to do a better job of giving people the brain dump on what they should know about Chroma." data-astro-cid-h4qngm3k>Chroma&#39;s Headline Numbers and Community Impact</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah, I think when you say single-node Chroma, I think you're describing the core difference between what Chroma Cloud has been." data-astro-cid-h4qngm3k>Chroma Cloud Development and Experience</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Chroma's known for its developer experience. I don't know that we were the first to do this." data-astro-cid-h4qngm3k>Seamless Onboarding and Zero-Config</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="De facto, you're also building a serverless compute platform. Yeah, you have to." data-astro-cid-h4qngm3k>Chroma as a Serverless Compute Platform</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="You had one of your usual cryptic tweets, and you tweeted context engineering a couple of months ago." data-astro-cid-h4qngm3k>Context Engineering: A Canonical Definition</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Particularly, I would feel like a lot of pieces I've read, a lot of it focuses on agents versus non-agent stuff." data-astro-cid-h4qngm3k>Context Engineering in Agent vs. Non-Agent Systems</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="One thing I definitely will call out for context engineering or context rot in general is I think that there's been a lot of marketing around needle in a haystack where every frontier model now comes out with, like, completely green, perfect charts of, like, full utilization across, you know, 1 million tokens." data-astro-cid-h4qngm3k>Context Rot: Challenging Needle in a Haystack Marketing</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah. So, maybe to back up a little bit, the way that we came to work on this research was we were looking, actually, at agent learning." data-astro-cid-h4qngm3k>Motivations for Context Rot Research</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah. We'll send people, at least on the YouTube video, we'll put this chart, which is kind of your figure one of the context rot report." data-astro-cid-h4qngm3k>Analyzing LLM Performance with Context Length</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I thought the best thing was that you did not try to sell something. You're just like, 'Hey, this thing is broken. Kind of sucks.'" data-astro-cid-h4qngm3k>Chroma&#39;s Approach: Highlighting Problems for Community Solutions</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I think it's also just, like, you don't get points on the board by doing that well." data-astro-cid-h4qngm3k>Addressing Developer Needs and Market Gaps</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="To me, also an interesting discipline developing just around context engineering." data-astro-cid-h4qngm3k>Emerging Best Practices and Patterns in Context Engineering</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So one pattern is to use what a lot of people call first stage retrieval to do a big cull down." data-astro-cid-h4qngm3k>First Stage Retrieval and LLMs as Re-rankers</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="We've also covered a little bit on, especially on the code indexing side of the house." data-astro-cid-h4qngm3k>Code Indexing and Search</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="You know, embeddings are known for semantic similarity today. Embeddings is just a generic concept of, like, information compression." data-astro-cid-h4qngm3k>Regex, Forking, and Embeddings for Code Search</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Do you have any thoughts on the developer experience versus agent experience? This is another case where maybe we should reformat and rewrite the code in a way that makes it easier to embed and then train models there." data-astro-cid-h4qngm3k>Optimizing Developer/Agent Experience with Chunk Rewriting</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="But also, just because we're here, it's worth saying: People should be creating small golden data sets of what queries they want to work and what chunks should return." data-astro-cid-h4qngm3k>Creating Golden Data Sets for Evaluation</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I think there's some intuition there, which is, like, the way we do things today is very crude, and we'll feel very caveman in five or ten years." data-astro-cid-h4qngm3k>Future Predictions for Retrieval Systems</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I think there are a few things that I think might be true about retrieval systems in the future." data-astro-cid-h4qngm3k>Continual Retrieval and Operating in Latent Space</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="You said that memory is the benefit of context engineering. I think there's... You had a rant on Twitter about, 'stop making memory for AI so complicated.'" data-astro-cid-h4qngm3k>Memory in AI: The Benefit of Context Engineering</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="To me, the thing I'm wrestling with a little more is just what are the structures of memory, if that makes sense." data-astro-cid-h4qngm3k>Structures of Memory and Offline Processing</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Part of the sleep-time compute thing that we talked about was pre-computing answers. So, based on the data that you have, what are likely questions that the person is going to ask?" data-astro-cid-h4qngm3k>Generative Benchmarking and Creating QA Pairs</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I think having worked in applied machine learning developer tools now for 10 years, the returns to a very high-quality small-labeled data set are so high." data-astro-cid-h4qngm3k>The Power of Small, High-Quality Labeled Data Sets</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="While you mentioned it, I should correct myself, it wasn't standard cognition, it was standard cyborg. My favorite fact about you is you're also a cyborg with your leg." data-astro-cid-h4qngm3k>Personal Reflections, Values, and Impact</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Is any of that, you know, and we can skip this question if it's sensitive, but like, is any of that guided by religion, by Christianity?" data-astro-cid-h4qngm3k>Religion and Conviction in Silicon Valley</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Who does your design? Because all of your swag is great. Your office looks great. The website looks great." data-astro-cid-h4qngm3k>Crafting Chroma&#39;s Brand and Culture</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Anything we're missing, you're hiring designers, any other roles that you have open that you want people to apply for?" data-astro-cid-h4qngm3k>Hiring for Chroma: Designers, Researchers, and Engineers</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="When you say that, can you double click on low-level distributed systems? People always say this and then like, okay, Rust, like, you know, Linux kernel, what are we talking here?" data-astro-cid-h4qngm3k>The Ideal Low-Level Distributed Systems Engineer</span></li></ol></details><div class="transcript" data-astro-cid-h4qngm3k><p><a href="https://assets.flightcast.com/track-v2/01K31AMDS3GJWXK9Y9MWE7ER3V.mp3">Long Live Context Engineering - with Jeff Huber of Chroma</a></p>
+<p>Hey everyone. Welcome to the <strong>Latent Space Podcast</strong> in the new studio. This is <strong>Alessio, partner and CTO at Decibel</strong>, and I’m joined by <strong>SWIX, founder of SmallAI</strong>.</p>
+<p>Hey, hey, hey, hey, hey. It’s weird to say welcome, because obviously, actually, today’s guest, <strong>Jeff, has welcomed us to Chroma for many months now</strong>. Welcome.</p>
+<blockquote>
+<p>Thanks for having me. Good to be here.</p>
+</blockquote>
+<p><strong>Jeff, you’re a founder, CEO of Chroma</strong>. I’ve sort of observed Chroma for a long, long time, especially back in the old office.</p>
+<blockquote>
+<p>Thanks for having me. Good to be here.</p>
+</blockquote>
+<p><strong>Jeff, you were, you originally sort of got your start in the open source vector database, right?</strong> Like you’re sort of the open source vector database of choice of a lot of different projects, particularly with even projects like the <strong>Voyager paper</strong> you guys were used in that. I don’t even know the full list, but how do you introduce <strong>Chroma today</strong>?</p>
+<p>It’s a good question. I mean, naturally, you always want to kind of take your messaging and make it fit your audience.</p>
+<p>Yeah.</p>
+<p>But I think the reason that <strong>Chroma got started</strong> is because we had worked for many years in applied machine learning, and we’ve seen how demos were easy to build, but building a production reliable system was <strong>incredibly challenging</strong>, and that the gap between demo and production didn’t really feel like engineering.</p>
+<p>It felt a lot more like <strong>alchemy</strong>.</p>
+<p>There’s some good, like, <strong>XKCD memes</strong> about this guy standing on top of a giant steaming pile of garbage, and the other character asks,</p>
+<blockquote>
+<p>“This is your data system?”</p>
+</blockquote>
+<p>And he’s like,</p>
+<blockquote>
+<p>“Yes.”</p>
+</blockquote>
+<p>He’s like,</p>
+<blockquote>
+<p>“How do you know if it’s good? Or how do you make it better?”</p>
+</blockquote>
+<p>You just, like, stir the pot, and then, like, see if it gets any better. That just seemed intrinsically wrong. And this is back in, like, <strong>2021, 2022</strong> that we were having these conversations.</p>
+<p>And so that coupled with, like, a thesis that, like, <strong>latent space was a very important tool</strong>.</p>
+<p>That is a plug, yes.</p>
+<p>We agree.</p>
+<p>That is a plug.</p>
+<p>We need to ring the bell.</p>
+<p>Yeah, exactly.</p>
+<p>That <strong>latent space</strong>—both the podcast but also the technology—was a very underrated tool, and a very important tool for <strong>interpretability</strong>. It’s fundamentally how models see their own data. We as humans can kind of have that shared space to understand what’s going on. That’s where we got started.</p>
+<p>And so I think that’s also where we continue to want to go. Like, what do we want to do? We want to help developers build production applications with AI, and what makes the process of going from demo to production feel <strong>more like engineering and less like alchemy</strong>.</p>
+<p>Doing a database is not a side quest. It is a part of the main quest.</p>
+<p>What we realized along the way was <strong>search was really a key workload to how AI applications were going to get built</strong>.</p>
+<ul>
+<li>It’s not the only workload, but it’s definitely a really important workload,</li>
+<li>And that you don’t earn the right to do more things until you’ve done one thing at a world-class level.</li>
+</ul>
+<p>That requires maniacal focus, and so that’s really what we’ve been doing for the last few years.</p>
+<p>That was a long kind of rambling introduction, but maybe to sort of land the plane, if you ask people, what does <strong>Chroma do today?</strong></p>
+<p>We build a <strong>retrieval engine for AI applications</strong>. We’re working on modern search infrastructure for AI, some version of that.</p>
+<p>I’ll do a double-click on this. Is <strong>information retrieval and search the same thing</strong>, or are they slightly different in your mind? I just wanted to clarify our terminology.</p>
+<p>Yeah, I think that, you know, that <strong>modern search infrastructure for AI</strong>, we’re going to maybe unpack that for a couple of seconds.</p>
+<p>So, <strong>modern</strong> is in contrast to traditional, and mostly what that means is, like, modern distributed systems.</p>
+<p>There’s a bunch of primitives in building great distributed systems that have come on to the scene in the last five or ten years that obviously are not in technology that is older than that, by definition:</p>
+<pre tabindex="0"><code><span><span>- separation of read and write</span></span>
+<span><span>- separation of storage and compute</span></span></code></pre>
+<p><strong>Chroma is written in Rust</strong>, it’s fully multi-tenant.</p>
+<p>We use object storage as a key assistance tier and data layer for Chroma distributed in Chroma Cloud as well.</p>
+<p>So, that’s the <strong>modern</strong> piece.</p>
+<p>And then the <strong>for AI</strong> piece, actually, I think it matters in four kind of different ways:</p>
+<ul>
+<li>Number one, the tools and technology that you use for search are different than in classic search systems.</li>
+<li>Number two, the workload is different than classic search systems.</li>
+<li>Number three, the developer is different than classic search systems.</li>
+<li>Number four, the person who’s consuming those search results is also different than in classic search systems.</li>
+</ul>
+<p>Think about, like, classic search systems.
+Like, you, as the <strong>human</strong>, were doing the <strong>last mile of search</strong>. You were doing, you’re like, <strong>“which of these are relevant?”</strong> Open a new tab, summarize, blah, blah, blah, blah. You, the human, were doing that, and now it’s a <strong>language model</strong>.</p>
+<p>Humans can only digest <strong>ten blue links</strong>. Language models can digest orders of magnitude more. All of these things matter and, I think, influence how a system is designed and what it’s made for.</p>
+<p>Back in <strong>2023</strong>, I think the <strong>VectorDB category</strong> was kind of one of the hottest ones. And you had <strong>Pinecone raise $100 million</strong>. You had all these different WVA. You had all these companies.</p>
+<p>Yep.</p>
+<p>How did you stay focused on what mattered to you rather than just trying to raise a lot of money and make a big splash? And it took you a while to release <strong>Chroma Cloud 2</strong>, which, rather than just getting something out that maybe broke, once you got to production, you kind of took your time.</p>
+<p>Yeah.</p>
+<p>Can you maybe give people advice on, in the <strong>AI space</strong>, how to be patient as a founder, and how to have your own vision that you follow versus kind of following the noise around you?</p>
+<p>There are different ways to build a startup. And so, you know, there are different schools of thought here.</p>
+<ul>
+<li>
+<p>One school of thought certainly is <strong>“find signal and kind of follow the gradient descent of what people want,”</strong> sort of lean startup style.
+My critique of that would be that if you follow that methodology, you will probably end up building a <strong>dating app for middle schoolers</strong>, because that just seems to be the lowest base take of what humans want to some degree. The slot machine would be the AI equivalent of that.</p>
+</li>
+<li>
+<p>The other way to build a startup is to have a very strong view, presumably a <strong>contrarian view</strong>, or at least a view that seems like a secret. And then to just be <strong>maniacally focused</strong> on that thing.</p>
+</li>
+</ul>
+<p>You know, there are different strokes for different folks, but we’ve always taken the second approach.</p>
+<p>And, yeah, there was the option of, like, okay, <strong>Chroma’s single node</strong> is doing really well, getting a bunch of traffic, clearly having a hosted service is the thing people want. We could very quickly get a product into market.</p>
+<p>But we felt like no, really what we want Chroma to be known for is our <strong>developer experience</strong>. Like, we want our brand to be, we want Chroma’s brand and the craft expressed in our brand to be <strong>extremely well-known</strong>.</p>
+<p>And we felt like by offering a single node product as a service, it was not going to meet our bar of what great developer experience could and should look like.</p>
+<p>Yeah, we made the decision of no, we’re going to build the thing that we think is right, which was really challenging and took a long time.</p>
+<p>And obviously, I’m incredibly proud that it exists today and that it’s serving <strong>hundreds of thousands of developers</strong> and they love it. But it was hard to get there.</p>
+<p>When you’re building the team, how do you message that?</p>
+<p>If I go back maybe a year and a half ago, I could join Chroma, I could join all these different companies. How do you keep the vision clear to people?</p>
+<p>When on the outside you have, oh, I’ll just use PG Vector or, like, whatever else the thing of the day is.</p>
+<p>Do you feel like that helps you bring people that are more aligned with the vision versus more of the missionary type just joining this company before it’s hot?</p>
+<p>And maybe, yeah, any learning that you have from recruiting early on?</p>
+<p>The upstream version of <strong>Conway’s Law</strong>:</p>
+<blockquote>
+<p><em>“You ship your org chart, is you ship your culture.”</em></p>
+</blockquote>
+<p>Because I think your org chart is downstream of your company’s culture.</p>
+<p>We’ve always placed an extremely high premium on that, on people that we actually have here on the team.</p>
+<p>I think that the slope of our future growth is entirely dependent on the people that are here in this office.</p>
+<p>And that could mean going back to zero, linear growth, all kinds of versions of hyper-linear growth, exponential growth, hockey-stick growth.</p>
+<p>And so, yeah, we’ve just really decided to hire very slowly and be really picky.</p>
+<p>I don’t know. The future will determine whether or not that was the right decision.</p>
+<p>But I think having worked on a few startups before, that was something I really cared about. I just want to work with people that I love working with and want to be shoulder-to-shoulder with in the trenches.</p>
+<p>And I think can independently execute on the level of craft and quality that we owe developers.</p>
+<p>And so that was how we chose to do it.</p>
+<p>We’ll talk about standard foundation and all the other fun stuff towards the end, but we’ll focus on <strong>Chroma</strong>.</p>
+<p>I always want to put some headline numbers up front.
+So I’m just trying to do a better job of giving people the <strong>brain dump</strong> on what they should know about <strong>Chroma</strong>.</p>
+<ul>
+<li><strong>Five million monthly downloads</strong> is what I have on <strong>PyPI</strong>.</li>
+<li>And <strong>21,000 GitHub stars</strong>.</li>
+</ul>
+<p>Anything else people should know? Like, that’s the typical sales call headline stuff.</p>
+<p>Yeah.
+Yeah, <strong>20,000 GitHub stars</strong>.
+<strong>Five million plus monthly downloads</strong>. I’ve looked at the number recently. I think it’s over <strong>60 or 70 million all-time downloads</strong> now.</p>
+<p>For many years running, <strong>Chroma’s been the number one used project</strong>.
+Yeah.
+Broadly, but also within communities like <strong>LinkChain</strong> and <strong>Llama Index</strong>.</p>
+<p>Okay, cool. Fair enough.
+Yeah, I think when you say <strong>single-node Chroma</strong>, I think you’re describing the core difference between what <strong>Chroma Cloud has been</strong>. I think we’re releasing this in line with your GA in <strong>Chroma Cloud</strong>.</p>
+<p>Yes. So, like, what should people know about <strong>Chroma Cloud</strong> and how you’ve developed this experience from the start? You mentioned <strong>separation of storage and compute</strong>. What is that?</p>
+<p>Yeah, 100 percent.
+<strong>Chroma’s known for its developer experience</strong>. I don’t know that we were the first to do this. I think we were.</p>
+<p>With Chroma, you just</p>
+<pre tabindex="0"><code><span><span>pip</span><span> install</span><span> ChromaDB</span></span></code></pre>
+<p>and then you can use it. It’s just like in memory. I think it may be the first. You can persist. It could be the first database to ever be pip installable.</p>
+<p>Any SQLite wrapper is pip installable, technically, you know?
+No, SQLite was not pip installable, even to that state, I don’t think. You probably have a deeper dive knowledge of this. I’m just speculating myself.</p>
+<p>Yeah. So that led to a very seamless onboarding experience for new users, because you could just run a command and then you could use it.</p>
+<p>We did all the work to make sure that regardless of the deployment target or architecture you were running it on, it would just work. In the early days, people did really good stuff, like run it on <strong>Arduinos</strong> and <strong>PowerPC architectures</strong>, really esoteric stuff.</p>
+<p>We would go the extra mile to make sure that it worked everywhere, and it just always worked. So that was <strong>Chroma single node</strong>.</p>
+<p>Going back to the developer experience that we wanted in a cloud product, we felt that in the same way you could run <code>pip install ChromaDB</code> and be up and running in five seconds without thinking about it or learning a bunch of abstractions or a complicated API, that same story had to be true for the cloud.</p>
+<p>So what that meant was having a version of the product where you don’t have to be forced to think about:</p>
+<ul>
+<li>How many nodes you want</li>
+<li>How to size those nodes</li>
+<li>Your sharding strategy</li>
+<li>Backup strategy</li>
+<li>Data tiering strategy</li>
+</ul>
+<p>Or I could go on.</p>
+<p>It just wasn’t good enough. It needed to be:</p>
+<ul>
+<li><strong>Zero config</strong></li>
+<li><strong>Zero knobs to tune</strong></li>
+<li>Always fast</li>
+<li>Very cost-effective</li>
+<li>Always fresh</li>
+</ul>
+<p>Without you having to do or think about anything, regardless of how your traffic and data scale up and down.</p>
+<p>That was the motivating criteria.</p>
+<p>It also had to be <strong>usage-based billing</strong>, which was really important because that’s so fair. We only charge you for the minimal slice of compute that you use, nothing more — which not all serverless databases can claim. But it is true inside Chroma: we truly only charge you for the narrow slice you use.</p>
+<p>So that was the criteria we entered the design process with. De facto, you’re also building a <strong>serverless compute platform</strong>.</p>
+<p>Yeah, you have to.
+No, exactly. That motivated the design of <strong>Chroma Distributed</strong>.</p>
+<p><strong>Chroma Distributed</strong> is part of the same <strong>monorepo</strong>. That’s open source, <strong>Apache 2</strong>. The control and data plane are both fully open source, Apache 2 licensed.</p>
+<p>Then <strong>Chroma Cloud</strong> uses <strong>Chroma Distributed</strong> to run a service. You can sign up, create a database, and load data in under 30 seconds.</p>
+<p>At the time of filming, people get about <strong>five bucks of free credits</strong>, which is actually enough to load in 100,000 documents and query it 100,000 times. For a lot of use cases, this might mean they use it for free for years, which is fine.</p>
+<p>To get there, we had to do all the hard work.</p>
+<p>I think every blog should basically have <strong>semantic indexing</strong>. So, if you host your personal blog on Chroma, why not?</p>
+<p>Yeah, I mean, the mission of <strong>organizing the world’s information remains unsolved</strong>.</p>
+<p>You had one of your usual cryptic tweets, and you tweeted <strong>context engineering</strong> a couple of months ago. What was it, April?
+I think everybody now is talking about <strong>context engineering</strong>. Can you give the canonical definition for you, and then how <strong>Chroma</strong> plays into it? And then we’ll talk about all the different pieces of it.</p>
+<p>I think something that’s incredibly important when a new market is emerging is <strong>abstractions and the primitives</strong> that you use to reason about that thing. And AI, I think, in part of its hype, has also had a lot of primitives and abstractions that have gotten thrown around and have led to a lot of developers not actually being able to think critically about:</p>
+<ul>
+<li>What is this thing?</li>
+<li>How do I put it together?</li>
+<li>What problems can I solve?</li>
+<li>What matters?</li>
+<li>Where should I spend my time?</li>
+</ul>
+<p>For example, the term <strong>rag</strong>, we never use the term rag. Like, I hate the term rag. Yeah, I killed the rag track partially because of your influence. Thank you. Thank you.</p>
+<p>A, it’s just <strong>retrieval</strong>, first of all. Like, retrieval, abandoned generation are three concepts put together into one thing. Like, it’s just really confusing. And, of course, rag got known now as he’s branded as, like, you know, oh, you’re just using single dense vector search, and that’s what rag is. It’s also dumb.</p>
+<p>I think one of the reasons I was really excited about the term, I mean, obviously, <strong>AI engineering</strong>, which you did a ton of work for. Like, context engineering is, in some ways, a subset of AI engineering. Like, what is it? It’s a high-status job.</p>
+<p><strong>Context engineering</strong> is the job of figuring out what should be in the <strong>context window</strong> any given <strong>LLM generation</strong> step. And there’s both an inner loop, which is setting up the infrastructure, you know, what should be in the context window this time. And there’s the outer loop, which is how do you get better over time at filling the context window with only the relevant information.</p>
+<p>We recently released a technical report about <strong>context rot</strong>, which goes sort of in detail, in depth, about how the performance of LLMs is not invariant to how many tokens you use. As you use more and more tokens, the model can pay attention to less and then also can reason sort of less effectively. I think this really motivates the problem. You know, <strong>context rot implies the need for context engineering</strong>.</p>
+<p>And I guess, like, why I’m really excited about the meme and, you know, I got maybe both lucky to some degree that, you know, called it back in April, this is going to be a big meme, is that it elevates the job. So it clearly describes the job and it elevates the status of the job.</p>
+<p>This is what, frankly, most AI startups, any AI startup that you know of, that you think of today that’s doing very well, like, what are they fundamentally good at? What is the one thing that they’re good at? It is <strong>context engineering</strong>.</p>
+<p>Particularly, I would feel like a lot of pieces I’ve read, a lot of it focuses on agents versus non-agent stuff. Like, the context engineering is more relevant for agents. Do you make that distinction at all or you’re just looking at context engineering generally?</p>
+<p>No. I mean, there’s interesting agent implications of, like, you know, agent learning. You know, can agents kind of learn from their interactions, which maybe are less relevant and, like, static sort of knowledge-based corpuses chat your documents, obviously.</p>
+<p>Then again, like, you know, I think you could make the argument that even, like, chat your document use cases, like, should get better with more interactions. I don’t draw a distinction between agent and non-agent. I don’t actually know what agent means still, but. Again, affirmatives, abstractions, words, they matter. I don’t know. Like, <strong>what does agent mean?</strong> I don’t know.</p>
+<p>Well, there’s many definitions out there. Exactly. I’ve taken a stab. Most terms that can mean anything are just a vehicle for people’s hopes and fears. Yeah. I think, you know, agent is the same thing. For sure.</p>
+<p>Well, maybe we’ll try to be more concise or precise about context engineering so that it doesn’t, it actually means something and, you know, people can actually use it to do stuff.</p>
+<p>One thing I definitely will call out for context engineering or context rot in general is I think that there’s been a lot of marketing around <strong>needle in a haystack</strong> where every frontier model now comes out with, like, completely green, perfect charts of, like, full utilization across, you know, 1 million tokens. I’m wondering why you guys’ takes are all on that kind of marketing.</p>
+<p>Yeah. Yeah. So, maybe to back up a little bit, the way that we came to work on this research was we were looking, actually, at <strong>agent learning</strong>. So, we were very curious, like, could you give agents access to, like, prior successes or prior failures? And if you did, would that help boost agent performance?</p>
+<p>So, we were specifically looking at a couple different data sets,</p>
+<pre tabindex="0"><code><span><span>-</span><span> SuiteBench</span></span>
+<span><span>-</span><span> Inclusive</span></span></code></pre>
+<p>And we started seeing interesting patterns where, on sort of <strong>multi-turn agent interactions</strong> where you’re giving it the whole conversation window, the <strong>number of tokens explodes extremely quickly</strong>.</p>
+<p>And instructions that were clearly in there were being ignored and were not being enacted upon. And we’re like, <strong>“oh, that clearly is a problem.”</strong> We’ve now felt the pain.</p>
+<p>It was sort of a <strong>meme amongst people in the know</strong> that this was true. And I think also some of the research community’s reaction to the context of our technical report is, like, <strong>“yeah, we know.”</strong> And that’s fine. Nobody else knew. And it’s kind of nice if you can actually teach builders what is possible today versus what is not possible today.</p>
+<p>I don’t blame the labs. I mean, <strong>building models is so insanely competitive</strong>. Everybody invariably is picking the benchmarks that they want to do the best on. They’re training around those. Those are also the ones that find their way into their marketing.</p>
+<p>And most people are not motivated to come out and say:</p>
+<ul>
+<li>Here are all the ways that our thing is great.</li>
+<li>Here are the ways that our thing is not great.</li>
+</ul>
+<p>You know, I don’t know. I have some sympathy for why this was not reported on.</p>
+<p>But, yeah, I mean, there was this bit of implication where <strong>“oh, look, our model is perfect on this task, needle in a haystack. Therefore, the context window you can use for whatever you want.”</strong> There was an implication there. And, well, I hope that that is true someday. That is not the case today.</p>
+<p>Yeah. We’ll send people, at least on the YouTube video, we’ll put this chart, which is kind of your figure one of the <strong>context rot report</strong>. It seems like <strong>Sonnet</strong> is the best in terms of area under curve, is how I think about it.</p>
+<p>Then <strong>Quinn, wow.</strong> And then <strong>GPT-4-1</strong> and <strong>Gemini Flash</strong> degrade a lot quicker in terms of the context length.</p>
+<p>Yeah. I don’t have much commentary. That is what we found for this particular task. Again, how that translates to people’s actual experience and real-world tasks is entirely different.</p>
+<p>I mean, there is a certain amount of love that developers have for <strong>Claude</strong>. And maybe those two things are correlated.</p>
+<p>Yeah. I think it shows here, if this is true, that’s a big explanation for why. You follow my instructions. There’s a clear baseline thing people want.</p>
+<p>I don’t think it’s super answered here, but I have a theory also that <strong>reasoning models are better at context visualization because they can loop back</strong>. Normal auto-regressive models just kind of go left to right. But reasoning models, in theory, they can loop back and look for things that they needed connections for that they may not have paid attention to in the initial pass.</p>
+<p>There’s a paper today that showed, I think maybe the opposite.</p>
+<p><strong>Really? I’ll send it to you later.</strong></p>
+<p>Yeah. That’d be fascinating to figure out. There’s papers every day.</p>
+<p>I thought the best thing was that you did not try to sell something. You’re just like,</p>
+<blockquote>
+<p>“Hey, this thing is broken. Kind of sucks.”</p>
+</blockquote>
+<p>How do you think about problems that you want to solve versus research that you do to highlight some of the problems and then hoping that other people will participate? Like, does everything that you talk about is on the <strong>Chroma roadmap</strong>, basically? Or are you just advising people, “Hey, this is bad, work around it, but don’t ask us to fix it”?</p>
+<p>Kind of going back to what I said a moment ago, like, <strong>Chroma’s broad mandate</strong> is to make the process of building AI applications more like <strong>engineering and less like alchemy</strong>.</p>
+<p>And so, this is a pretty broad tent, but we’re a small team and we can only focus on so many things. We’ve chosen to focus very much on one thing for now. And so, I don’t think that I have the hubris to think that we can ourselves solve this stuff conclusively for a very dynamic and large emerging industry.</p>
+<p>I think it does take a community. It does take a rising tide of people all working together.</p>
+<p>We intentionally wanted to make very clear that we do not have any <strong>commercial motivations in this research</strong>. We do not posit any solutions. We don’t tell people to use Chroma. It’s just, <strong>here’s the problem.</strong></p>
+<p>It’s implied.</p>
+<p>Listen, we weren’t sad that that was maybe a positive indication, but there’s still reasons around speed and costs regardless, I think. But there’s just a lot of work to do.</p>
+<p>And I think that it’s interesting where the labs don’t really care and they’re not motivated to care.</p>
+<p>Increasingly, it’s the market to be a good LLM provider. The main market seems to be consumer. You’re just not that motivated to help developers. Developers are a secondary concern. As a secondary concern.
+So you’re just, like, not that motivated, really, to do the legwork, to, like, help developers learn how to build stuff.</p>
+<p><strong>Yeah.</strong></p>
+<p>And then, like, if you’re a <strong>SaaS company</strong> or you’re a <strong>consumer company</strong>, you’re building with <strong>AI</strong>, you’re, you know, an <strong>AI-native company</strong>, like, this is your, like, this is your <strong>secret sauce</strong>. You’re not going to market how to do stuff.</p>
+<p>And so, like, I think there’s just, like, there’s a natural empty space, which is people that are actually, like, have the motivations to, like, help show the way for how developers can build with AI. Like, there’s just, there’s not a lot of obvious people who are, like, obviously investing their time and energy in that.</p>
+<p>But I think that is obviously a good thing for us to do. And so that’s kind of how I thought about it.</p>
+<p>Just a bit of pushback on the consumer thing, like, you say labs and, you know, don’t you think, like, <strong>opening AI</strong>, building memory into <strong>ChatGPT</strong> and making it available to literally everybody?</p>
+<p>It’s probably too much in your face, I would argue. But, like, they would really care to make the <strong>memory utilization good</strong>.</p>
+<p>I think <strong>context utilization, context engineering</strong> is important for them, too, even if they’re only building for consumer and don’t care about developers.</p>
+<p><strong>Yeah, how good is it today is obviously one important question, but we’ll skip that one.</strong></p>
+<p>Like, even if that’s the case, are they actually going to publish those findings?</p>
+<ul>
+<li>No.</li>
+<li>Never.</li>
+</ul>
+<p><strong>Exactly.</strong></p>
+<p>“It’s alpha, right? Why would you give away your secrets?”</p>
+<p>Yeah. And so I think there’s just, like, very few companies that actually are, like, in the position where, like, they have the incentive and they really care about, like, trying to teach developers how to build useful stuff with AI. And so I think that we have that incentive.</p>
+<p>But do you think you could get this to grow to the point of being the <strong>next needle in a haystack</strong> and then forcing the models, providers, to actually be good at it?</p>
+<p>There’s no path to forcing anybody to do anything. And so we thought about that when we were kind of putting this together.</p>
+<p>We’re like, oh, maybe we should, like, sort of formulate this as a <strong>formal benchmark</strong> that you can make very easy to, like, we did <strong>open source all the code</strong>. So, like, you could, you know, if you’re watching this and you’re from a large model company, you can do this. You can take your new model that you haven’t released yet and you can run, you know, these numbers on it.</p>
+<p>And, you know, I would rather have a model that has a <strong>60,000 token context window</strong> that is able to perfectly pay attention to and perfectly reason over those 60,000 tokens than a model that’s, like, 5 million tokens. Like, just as a developer, the former is, like, so much more valuable to me than the latter.</p>
+<p>I certainly hope that model providers do, like, pick this up as the thing that they care about and that they train around and that they, you know, evaluate their progress on and they communicate to developers as well. And that would be great.</p>
+<p>Do you think this will get a better lesson as well? How do you decide which of the, because, you know, you’re basically saying, yeah, the models will not learn this. It’s going to be a trick on top of it that you won’t get access to.</p>
+<p>I’m not saying that.</p>
+<p>Well, but when you’re saying that they will not publish how to do it.</p>
+<p>Well, it means that the model API will not be able to do it, but they will have something, ChatGPT, that will be able to do it.</p>
+<p>I see.</p>
+<p>Yeah. It’s very risky to bet what’s going to be a better lesson versus what is not. I don’t think I’ll hazard a guess.</p>
+<p>Hopefully not AI engineers.</p>
+<p><strong>Yeah. Hopefully not all of humanity. I don’t know. You know.</strong></p>
+<p>To me, also an interesting discipline developing just around <strong>context engineering</strong>.</p>
+<p><strong>Lance Martin from Langchain</strong> did a really nice blog post of like all the different separations.</p>
+<p>And then you in <strong>New York</strong>, you had, you hosted your first meetup. We’re going to do one here in <strong>San Francisco</strong> as well. But I’m just kind of curious, like, what are you seeing in the, in the fields? Like who’s doing interesting work? What are the top debates? That kind of stuff.</p>
+<p>I think this is still early. I mean, a lot of people are doing nothing. A lot of people are just still eating everything into the context window. That is very popular.</p>
+<p><strong>Yeah.</strong></p>
+<p>And, you know, they’re using context caching and that certainly helps. But like their cost and speed, but like isn’t helping the context raw problem at all.</p>
+<p>And so, yeah, I don’t, I don’t know that there’s lots of best practices in place yet. I mean, I’ll highlight a few.</p>
+<p>So the problem fundamentally is quite simple.</p>
+<p>It’s, you know, you have <em>N</em> number of sort of candidate chunks and you have <em>Y</em> spots available. And you have to do the process to curate and cull down from 10,000 or 100,000 or a million candidate chunks, which 20 matter right now for this exact step.
+That <strong>optimization problem</strong> is not a new problem to many applications and industries, sort of a <strong>classic</strong>, a classic problem. And of course, like what tools people use to solve that problem.</p>
+<p>Again, I think it’s still very early. It’s hard to say, but a few patterns that I’ve seen.</p>
+<p>So one pattern is to use what a lot of people call <strong>first stage retrieval</strong> to do a big cull down. So that should be using signals like:</p>
+<ul>
+<li><strong>vector search</strong></li>
+<li><strong>full text search</strong></li>
+<li><strong>metadata filtering</strong></li>
+<li><strong>metadata search</strong></li>
+</ul>
+<p>and others to go from, let’s say, 10,000 down to 300. Like we were saying a moment ago, like you don’t have to give an LLM 10 blue links. You can brute force a lot more.</p>
+<p>And so using an LLM as a <strong>re-ranker</strong> and brute forcing from 300 down to 30, I’ve seen now emerge a lot. Like a lot of people are doing this and it actually is like way more cost effective than I think a lot of people realize.</p>
+<p>I’ve heard of people that are running models themselves that are getting like a penny per million input tokens. And like the output token cost is basically zero because it’s like a, you know, the simplest.</p>
+<p><strong>These are dedicated re-ranker models, right? Not full LLMs.</strong>
+No, these are <strong>LLMs</strong>.
+Oh, okay. They’re just using LLMs as re-rankers.
+Okay.</p>
+<p>And of course there are also dedicated re-ranker models that by definition are going to be so like cheaper because they’re much smaller and faster because they’re much smaller.</p>
+<p>But like what I’ve seen emerge is like application developers who already know how to prompt are now applying that tool to <strong>re-ranking</strong>. And I think that like this is going to be the dominant paradigm.</p>
+<p>I actually think that like probably <strong>purpose-built re-rankers will go away</strong>. And the same way that like purpose-built, they’ll still exist, right? Like if you’re at extreme scale, extreme cost, yes, you’ll care to optimize that.</p>
+<p>And the same way that if you’re running with hardware, right? Like you’re just going to use a <strong>CPU or a GPU unless you absolutely have to have an ASIC or an FPGA</strong>.</p>
+<p>And I think the same thing is true about like re-rankers where like as <strong>LLMs become 100, 1,000 times faster, 100, 1,000 times cheaper</strong>, that like people are just going to use LLMs for re-rankers.</p>
+<p>And that actually like <strong>brute forcing information curation is going to become extremely, extremely popular</strong>.</p>
+<p>Now today, the prospect of running 300 parallel LLM calls, even if it’s not very expensive, the <strong>tail latency on any one of those 300 LLM calls, API availability, it’s also really bad</strong>. And so like there are good reasons to not do that today in a production application, but those will also go away over time.</p>
+<p>So those patterns I think I’ve seen emerge that are, that’s a, that is a new thing that I think I’ve only seen start to really become popular in the last few months. And by popular, I mean like popular in like the leading tip of the spear, but I think we’ll become a very, very dominant paradigm.</p>
+<p>Yeah.</p>
+<p>We’ve also covered a little bit on, especially on the <strong>code indexing</strong> side of the house. So everything we’ve been talking about applies to all kinds of contexts.</p>
+<p>I think <strong>code</strong> is obviously a special kind of context and corpus that you want to index. We’ve had a couple of episodes, the cloud code guys and the client guys talk about, they don’t embed or they don’t index your code base. They just give tools and use the, use the tools of code search.</p>
+<p>And I’ve often thought about whether or not like this should be the primary context retrieval paradigm where when you build an agent, you effectively call out to another agent with all these sort of <strong>recursive re-rankers and summarizers</strong> or another agent with tools.</p>
+<p>Yep. Or do you sort of glom them on to a single agent? I don’t know if you have an opinion, obviously, because agent is very ill-defined, but I’ll just put it out there. You can pull that apart.</p>
+<p>So, you know, <strong>indexing by definition is a trade-off</strong>. Like when you index data, you’re trading <strong>write-time performance for query-time performance</strong>. You’re making it slower to ingest data, but much faster to query data, which obviously scales as data sets get larger.</p>
+<p>And so, like, if you’re only grepping very small, you know, 15-file code bases, you probably don’t have to index it, and that’s okay.</p>
+<p>If you want to search all of the open-source dependencies of that project, you all have done this before in VS Code or Cursor, right? You, like, run a search over, like, the node_modules folder, it takes a really long time to run that search. That’s a lot of data.</p>
+<p>Like, so to make that indexed and sort of, again, make that trade-off of write-time performance or query-time performance, like, that’s what indexing is. Like, just, like, demystify it. What is this, right? Like, that’s what it is.</p>
+<p>You know, <strong>embeddings are known for semantic similarity today</strong>. Embeddings is just a generic concept of, like, information compression. There’s actually, like, many tools you can use embeddings for.
+I think <strong>embeddings for code</strong> are still extremely early and underrated, but <strong>regex</strong> is obviously an incredibly valuable tool.</p>
+<p>And, we’ve actually worked on this now inside of <strong>Chroma</strong>, both single-loaded and distributed, where we support <strong>regex search natively</strong>. So you can do regex search inside of <strong>Chroma</strong>, because we’ve seen that as a very powerful tool for <strong>code search</strong>. It’s great. We built indexes to make regex search go fast at large data volumes.</p>
+<p>On the coding use case that you mentioned, another feature we added to <strong>Chroma</strong> is the ability to do <strong>forking</strong>. So you can take an existing index, and you can create a copy of that index in under <strong>100 milliseconds</strong> for pennies. In so doing, you then can just apply the <strong>diff for what file has changed</strong> to that new index.</p>
+<p>So any corpus of data that’s logically changing, very fast <strong>re-indexing</strong> is the result. Now you can have an index for each commit. If you want to search different commits, search different branches, or different release tags — like, any corpus of data that’s logically versioned — you now can search all those versions very easily and very cheaply and cost-effectively.</p>
+<p>And so, yeah, I think that’s how I sort of think about regex, indexing, and embeddings. The needle continues to move here. I think that anybody who claims to have the answer, you just shouldn’t listen to them.</p>
+<p>When you say that code embeddings are underrated, what do you think that is? Most people just take <strong>generic embedding models</strong> that are trained on the internet, and try to use them for code. It works okay for some use cases. But does it work great for all use cases? I don’t know.</p>
+<p>Another way to think about these different primitives and what they’re useful for is fundamentally that we’re trying to find <strong>signal</strong>.</p>
+<ul>
+<li><strong>Text search</strong> works really well.</li>
+<li><strong>Lexical search</strong>, text search, works really well when the person who’s writing the query knows the data.</li>
+</ul>
+<p>If I want to search my <strong>Google Drive</strong> for the spreadsheet that has all my investors, I’m just going to type in <strong>CapTable</strong> because I know there’s a spreadsheet in my Google Drive called CapTable. Full text search — great, it’s perfect. I’m a subject matter expert in my data.</p>
+<p>Now, if you wanted to find that file and you didn’t know that I had a spreadsheet called CapTable, you’re going to type in <em>the spreadsheet that has the list of all the investors</em>. And, of course, in embedding space, in semantic space, that’s going to match.</p>
+<p>And so, I think again, these are just different tools. It depends on who’s writing the queries. It depends on what expertise they have in the data. It depends on what blend of those tools is going to be the right fit.</p>
+<p>My guess is that for code today, something like <strong>90% or 85% of queries</strong> can be satisfactorily run with regex. Regex is obviously the dominant pattern used by <strong>Google Code Search</strong>, <strong>GitHub Code Search</strong>. But maybe you can get 15%, 10%, or 5% improvement by also using embeddings.</p>
+<p>Very sophisticated teams also use embeddings for code as part of their <strong>code retrieval</strong> and <strong>code search stack</strong>. You shouldn’t assume they just enjoy spending money on things unnecessarily — they’re eking out some benefit there.</p>
+<p>Of course, for companies that want to be top of their game, want to corner their market, and want to serve their users the best, this is what it means to build great software with AI.</p>
+<blockquote>
+<p>“80% is quite easy, but getting from 80% to 100% is where all the work is.”</p>
+</blockquote>
+<p>Each point of improvement is a point on the board. It’s a point that users care about and that you can use to fundamentally serve your users better.</p>
+<p>Do you have any thoughts on the <strong>developer experience</strong> versus <strong>agent experience</strong>? This is another case where maybe we should <strong>reformat and rewrite the code</strong> in a way that makes it easier to embed and then train models there. Where are you on that spectrum?</p>
+<p>One tool I’ve seen work well for some use cases is instead of just embedding the code, you first have an <strong>LLM generate a natural language description</strong> of what this code is doing. Then you either embed just the natural language description, or embed that and the code, or embed them separately and put them into separate vector search indexes.</p>
+<p><strong>Chunk rewriting</strong> is the broad category for what that is. The idea here is related to <strong>indexing</strong>, which is: as much structured information as you can put into your write or ingestion pipeline, you should.</p>
+<ul>
+<li>Extract all of the metadata you can at ingestion.</li>
+<li>Perform all chunk rewriting you can at ingestion.
+If you really invest in <strong>trying to extract as much signal</strong> and kind of pre-break a bunch of the signals at the ingestion side, I think it makes the downstream query task much easier.</li>
+</ul>
+<p>But also, just because we’re here, it’s worth saying:</p>
+<ul>
+<li>People should be creating small <strong>golden data sets</strong> of what queries they want to work and what chunks should return.</li>
+<li>Then, they can quantitatively evaluate what matters.</li>
+<li>Maybe you don’t need to do a lot of fancy stuff for your application.</li>
+<li>It’s entirely possible that, again, just using <strong>regex</strong> or just using <strong>vector search</strong>, depending on the use case, that’s maybe all you need.</li>
+</ul>
+<p>I guess, again, anybody who’s claiming to know the answer, you should, the first thing you should ask is,</p>
+<blockquote>
+<p>“Let me see your data.”</p>
+</blockquote>
+<p>And then if they don’t have any data, then you have your answer already.</p>
+<p>I’ll give a plug to a talk that you gave at the conference, <strong>how to look at your data.</strong>
+Yes, looking at your data is important, having golden data sets.</p>
+<p>So these are all good practices that I feel like somebody should put into a little pamphlet, call it the <strong>Ten Commandments of AI Engineering</strong> or something.</p>
+<p>Okay, you might do that, yeah.
+<strong>Thou shalt look at your data.</strong></p>
+<p>We’re about to move on to memory, but I want us to sort of leave space for any other threads that you feel like you always want to get on a soapbox about.</p>
+<p>That’s dangerous.
+That’s a dangerous thing to ask.</p>
+<p>I have one to key off of, because I think I didn’t know where to insert this in the conversation, but we’re kind of skirting near it.
+That I’m trying to explore, which is, you know, I think you had this rant about <strong>RA and G,</strong> where the original transformer was sort of like an <strong>encoder-decoder architecture.</strong></p>
+<p>Then <strong>GPT</strong> turns most transformers into <strong>decoder-only,</strong> but then we’re also encoding with all the embedding models as <strong>encoder-only models.</strong></p>
+<p>So in some sense, we sort of decoupled the transformer into:</p>
+<ol>
+<li>First, we encode everything with the encoder-only model, put it into a vector database like <strong>Chroma</strong>.</li>
+<li>And Chroma also does other stuff, but, you know.</li>
+<li>Then we decode with the <strong>LLMs.</strong></li>
+</ol>
+<p>And I just think it’s a very interesting meta-learning about the overall architecture.
+Like, it is stepping out of just the model to models and system.</p>
+<p>And I’m curious if you have any reflections on that, or if you have any modifications to what I just said.</p>
+<p>I think there’s some intuition there, which is, like, the way we do things today is very crude, and we’ll feel very caveman in five or ten years.</p>
+<p>You know, why aren’t we just, why are we going back to natural language?
+Why aren’t we just, like, passing the embeddings directly to the models who are just going to functionally re-put it into latent space, right?</p>
+<p>Yeah, they have a very thin <strong>embedding layer,</strong> yeah.</p>
+<p>So I think there are a few things that I think might be true about retrieval systems in the future.</p>
+<ol>
+<li>They just stay in <strong>latent space.</strong> They don’t go back to natural language.</li>
+<li>Instead of doing, like, this is actually starting out to change, which is really exciting. But for the longest time, we’ve done <strong>one retrieval per generation.</strong></li>
+</ol>
+<p>If you retrieve, and then you stream out a number of tokens, like, why are we not continually retrieving?</p>
+<p>Yeah.
+As we need to.</p>
+<p>Agentic reg.
+Don’t call it that.
+Stop.
+Stop.</p>
+<p>But there was a paper, or a paper in a GitHub that came out a few weeks ago.
+I think it was called, unfortunately, <strong>RAG are 1,</strong> where they teach DeepSeek-R1, kind of give it the tool of how to retrieve.</p>
+<p>And so, kind of in its internal chain of thought, in its infinite times compute, it’s actually searching.</p>
+<p>There’s also <strong>retrieval augmented language models.</strong>
+I think this is an older paper.</p>
+<p>Yeah, there’s a bunch of Realm and Retro, and it’s kind of a long history here.</p>
+<p>So, I think that, you know, somehow not that popular.
+I don’t know why. Somehow not that popular.</p>
+<p>Well, a lot of those have the problem where either the retriever or the language model has to be frozen, and then the corpus can’t change, which most developers don’t want to deal with in the developer experience around.</p>
+<p>I would say, like, we’d do it if the gains were that high, or the labs don’t want you to do it.
+I don’t know about that.</p>
+<p>Yeah.
+Because the labs have a huge amount of influence.
+The labs have a huge amount of influence.</p>
+<p>I think it’s also just, like, you don’t get points on the board by doing that well.
+You’re just like, no one cares.
+The status games don’t reward you for solving their problem.</p>
+<p>So, yeah.</p>
+<p>So, broadly, continual retrieval, I think, will be interesting to see coming out of the scene, number one.
+Number two, staying in a <strong>latent space</strong> will be very interesting.
+And then, yeah, there’s some interesting stuff also about, kind of, like, <strong>GPUs</strong> and how you’re, kind of, like, paging information into memory on <strong>GPUs</strong> that I think can be done, like, much more efficiently.</p>
+<p>And this is more, like, five or ten years in the future that we’re kind of thinking about. But, yeah, I think when we look back and think that this was, like, <strong>hilariously crude</strong>, the way we do things today. Maybe, maybe not. You know, we’re solving <strong>IMO challenges with just language</strong>. Yeah, it’s great. I’m still a little working on the implications of that. Like, it’s still a huge achievement. But also very different than how I thought we would do things.</p>
+<p>You said that <strong>memory is the benefit of context engineering</strong>. I think there’s… You had a rant on Twitter about,</p>
+<blockquote>
+<p>“stop making memory for AI so complicated.”</p>
+</blockquote>
+<p>How do you think about memory? And what are, like, maybe the other benefits of <strong>context engineering</strong> that maybe we were not connecting together?</p>
+<p>I think <strong>memory is a good term</strong>. It is very legible to a wide population. Again, this is sort of just continuing the <strong>anthropomorphization of LLMs</strong>.</p>
+<p>You know, we ourselves understand how we are, we as humans use memory. We’re very good at, well, some of us are very good at using memory to learn how to do tasks. And then those learnings being, like, flexible to new environments.</p>
+<p>And, you know, the idea of being able to, like, take an AI, sit down next to an AI, and then instruct it for 10 minutes or a few hours and kind of just, like, tell it what you want it to do. And it does something, and you say,</p>
+<blockquote>
+<p>“hey, I actually do this next time,”</p>
+</blockquote>
+<p>the same that you would with a human. At the end of that 10 minutes, at the end of those few hours, the AI is able to do it now. And the same level of reliability that a human could do it, like, is an incredibly attractive and exciting vision. And I think that that will happen.</p>
+<p>And I think that memory, again, is, like, the memory is the term that, like, everybody can understand. Like, we all understand, our moms all understand. And the benefits of memory are also very appealing and very attractive.</p>
+<p>But what is memory under the hood? It’s still just <strong>context engineering</strong>, I think, which is the domain of how do you put the right information into the context window. And so, yeah, I think of memory as the benefit. Context engineering is the tool that gives you that benefit.</p>
+<p>And there may be stuff as well. I mean, maybe there’s some version of memory where it’s, like, oh, you’re actually, like, using RL to improve the model through data scene. And so, I’m not suggesting that, like, only changing the context is the only tool which, you know, gives you great performance on tasks. But I think it’s a very important part.</p>
+<p>Do you see a big difference between synthesizing the memory, which is, like, based on this conversation, what is the implicit preference? Yeah. That’s one side. And then there’s the other side, which is, based on this prompt, what are the memories that I should put in?</p>
+<p>I think they will be all fed by the same data. So, the same feedback signals that tell you how to retrieve better will also tell you what to remember better. So, I don’t think they’re actually different problems. I think they’re the same problem.</p>
+<p>To me, the thing I’m wrestling with a little more is just what are the structures of memory, if that makes sense. So, there’s, like, obviously, all these analogies with, like, long-term memory, short-term memory, letters trying to coin something around sleep.</p>
+<p>I do think that there definitely should be some sort of batch collection cycle, maybe sort of <strong>garbage collection cycle</strong> where it’s, like, where the <strong>LLM is sleeping</strong>. But I don’t know what makes sense. Like, we’re making all these analogies based on what we think, how we think humans work.</p>
+<p>Yeah. But maybe AI doesn’t work the same way. Yeah. I’m curious about anything that you’ve seen that’s working.</p>
+<p>Yeah, I always, again, you know, as a through line of this conversation, I always get a little bit nervous when we start creating new concepts and new acronyms for things.</p>
+<p>And then, all of a sudden, there’s, you know, info charts that are, like, here are the <strong>10 types of memory</strong>. And you’re, like, why? These are actually, if you squint, the same thing. Like, do they have to be different, you know? Like, you have to blow the people’s minds. No, I don’t think you do. I don’t know. You got to resist the slot machine. The slot and the sloth machine.</p>
+<p>Has always been a useful concept in— even in <strong>databases</strong>. In databases on your computer, we all remember running <strong>defrag</strong> on our <strong>Windows machines</strong> in a 1098. And, you know, so, yeah, again. Some of us not old enough to do that. I am. Not at this table.</p>
+<p>And, yeah, so, obviously, <strong>offline processing is helpful</strong>. And I think that is also helpful in this case. And as we were talking about before, like, what is the goal of indexing?
+The goal of <strong>indexing</strong> is to trade <strong>write-time performance</strong> for <strong>query-time performance</strong>.</p>
+<p><strong>Compaction</strong> is another tool in the toolbox of write-time performance. You’re <strong>re-indexing data</strong>. It’s not indexing, but actually, it is indexing. It’s sort of re-indexing, yeah. You’re taking data. You’re like, oh, maybe those two data points should be merged. Maybe they should be split. Maybe they should be rewritten. Maybe there’s new <strong>metadata</strong> we can extract from those.</p>
+<p>Like, let’s look at the <strong>signal</strong> of how our application is performing. Let’s try to figure out, are we remembering the right things or not? The idea that there is going to be a lot of <strong>offline compute and inference</strong> under the hood that helps make <strong>AI systems continuously self-improve</strong> is a sure bet. Part of the sleep-time compute thing that we talked about was <strong>pre-computing answers</strong>.</p>
+<p>So, based on the data that you have, what are likely questions that the person is going to ask? And then can you pre-compute those things? How do you think about that in terms of <strong>Chroma</strong>?</p>
+<p>We released a <strong>technical report</strong> maybe three months ago. The title is <strong>Generative Benchmarking</strong>. The idea there is having a <strong>golden data set</strong> is really powerful. What a golden data set is, is you have:</p>
+<ul>
+<li>A list of <strong>queries</strong></li>
+<li>A list of <strong>chunks</strong> that those queries should result in</li>
+</ul>
+<p>And now you can say, okay, this retrieval strategy gives me, for these queries, 80% of those chunks. Whereas if I change the embedding model, now I get 90% of those chunks. That is better.</p>
+<p>And then you also need to consider:</p>
+<ul>
+<li><strong>Cost</strong></li>
+<li><strong>Speed</strong></li>
+<li><strong>API reliability</strong></li>
+<li>Other factors</li>
+</ul>
+<p>Obviously, we’re making good engineering decisions. But you can measure now changes to your system.</p>
+<p>What we noticed was developers had the data, the chunks, and the answers, but they didn’t have the queries. We did a whole technical report around:</p>
+<blockquote>
+<p>“How do you teach an LLM to write good queries from chunks?”</p>
+</blockquote>
+<p>Because, again, you want chunk-query pairs. And so, if you have the chunks, you need the queries.</p>
+<p>Okay, we can have a human do some manual annotation, obviously. But humans are inconsistent and lazy, and QA is hard. So, can we teach an LLM how to do that?</p>
+<p>We sort of did a whole technical report and proved a strategy for doing that well. I think generating <strong>QA pairs</strong> is really important for benchmarking a retrieval system’s golden data set. Frankly, it’s also the same data set that you would use to fine-tune, in many cases. So, yeah, there’s definitely something very underrated there.</p>
+<p>Yeah, I’ll throw a plus one on that. I think as much attention as the <strong>Context Rock paper</strong> is getting, I feel like <strong>generative benchmarking</strong> was a bigger aha moment for me, just because I never came across the concept before. I think more people will apply it to their own personal situations.</p>
+<p>Whereas Context Rock is just generally, like,</p>
+<blockquote>
+<p>“Don’t trust the models that much, but there’s not much you can do about it, except do better context engineering.”</p>
+</blockquote>
+<p>Whereas generative benchmarking, you’re like,</p>
+<blockquote>
+<p>“Generate your evals.”</p>
+</blockquote>
+<p>And part of that is you’re going to need the data sets. It’ll sort of fall you into all the better best practices that everyone advocates for. So, yeah, it’s a very nice piece of work.</p>
+<p>I think having worked in <strong>applied machine learning developer tools</strong> now for 10 years, the returns to a very high-quality small-labeled data set are so high. Everybody thinks you have to have a million examples or whatever. No, actually, just a couple hundred even, like, high-quality examples is extremely beneficial.</p>
+<p>And customers all the time, I say:</p>
+<blockquote>
+<p>“Hey, what you should do is say to your team, Thursday night, we’re all going to be in the conference room, we’re ordering pizza, and we’re just going to have a data labeling party for a few hours.”</p>
+</blockquote>
+<p>And that’s all it takes to bootstrap this. <strong>Google</strong> does this, <strong>OpenAI</strong> does this, <strong>Anthropic</strong> does this. You are not above doing this.</p>
+<p>Great. You know, right?</p>
+<p>Yeah, exactly. Yeah.</p>
+<p>Look at your data. It’s, again, what matters. Maybe you should classify that as label your data, not look at, because look at seems a bit too…</p>
+<p>I agree with that.</p>
+<p>Yeah. There’s some more… View only.</p>
+<p>Right.</p>
+<p>I agree with that.</p>
+<p>Yeah. Read and write.</p>
+<p>Read and write.</p>
+<p>While you mentioned it, I should correct myself, it wasn’t standard cognition, it was <strong>standard cyborg</strong>.</p>
+<p>My favorite fact about you is you’re also a cyborg with your leg.</p>
+<p>True.</p>
+<p>That people, if you see <strong>Jeff</strong> in person, you should ask him about it. Or maybe not. Maybe don’t. I don’t know. I don’t care.</p>
+<p>Don’t care.</p>
+<p>Standard cyborg, Mighty Hive, Know It.</p>
+<p>What are those lessons there that you’re applying to Krova?</p>
+<p>Yeah. More than I can count.
+I mean, <strong>it’s a bit of a cliche</strong>. It’s very hard to be self-reflective and honest with yourself about a lot of this stuff. But I think viewing your life as being very short and kind of a, you know, a <strong>vapor in the wind</strong> and therefore like only doing the work that you absolutely love doing and only doing work that you, doing that work with people that you love spending time with. And serving customers that you love serving is a very useful, like <strong>North Star</strong>.</p>
+<p>And, you know, it may not be the North Star to like print a ton of money in some sense. There may be faster ways to scam people into making $5 million or whatever. So, but if I reflect on, and I’m happy to go into more detail, obviously, but if I reflect on like my prior experiences, like I was always making trade-offs. I was making trade-offs with like the people that I was working with, or I was making trade-offs with the customer that I was serving, or I was making trade-offs with like the technology and like how proud I was of it.</p>
+<p>And maybe it’s sort of like an age thing, I don’t know. But like, you know, the older that I get, I just more and more want to do the <strong>best work</strong> that I can. And I want that work to not just be great work, but I also want it to be seen by the most number of people because ultimately that is what <strong>impact</strong> looks like. You know, impact is not inventing something great and then nobody using it. Like impact is inventing something great and as many people using it as possible.</p>
+<p>Is any of that, you know, and we can skip this question if it’s sensitive, but like, is any of that guided by <strong>religion, by Christianity</strong>? And I only ask this because I think you’re one of a growing number of openly, outwardly, positively religious people in the <strong>Valley</strong>. And I think that it’s kind of what I want to explore. You know, I’m not, I’m not like that religious myself, but I just kind of like, how does that inform how you view your impact, your, you know, your choices that there was a little bit of, of that in what you just said, but I wanted to sort of tease that out more.</p>
+<p>I think increasingly modern society is <strong>nihilist</strong>. Nothing matters. It’s a <strong>absurdist</strong>, right? Everything’s a farce. Everything is power. Everything’s a comedy. Everything’s a comedy. Yeah, yeah, exactly. And so like, it’s very rare and I’m not saying that I always am the living exemplar of this, but like, it’s very rare to meet people that have genuine conviction about what flourishing for humanity looks like. And that’s very rare to meet people that are like, actually willing to sacrifice a lot to like, make that happen.</p>
+<p>And to start things that like, they may not actually see complete in their lifetimes. Like it used to be commonplace that people would start projects that would take centuries to complete.</p>
+<ul>
+<li><strong>Examples like the Sagrada Familia in Barcelona</strong> come to mind, which I think was started like 300 years ago and is completing next year.</li>
+<li>I’ve seen it in construction, but I can’t wait to see it completed as well.</li>
+<li>I’m sure the places are booked out already.</li>
+</ul>
+<p>Yeah. And so, you know, it’s common. There are actually, you know, a lot of like <strong>religions in Silicon Valley</strong>. I think <strong>AGI is also a religion</strong>.</p>
+<p>It has:</p>
+<pre tabindex="0"><code><span><span>-</span><span> A problem of evil: We don't have enough intelligence.</span></span>
+<span><span>-</span><span> A solution, a deus ex machina: The second coming of Christ, that AGI, the singularity is going to come.</span></span></code></pre>
+<p>It’s going to save humanity because we will now have infinite and free intelligence. Therefore, all of our problems will be solved. And, you know, we will live in sort of like the <strong>palm of grace for all eternity</strong>. It’s going to solve death. Right.</p>
+<p>And so, like, I think that like religion still exists in Silicon Valley. I think that it’s like, you know, there’s a <strong>conservation of religion</strong>. You kind of can’t get rid of it.</p>
+<p>Yeah. But the <strong>God gene</strong>.</p>
+<p>Yeah. I mean, you know, people have different terms for this, but like, I think that I’m always skeptical of religions that haven’t been around for more than five years. Put it that way. Yeah. There’s a survivorship bias.</p>
+<p>Anyway, I do think like you’re one of the more prominent ones that I, that I know of. And I think you guys are a force for good. And I like to encourage more of that.</p>
+<p>I don’t know. You know, people should believe in something bigger than themselves and build for planting trees under which they will not sit.</p>
+<blockquote>
+<p>Am I mangling the quote?
+Is that actually a biblical quote?</p>
+</blockquote>
+<p>I don’t think it’s a biblical quote, but I like that quote. That’s a good one. So yeah. Plus one.</p>
+<p>Like, I think society is really collapsed when like you just live for yourself. That really is true.</p>
+<p>Agreed.</p>
+<p>Who does your design? Because all of your swag is great. Your office looks great. The website looks great. The docs look great. How much of that is your input? How much of that do you have somebody who just gets it?
+And how important is that to like making the <strong>brand part of the culture</strong>?</p>
+<p>I think all value, you know, again, going back to the <strong>Conway’s Law</strong> thing, like you ship your org chart, you ship what you care about as a founder in some sense. And like, I do care deeply about this aspect of what we do. And so I think it does, it does, it does come from me in some sense.</p>
+<p>I can’t take all credit for everything we’ve done. We’ve had the opportunity to work with some really talented designers and we’re hiring as well for that. So if people are listening to this and want to apply, please do.</p>
+<p>I think, I mean, it’s cliche to describe <strong>Patrick Collison</strong> quotes, but he does seem to be one of the like most sort of public embodiers of this idea that:</p>
+<blockquote>
+<p>“How you do one thing is how you do everything.”</p>
+</blockquote>
+<p>I’m not sure this is a direct quote from him to be clear. This is more of just a broad aphorism, but like how you do one thing is how you do everything. And just ensuring that there’s a consistent experience of what we’re doing, where, like you said,</p>
+<ul>
+<li>if you come to our office, it feels intentional and thoughtful.</li>
+<li>if you go to our website, it feels intentional and thoughtful.</li>
+<li>if you use our API, it feels intentional and thoughtful.</li>
+<li>if you go through an interview process, it feels intentional and purposeful.</li>
+</ul>
+<p>I think that’s so easy to lose. It’s just so easy to lose that. And in some ways, the only way that you keep that is by insisting on that standard remain. And I think that that is like one of the main things that I can do really for the company, like as a leader. It’s sort of cringe to say, but like you do kind of have to be like the curator of taste.</p>
+<p>It’s not that I have to stamp everything that goes out the door before it does, but at a minimum companies, you know, maybe it’s not even like downhill in quality. It’s not sort of legible that any one thing is bad or worse. But it’s more like people just have their own expressions of what good looks like.</p>
+<p>And like, you know, they turn that up to 11 and then the brand becomes incoherent.</p>
+<ul>
+<li>What does this thing mean?</li>
+<li>What do they stand for?</li>
+</ul>
+<p>Again, there’s no longer a single voice.</p>
+<p>Yeah.</p>
+<p>I don’t, again, I’m not claiming that I’m good, perfect at this or good at this, but we certainly do. We wake up every day and we try. You have a lot of, it’s very powerful that the skill you have to convey straightforward principles and values and thoughtfulness, I think, in everything that you do.</p>
+<p>Like, yeah, I, you know, I’ve been impressed with your work for a while. Thank you.</p>
+<p>Anything we’re missing, you’re hiring designers, any other roles that you have open that you want people to apply for?</p>
+<p>If you’re a <strong>great product designer</strong> that wants to work on <strong>developer tools</strong>, I think we have one of the most kind of unique opportunities at <strong>Chroma</strong>.</p>
+<p>If you are interested in extending the kind of research that we do, that’s also an interesting opportunity.</p>
+<p>We’re always also hiring very talented engineers that want to work with other people who are very passionate about kind of <strong>low-level distributed systems</strong> and in some ways solving all the hard problems so that application developers don’t have to.</p>
+<p>When you say that, can you double click on low-level distributed systems? People always say this and then like, okay, Rust, like, you know, Linux kernel, what are we talking here?</p>
+<p>Yeah. I mean, like that may be like a useful encapsulation of this is like, if you care deeply about things like:</p>
+<pre tabindex="0"><code><span><span>- Rust</span></span>
+<span><span>- deterministic simulation testing</span></span>
+<span><span>- raft</span></span>
+<span><span>- Paxos</span></span>
+<span><span>- TLA+ consensus</span></span></code></pre>
+<p><strong>TLA+, really?</strong></p>
+<p>Wow. You know, if you just keep them saying, these are like proxies for, you would like the work that we do here.</p>
+<p>I just really want to tease out the hiring message, but also I, part of my goal is also to try to identify what is the type of engineer that people, that startups are really trying to hire and they cannot get because the better we can identify this thing, I can maybe create some kind of branding around it, create an event and like get these, like there’s a supply side and a demand side and they can’t find each other.</p>
+<p>Yeah. And that’s why I put <strong>AI engineer</strong> together was that part of it.</p>
+<p>Yeah. Yeah.</p>
+<p>But then this <strong>distributed systems person</strong>, which I’ve heard from you and like a hundred other startups, what is the skillset? What are they called? What do they do?</p>
+<p>And part of that is cloud engineering, because a lot of times you’re just dealing with <strong>AWS</strong>. Sure.</p>
+<p>A lot of that, a lot of times you’re just dealing with debugging network calls and consistency things. If you’re doing replication or whatever, where do they go? What do they do?</p>
+<p>Yeah. Yeah.
+Like, but they don’t use <strong>TLA+</strong> at work, probably not.</p>
+<p>Yeah. I mean, last year I started the <strong>SF systems group</strong>. The reading group. There’s like presentations and the point of that was like, “let’s bring, let’s create a meeting place that care about this topic,” because there wasn’t really a place in the <strong>Bay Area</strong> for people to do that.</p>
+<p>Yeah. So that continues to go now and continues to run, which is great.</p>
+<p>I mean, to be clear, we have a lot of people on the team who are extremely good at this. And so like, it’s not that we have zero, it’s that we have six or seven, and you want 20, but yeah, it’s not that we want more, but we are in some ways, like, I feel like our product roadmap is very obvious and we know exactly what we need to build for the next, even like, 18 months.</p>
+<p>But <strong>quality is always a limiting function</strong>. Quality and focus are always limiting functions.</p>
+<p>And like, well, yes, I will always make my land acknowledgement to <strong>Mythical Man-Month</strong>. Eventually it’s good.</p>
+<p>More people. You do, you kind of do need more people because you need more focus. Like you need more people to care deeply about the work that they do.</p>
+<p>And the AI is certainly an accelerant and it’s helpful. And it’s a reason that our team is still very small today relative to many of our competitors is because I think we’ve really embraced those tools:</p>
+<ul>
+<li><strong>Your cursor</strong></li>
+<li><strong>Shop</strong></li>
+<li><strong>Cloud code</strong></li>
+<li><strong>Windsurf</strong></li>
+</ul>
+<p>People use whatever they want.</p>
+<p>Okay. Yeah. So I think all of those tools get some usage internally.</p>
+<p>So far, we’ve still not found that really any <strong>AI coding tools are particularly good at Rust</strong>, though. I think, I’m not sure why that is other than the obvious. There’s just not that many examples of great Rust on the internet.</p>
+<p>And so, you know, yeah. You would think that Rust errors would help you debug itself. Right. You would think. Apparently not.</p>
+<p>Okay. All right. I have zero experience in that in our front.</p>
+<p>Yeah. I’ve contributed three things to the <strong>Rust SDK</strong> of <strong>Temporal</strong> and that was my total experience with Rust, but I think it’s definitely on the rise. It’s Zig, it’s Rust, and I don’t know if there’s a third cool language.</p>
+<p>I think <strong>Ghost Accounts, Golang</strong>.</p>
+<p>Yeah. Ghost accounts.</p>
+<p>If you’re in that bucket, reach out to Jeff, but otherwise I think we’re good.</p>
+<p>Thanks for coming on.</p>
+<p>Thanks for having me guys. Good to see you.</p>
+<p>Thank you. Thank you.</p>
+</div><details data-astro-cid-h4qngm3k><summary data-astro-cid-h4qngm3k>Questions and answers</summary><dl data-astro-cid-h4qngm3k><dt data-astro-cid-h4qngm3k><span data-excerpt="But I think the reason that Chroma got started is because we had worked for many years in applied machine learning, and we've seen how demos were easy to build, but building a production reliable system was incredibly challenging, and that the gap between demo and production didn't really feel like engineering." data-astro-cid-h4qngm3k>What motivated the creation of Chroma, and what problem did its founders aim to solve in the applied machine learning space?</span></dt><dd data-astro-cid-h4qngm3k>Chroma was started because its founders observed a significant gap between building easy demos and developing production-reliable machine learning systems, a process they described as more &quot;alchemy&quot; than engineering. They aimed to bridge this gap by creating tools that make building production AI applications feel more like engineering.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="And then the for AI piece, actually, I think it matters in four kind of different ways:" data-astro-cid-h4qngm3k>How does Chroma differentiate &quot;modern search infrastructure for AI&quot; from classic search systems, particularly regarding the role of the user?</span></dt><dd data-astro-cid-h4qngm3k>Chroma differentiates modern search for AI by highlighting four key ways: the tools/technology, the workload, the developer, and the consumer. Crucially, in classic search, the human performed the &quot;last mile&quot; of evaluation (e.g., clicking ten blue links), whereas in modern AI search, a language model handles this task, capable of processing orders of magnitude more information.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="Context engineering is the job of figuring out what should be in the context window any given LLM generation step." data-astro-cid-h4qngm3k>What is &quot;context engineering&quot; according to Jeff, and why does he believe it&#39;s a high-status job in the AI industry?</span></dt><dd data-astro-cid-h4qngm3k>Context engineering is defined as the job of figuring out what information should be included in the context window for any given LLM generation step. Jeff believes it&#39;s a high-status job because it clearly describes a critical task for building effective AI applications, and successful AI startups fundamentally excel at this very skill.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="One thing I definitely will call out for context engineering or context rot in general is I think that there's been a lot of marketing around needle in a haystack where every frontier model now comes out with, like, completely green, perfect charts of, like, full utilization across, you know, 1 million tokens." data-astro-cid-h4qngm3k>Why does Jeff criticize the &quot;needle in a haystack&quot; marketing from frontier model labs, and what&#39;s the underlying issue with it?</span></dt><dd data-astro-cid-h4qngm3k>Jeff criticizes the &quot;needle in a haystack&quot; marketing because it often presents misleadingly perfect benchmarks for models&#39; context window performance, implying models can utilize millions of tokens effectively. However, Chroma&#39;s research on &quot;context rot&quot; indicates that LLM performance often degrades significantly as the number of tokens increases, making these claims unrealistic for real-world applications today.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="The other way to build a startup is to have a very strong view, presumably a contrarian view, or at least a view that seems like a secret." data-astro-cid-h4qngm3k>What &quot;school of thought&quot; does Chroma follow in building a startup, and how did this influence their decision to delay the release of Chroma Cloud 2 despite market pressure?</span></dt><dd data-astro-cid-h4qngm3k>Chroma adheres to the school of thought that involves having a strong, often contrarian, view and maintaining maniacal focus on that vision. This philosophy led them to delay Chroma Cloud 2 because they prioritized delivering an exceptional developer experience and maintaining their brand&#39;s craft, rather than rushing a single-node product as a service that wouldn&#39;t meet their high standards for quality.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="So one pattern is to use what a lot of people call first stage retrieval to do a big cull down." data-astro-cid-h4qngm3k>What are the two emerging patterns Jeff has observed for solving the context optimization problem in AI applications?</span></dt><dd data-astro-cid-h4qngm3k>Jeff has observed two patterns for solving the context optimization problem. First, &quot;first-stage retrieval&quot; uses signals like vector search, full-text search, and metadata filtering to cull a large number of candidate chunks (e.g., 10,000) down to a smaller set (e.g., 300). Second, an LLM is then used as a re-ranker to further narrow down this set (e.g., from 300 to 30), a method he sees becoming very popular and cost-effective.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="I think there's some intuition there, which is, like, the way we do things today is very crude, and we'll feel very caveman in five or ten years." data-astro-cid-h4qngm3k>How does Jeff envision the future of retrieval systems evolving beyond current practices, which he describes as &quot;crude&quot; and &quot;caveman&quot;?</span></dt><dd data-astro-cid-h4qngm3k>Jeff envisions retrieval systems evolving in two main ways: they will increasingly stay in latent space rather than converting back to natural language, and they will move towards continual retrieval throughout the generation process, rather than a single retrieval per generation. He suggests today&#39;s methods will seem &quot;hilariously crude&quot; in five to ten years.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="The idea there is having a golden data set is really powerful. What a golden data set is, is you have: A list of queries A list of chunks that those queries should result in." data-astro-cid-h4qngm3k>What is &quot;generative benchmarking,&quot; and why does Jeff believe it&#39;s crucial for evaluating and improving retrieval systems?</span></dt><dd data-astro-cid-h4qngm3k>Generative benchmarking is a strategy where an LLM is taught to write good queries from existing data chunks, creating high-quality chunk-query pairs. This is crucial because a &quot;golden data set&quot; (queries + chunks that should return) allows developers to quantitatively evaluate different retrieval strategies, embedding models, and system changes to measure performance improvements in terms of accuracy, cost, and speed.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="The upstream version of Conway's Law: &quot;You ship your org chart, is you ship your culture.&quot;" data-astro-cid-h4qngm3k>Jeff mentions &quot;Conway&#39;s Law&quot; in the context of building Chroma&#39;s team and culture. How does this law manifest in his approach to the company&#39;s culture and product?</span></dt><dd data-astro-cid-h4qngm3k>Jeff applies &quot;Conway&#39;s Law&quot; (which he rephrases as &quot;you ship your culture&quot; or &quot;you ship what you care about as a founder&quot;) by deeply valuing the people on his team, hiring very slowly, and being extremely picky. This approach ensures a strong, aligned culture that directly translates into the quality and intentionality observed across Chroma&#39;s products, brand, and overall developer experience.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="But I think viewing your life as being very short and kind of a, you know, a vapor in the wind and therefore like only doing the work that you absolutely love doing and only doing work that you, doing that work with people that you love spending time with." data-astro-cid-h4qngm3k>How does Jeff&#39;s personal philosophy, potentially influenced by his religious beliefs, guide his approach to building Chroma and his understanding of &quot;impact&quot;?</span></dt><dd data-astro-cid-h4qngm3k>Jeff&#39;s personal philosophy, including his Christian faith, guides him to view life as short and to pursue work he loves, with people he loves, serving customers he loves. He aims for impact, which he defines not as inventing something great that nobody uses, but as inventing something great that is used by as many people as possible, driven by a conviction for human flourishing and a willingness to build for future generations (&quot;planting trees under which they will not sit&quot;).</dd></dl></details></article></main></body></html><script type="module">var e=e=>e.toLowerCase().replace(/[\p{P}\s]/gu,``),t=[...document.querySelectorAll(`.transcript p`)],n=t.map(t=>e(t.textContent||``));for(let r of document.querySelectorAll(`[data-excerpt]`)){let i=e(r.dataset.excerpt||``),a=i?n.findIndex(e=>e.includes(i)):-1;if(a<0)continue;let o=t[a];o.id||=`paragraph-`+(a+1);let s=document.createElement(`a`);s.href=`#`+o.id,s.textContent=r.textContent,r.replaceWith(s)}</script>

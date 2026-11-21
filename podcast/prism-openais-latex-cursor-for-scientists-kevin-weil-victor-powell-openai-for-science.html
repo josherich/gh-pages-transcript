@@ -1,0 +1,342 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Transcripts from podcasts and videos collected by Josherich."><link rel="canonical" href="https://podcast.josherich.me/podcast/prism-openais-latex-cursor-for-scientists-kevin-weil-victor-powell-openai-for-science"><title>⚡️ Prism: OpenAI&#39;s LaTeX Cursor for Scientists — Kevin Weil &amp; Victor Powell, OpenAI for Science · Podcast Transcripts</title><style>:root{color-scheme:light dark;--background:#f8fafc;--foreground:#192234;--subtle:#495871;--border:#dbe2ed;--surface:#eef3fa;--accent:#2049a0;background:var(--background);color:var(--foreground);font-family:system-ui,sans-serif;font-size:1rem}@media (prefers-color-scheme:dark){:root{--background:#101621;--foreground:#edf1f7;--subtle:#aebbd0;--border:#303e54;--surface:#1a2537;--accent:#a7c7ff}}*,:before,:after{box-sizing:border-box}body{margin:0;line-height:1.55}a{color:var(--accent);text-underline-offset:.22em}a:hover{text-decoration-thickness:2px}:focus-visible{outline:2px solid var(--accent);outline-offset:3px}h1,h2,h3{text-wrap:pretty;line-height:1.17}h1{letter-spacing:-.025em;margin:0 0 .35em;font-family:Georgia,Noto Serif CJK SC,serif;font-size:clamp(2rem,6vw,3.6rem);font-weight:500}main,.site-header{max-width:65rem;margin-inline:auto;padding-inline:clamp(1rem,5vw,3rem)}main{padding-block:clamp(2rem,6vw,4rem) 5rem}.site-header{border-bottom:1px solid var(--border);justify-content:space-between;align-items:center;gap:1rem;min-height:4.2rem;font-size:.9rem;display:flex}.site-name{color:var(--foreground);font-weight:650}.skip-link{position:absolute;top:1rem;left:1rem;transform:translateY(-200%)}.skip-link:focus{background:var(--background);z-index:1;transform:none}[hidden]{display:none!important}
+article[data-astro-cid-h4qngm3k]{max-width:49rem;margin-inline:auto}h1[data-astro-cid-h4qngm3k]{overflow-wrap:anywhere;margin-bottom:1.5rem}.metadata[data-astro-cid-h4qngm3k]{color:var(--subtle);flex-wrap:wrap;gap:.5rem 1rem;margin:0 0 .8rem;display:flex}details[data-astro-cid-h4qngm3k]{background:var(--surface);border:1px solid var(--border);border-radius:.4rem;padding:.7rem 1rem}summary[data-astro-cid-h4qngm3k]{cursor:pointer;font-weight:600}ol[data-astro-cid-h4qngm3k],dl[data-astro-cid-h4qngm3k]{margin:.6rem 0 .4rem}ol[data-astro-cid-h4qngm3k]{padding-inline-start:1.5rem}li[data-astro-cid-h4qngm3k],dd[data-astro-cid-h4qngm3k]{margin-bottom:.55rem}dt[data-astro-cid-h4qngm3k]{font-weight:600}dd[data-astro-cid-h4qngm3k]{margin-inline-start:0}.transcript[data-astro-cid-h4qngm3k]{overflow-wrap:anywhere;font-size:1.1rem;line-height:1.7}.transcript[data-astro-cid-h4qngm3k] p:target{background:var(--surface);scroll-margin-block:1rem}.transcript[data-astro-cid-h4qngm3k] pre{background:var(--surface);padding:.9rem;overflow:auto}.transcript[data-astro-cid-h4qngm3k] blockquote{color:var(--subtle);border-inline-start:3px solid var(--border);margin-inline:0;padding-inline-start:1rem}.transcript[data-astro-cid-h4qngm3k] img,.transcript[data-astro-cid-h4qngm3k] iframe{max-width:100%}.transcript[data-astro-cid-h4qngm3k] table{border-collapse:collapse;display:block;overflow:auto}.transcript[data-astro-cid-h4qngm3k] th,.transcript[data-astro-cid-h4qngm3k] td{border:1px solid var(--border);padding:.3rem .65rem}
+</style></head><body><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><a class="site-name" href="/">Podcast Transcripts</a><a href="https://josherich.me">Josherich’s Blog</a></header><main id="main"><article data-astro-cid-h4qngm3k><p class="metadata" data-astro-cid-h4qngm3k><time datetime="2026-01-27" data-astro-cid-h4qngm3k>Jan 27, 2026</time></p><h1 data-astro-cid-h4qngm3k>⚡️ Prism: OpenAI&#39;s LaTeX Cursor for Scientists — Kevin Weil &amp; Victor Powell, OpenAI for Science</h1><details data-astro-cid-h4qngm3k><summary data-astro-cid-h4qngm3k>Table of contents</summary><ol data-astro-cid-h4qngm3k><li data-astro-cid-h4qngm3k><span data-excerpt="Okay, we're here at OpenAI with some exciting news from the AI for Science team." data-astro-cid-h4qngm3k>Introduction to AI for Science Team</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So we're launching Prism, which is a free AI-native LaTeX editor." data-astro-cid-h4qngm3k>The Launch of Prism</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="What does all that mean? Because probably a lot of people on the pod haven't worked with LaTeX in the past." data-astro-cid-h4qngm3k>Understanding LaTeX and AI&#39;s Role</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="But if you step back, right, it is OpenAI for Science. Our goal is to accelerate science." data-astro-cid-h4qngm3k>OpenAI for Science Mission</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="If there was a lesson from what happened over the last year with software engineering, it's that part of the acceleration in software engineering came from better models." data-astro-cid-h4qngm3k>Learning from AI in Software Engineering</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah, I guess it started off as just a project. I left Meta about three years ago trying to look for various different projects to start." data-astro-cid-h4qngm3k>The Genesis of Prism</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="And I was looking around like, what is there in this space? And there hadn't been a lot of innovation for a long time." data-astro-cid-h4qngm3k>Discovering Cricket (Prism&#39;s Predecessor)</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah, always fun to show it. I'm a fan of show, don't tell. Push people to the video." data-astro-cid-h4qngm3k>Prism Demonstration</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So what you have here, so this is, this is Prism. And what you can see is on the left here, this is actual LaTeX." data-astro-cid-h4qngm3k>Prism User Interface Overview</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Help me proofread the introduction section paragraph by paragraph, suggest places where I can simplify." data-astro-cid-h4qngm3k>AI-Assisted Proofreading</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So here’s another thing we were talking about: diagrams in LaTeX. So, I've got a, say, I wanted to input a commutative diagram, right?" data-astro-cid-h4qngm3k>Generating Commutative Diagrams with AI</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="You also can create new parallel chats. So you can have whole sessions with ChatGPT that can be going in parallel." data-astro-cid-h4qngm3k>Parallel Chats and Equation Verification</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Now, while we're waiting for the diagram to finish, we can also get another thing going in parallel." data-astro-cid-h4qngm3k>Generating Lecture Notes</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So anyways, you could see we: - Had it proofread the paper. - Had it check some of the answers to verify that our calculations were correct." data-astro-cid-h4qngm3k>Summary of Prism Features Demonstrated</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="What about collaboration? It's great. Yeah. So it's built for, I mean, you can speak to this." data-astro-cid-h4qngm3k>Collaboration Features</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="And then any of the like engineering choices, like, you know, what might engineers not appreciate when just looking at a tool like this?" data-astro-cid-h4qngm3k>Engineering Challenges and Architecture</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I think initially one of the, one interesting challenges was that we really pushed on it being WebAssembly and fully just running in the browser at first, the whole entire LaTeX compilation." data-astro-cid-h4qngm3k>From WebAssembly to Backend PDF Rendering</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I think we also, the AI in here benefits a lot from everything that we've learned building codecs." data-astro-cid-h4qngm3k>Codecs Integration and Future UI</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I mean, that, that's actually maybe a good segue into some of the other questions that I had about your initiative." data-astro-cid-h4qngm3k>Broader Impact of AI for Science</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I mean, when you step back and look at the trend, I think that's the biggest thing." data-astro-cid-h4qngm3k>Validation and Progress of AI in Science</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Then the bottleneck becomes the wet lab or the lab, right? Yeah. By the way, I totally — we were talking a little bit about software engineering before and the analogies." data-astro-cid-h4qngm3k>Robotic Labs and Shifting Bottlenecks</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I guess we spoke recently with Heather Kulik at MIT, and one of the things she pointed out was that there's an element of serendipity to working in a lab that you lose." data-astro-cid-h4qngm3k>Serendipity vs. Automated Experimentation</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I'm very pro the in silico acceleration, because you have more control over that and you can parallelize, repeat, and do all those things." data-astro-cid-h4qngm3k>The Power of In Silico Acceleration</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well, I mean, this is why we're so excited about this, right? I mean, imagine our mission is to bring AGI to the world in a way that's beneficial to all of humanity." data-astro-cid-h4qngm3k>OpenAI&#39;s Mission and AGI&#39;s Impact</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So that brings up two questions in my mind: 1. Who owns the invention? 2. Does OpenAI become a drug company and a fusion company?" data-astro-cid-h4qngm3k>Ownership and OpenAI&#39;s Business Strategy</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="One thing I did want to bring across also was that AI for Science sits within the broader research org at OpenAI." data-astro-cid-h4qngm3k>Self-Acceleration and the AI Researcher</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I think one thing I'm most trying to figure out is how closely is machine learning research, which is a science, or high-performance compute, which is also something that you guys are doing a lot of, close to the traditional hard sciences, let's call it, like physics and chemistry." data-astro-cid-h4qngm3k>ML Research vs. Traditional Hard Sciences</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well, I hope everybody tries Prism. It's available today at prism.openai.com. It's totally free." data-astro-cid-h4qngm3k>Conclusion and Call to Action</span></li></ol></details><div class="transcript" data-astro-cid-h4qngm3k><p><a href="https://episode.flightcast.com/01KG02GMCH9FACK2SB8RANBRVW.mp3">⚡️ Prism: OpenAI’s LaTeX “Cursor for Scientists” — Kevin Weil &#x26; Victor Powell, OpenAI for Science</a></p>
+<p>Okay, we’re here at <strong>OpenAI</strong> with some exciting news from the <strong>AI for Science</strong> team. With us is <strong>Kevin Weil</strong>, from, I guess, your <strong>VP of AI for Science</strong>.</p>
+<p><strong>VP of OpenAI for Science</strong>, yeah. OpenAI for Science, and <strong>Victor Powell</strong>, who is the product lead on the new product that we’re talking about today. And with me is our new AI for Science host, <strong>RJ</strong>. Welcome.</p>
+<blockquote>
+<p>“Thanks for having us.”</p>
+</blockquote>
+<blockquote>
+<p>“Thanks for having us. Yeah, it’s very good to be here.”</p>
+</blockquote>
+<blockquote>
+<p>“Thanks for hosting us as well. It’s always nice to come over to the office.”</p>
+</blockquote>
+<p>What are we announcing today?</p>
+<p>So we’re launching <strong>Prism</strong>, which is a free <strong>AI-native LaTeX editor</strong>.</p>
+<p>What does all that mean? Because probably a lot of people on the pod haven’t worked with LaTeX in the past. LaTeX is a language, effectively, for typesetting <strong>mathematics, physics, and science in general</strong>.</p>
+<p>So if you’re a scientist writing a paper, you’re probably not using Google Docs because you need to — you have diagrams, you have equations, et cetera. But it’s — and it’s been the standard for decades. But the tools that people use to actually write LaTeX, write their papers, haven’t changed in a long time.</p>
+<p>And in particular, <strong>AI can help with a lot of the tasks</strong>, right? Because you spend your time doing the science, you need to write it up. That’s an important part of communicating your work. But you want that to be fast, and you want that to be accelerated, and AI can help in a ton of ways. And we’ll talk about some of those.</p>
+<p>But if you step back, right, it is <strong>OpenAI for Science</strong>. Our goal is to <strong>accelerate science</strong>. And the surface area of science is very large. So we’re trying to build tools and products that help every scientist move faster with AI.</p>
+<p>Some of that is obviously the work that we can do with the model, making the model able to solve really hard scientific frontier kind of problems, allowing it to think for a long time. But it’s not only that, right?</p>
+<p>If there was a lesson from what happened over the last year with software engineering, it’s that part of the acceleration in software engineering came from better models. But part of it also came from the fact that you now have AI embedded into the workflows, into the products that you use as a software engineer, right?</p>
+<ul>
+<li>It’d be one thing if we were going back and forth, copying and pasting code between ChatGPT and your IDE. That would be okay. That would be an acceleration.</li>
+<li>But the real acceleration came when you embedded AI into the actual workflow.</li>
+</ul>
+<p>And so that’s what we’re doing here. So OpenAI for Science, it’s both building great models for scientists and also speeding them up by bringing AI into the workflow. That’s what we’re doing with <strong>Prism</strong>.</p>
+<p>I often say like every million copy and paste done in ChatGPT, there’s probably some product to be built.</p>
+<blockquote>
+<p>“Right, exactly.”</p>
+</blockquote>
+<p>That’s a good analogy.</p>
+<blockquote>
+<p>“Yeah.”</p>
+</blockquote>
+<p>That’s a good way to look at it. Especially with LaTeX, having written a lot of LaTeX papers.</p>
+<blockquote>
+<p>“Yes.”</p>
+</blockquote>
+<blockquote>
+<p>“Yeah, me too.”</p>
+</blockquote>
+<p>The number of hours as a grad student I spent trying to get some diagram to line up exactly.</p>
+<blockquote>
+<p>“Exactly.”</p>
+</blockquote>
+<blockquote>
+<p>“Oh, man.”</p>
+</blockquote>
+<p>Yeah. Cool. And Victor, this is your sort of baby.</p>
+<blockquote>
+<p>“Yeah, I guess it started off as just a project. I left Meta about three years ago trying to look for various different projects to start. And this was one that like when I sort of presented it to people, they’re like, oh, I get it. That’s, I see what you’re doing.”</p>
+</blockquote>
+<p>And so I’ve just been focused on that, building it for about a year and a half. And, you know, it has now become part of OpenAI and that’s been very exciting.</p>
+<blockquote>
+<p>“Congrats.”</p>
+</blockquote>
+<blockquote>
+<p>“Thank you.”</p>
+</blockquote>
+<p>Yeah. So it’s kind of a fun story, right? I mean, we, as we were thinking, we had this thesis around, it’s not just models. It’s also building models into the workflow and accelerating scientists in that way.</p>
+<p>And this is, there are obviously a lot of different ways that you can do that, but the scientific collaboration and publishing thing is definitely one of them. And I was looking around like, what is there in this space? And there hadn’t been a lot of innovation for a long time.</p>
+<p>Like it wasn’t that different from when I was writing up my assignments and papers in tech and grad school. And then I found on this Reddit forum, maybe it was /r/LaTeX. I don’t remember, but somewhere on this Reddit forum, I found this thing about a company called <strong>Cricket</strong>.</p>
+<p>And I was looking around, I couldn’t find who the founder was. It took me a little while. And then I think I found you on Twitter and DM’d you out of the blue and just said,</p>
+<blockquote>
+<p>“Hey, I don’t know if you want to talk about this, but I would love to talk about this if you’re open to it,”</p>
+</blockquote>
+<p>and gave you my number. And we talked on the phone and then jumped on a Zoom and eventually met in <strong>San Francisco</strong> and made it happen.</p>
+<blockquote>
+<p>“That’s right.”</p>
+</blockquote>
+<p>It’s awesome to have you guys here, but it’s just, yeah, I have a ton of respect.
+For what you, what you started to build. I actually never heard that full story from you until now. You gotta find that <strong>Reddit user</strong> and thank them because, you know, it might have been me.</p>
+<p>I thought you were totally in stealth because it was the hardest thing to actually figure out who the founder of this thing was. And then I was like, <strong>“Oh, for sure. He’s not going to respond to my random DM.”</strong></p>
+<p>I mean, I guess that’s a part of, part of our focus has always just been entirely on <strong>product</strong>, and to the point where it’s almost embarrassing how little we focus on anything else.</p>
+<p>Yeah. It worked out for you.</p>
+<p>Also full circle for a moment for you using <strong>Twitter</strong> to do your business development.</p>
+<p>Yeah, that’s right. So that’s kind of interesting.</p>
+<ul>
+<li>DMs forever.</li>
+<li>Right.</li>
+</ul>
+<p>Like I actually, yeah, probably one of the most important social network innovations, I guess, is those, that stuff. And I’m sure you know a lot about that.</p>
+<p>Shall we go right into a demo or talk about it?</p>
+<p>Yeah, always fun to show it.</p>
+<p>I’m a fan of <strong>show, don’t tell</strong>. Push people to the video.</p>
+<p>All right. I’ll try and arrange this so you guys can see a little bit.</p>
+<p>Yes.</p>
+<p>So what you have here, so this is, this is <strong>Prism</strong>. And what you can see is on the left here, this is actual <strong>LaTeX</strong>. You can see why you might want AI to help you write it because it’s a little bit, it’s a language. It’s a little bit messy.</p>
+<p>And then on the right, this is my colleague’s paper. <strong>Alex Lipsoske</strong> is a physicist. This is a paper that he wrote on <strong>black holes</strong>. And so you see it over here, all the, all the, you know, you can imagine trying to write this in Google Docs or something — it’d be impossible.</p>
+<p>This is why LaTeX is super powerful.</p>
+<p>And then, you’ve got kind of your files here that make up the project:</p>
+<ul>
+<li>Tech file, which is the actual main source file</li>
+<li>Bibliography files</li>
+<li>Etc.</li>
+</ul>
+<p>You can go through and change it and then you compile that into the PDF itself. But here I can say, at the bottom, you can use the AI using <strong>GPT 5.2</strong>. And I could say, you know, this introduction, maybe I want a little help writing the introduction.</p>
+<p>So,</p>
+<blockquote>
+<p><strong>“Help me proofread the introduction section paragraph by paragraph, suggest places where I can simplify.”</strong></p>
+</blockquote>
+<p>There’s a lot of demo and we’re working on it pretty heavily. So just, you can’t be nervous.</p>
+<p>Spoken like a true founder.</p>
+<p>One of the nice things is you could do this in ChatGPT, but you’d have to go upload your files into a chat, right? And you’re going back and forth here because the AI is <strong>built into the product</strong>. It has all of the files that are part of your project. It automatically puts them in context. It works the way you think it would work.</p>
+<p>So here it’s looking at the files.</p>
+<p>And it’s given us kind of a diff here. So it’s suggesting changes. You’ve got:</p>
+<ul>
+<li>The part in <strong>red</strong>, which is the part that it’s changing</li>
+<li>The part in <strong>green</strong>, what it wants to change it to</li>
+</ul>
+<p>You can see the different places where it is suggesting that we change things.</p>
+<p>So, okay, we can, we’ll just keep all of them, right? YOLO.</p>
+<p>Here’s the thing — we’re changing Alex’s paper. What’s the big deal?</p>
+<p>So here’s another thing we were talking about: <strong>diagrams in LaTeX</strong>.</p>
+<p>So, I’ve got a, say, I wanted to input a <strong>commutative diagram</strong>, right? It’s really easy to draw a commutative diagram like this. Yeah, it is an absolute nightmare to put these things into LaTeX.</p>
+<p>So I will upload this photo and I’ll say here, whoops.</p>
+<p>Is there a tech bench for this kind of stuff? Like a set of evals?</p>
+<ul>
+<li>Yeah, we totally need one.</li>
+<li>I think there’s an opportunity to do that for sure.</li>
+</ul>
+<p>So here’s a commutative diagram that I drew on the whiteboard:</p>
+<blockquote>
+<p><strong>“Can you make it into a LaTeX diagram and put it right after the, I don’t know, right after, right before, right at the top of the introduction section? Make sure you get the details right.”</strong></p>
+</blockquote>
+<p>So, I didn’t want to interrupt you while you were typing, but why don’t you use voice?</p>
+<p>Oh, actually I should. I totally could.</p>
+<p>Yeah.</p>
+<p>No, but isn’t it interesting that we all have these voice buttons and we don’t use it?</p>
+<p>Yeah, it’s not second nature yet. Like it’s interesting.</p>
+<p>And that one I totally should have. I was going to also show something. So here I am in the LaTeX and it’s working.</p>
+<p>You also can create new parallel chats. So you can have whole sessions with ChatGPT that can be going in parallel.</p>
+<p>So here I’ll ask it, there are all these equations. We’re talking about symmetries of this black hole wave equation. And in particular, there’s this complex symmetry here.
+I like how it. Notice how, yeah. Yeah. Notice how it sinks when I highlight it, but I’ll say like, why don’t you, I’ll go to my chat so I can start doing this in parallel.</p>
+<p>I’ll say, <strong>please make sure, or please verify that the H plus operator in the new symmetries section is indeed a symmetry of the stationary axisymmetric black hole.</strong> Do you understand those questions? You lost me. Are there a whole wave of equations? I have, but after that. I don’t know if <strong>Brandon</strong> is actually a natural physics person.</p>
+<p>Yeah. I’ll say, <strong>don’t do it in the paper. Show it here.</strong> I don’t want it to actually edit the paper. I just wanted to prove it here. Right. Yeah. Okay. So I’ll get that going.</p>
+<p>Now, while we’re waiting for the diagram to finish, we can also get another thing going in parallel. So I’ll say, <strong>I need to write up a set of lecture notes on general relativity.</strong> You know, say I’m a professor, right? I’ve got, I’m teaching a class or something, put together a 30-minute set of lecture notes on a Riemannian curvature.</p>
+<p>Wow. That’s a very different task. Put it into the file. I made this <strong>gr_lecture.tex</strong>. Okay. And so I’ve got this going.</p>
+<p>All right. Well, it came back on my earlier one — <strong>H plus symmetry.</strong> Is it really here? You got <strong>ChatGPT</strong> doing a whole bunch of work to verify that this is indeed a symmetry of the equation. Okay. It does. It confirms it.</p>
+<p>Right. So you’ve got the full power of a reasoning model that can think deeply about frontier science. And now we can go back while it works on the other thing.</p>
+<p>Okay. So this was where I was making the diagram, right? It put it right below the introduction. I’ll compile it again. So this is an auto compile. You can turn that on.</p>
+<p>Yeah. Okay. And it nailed it. So it looks like it got it pretty much exactly. Just a small check. Check the details.</p>
+<p>Oh yeah. Good enough for me. Yeah. It’s pretty good, but all right, we can see if it’ll get it right. Let’s say, the C vertex should be directly…</p>
+<p>To your point about voice though, I do think maybe over time the code might recede into the background more as you’re really interacting with the paper.</p>
+<ul>
+<li>You’re interacting with the paper.</li>
+<li>You’re having a conversation with it.</li>
+</ul>
+<p>When you started this product, how were you envisioning it would be used? Or were there other design choices you were considering that you didn’t take?</p>
+<p>By the way, before you answer it, we have our general relativity lecture notes here, but that was quick. So 30 minutes, this is a — yeah — so 30 pages there, 30-minute section.</p>
+<p>Okay. So we got curvature, covariant derivatives. This looks like a reasonable set of notes if you were going to go teach a class, right? It just did it for you.</p>
+<p>Or you can think like, you know, generate the problem set for this week.</p>
+<ul>
+<li>Yeah.</li>
+<li>Right.</li>
+<li>You’ve got work.</li>
+</ul>
+<p>So it’s got some examples here. We could tell it to work out solutions to the examples. That’s sort of a hidden feature of <strong>LightTeX</strong> too, that it actually makes it pretty easy to generate problem sets with answer sheets and things like this.</p>
+<p>There’s so many cool features of LightTeX that I think are underutilized.</p>
+<p>So anyways, you could see we:</p>
+<ul>
+<li>Had it proofread the paper.</li>
+<li>Had it check some of the answers to verify that our calculations were correct.</li>
+<li>Generated a set of lecture notes.</li>
+<li>Added a diagram that we didn’t have to actually type up ourselves, which I promise you is horrendous.</li>
+</ul>
+<p>And that’s just basically all in parallel.</p>
+<p>And you can imagine lots of other things you can do.</p>
+<p>For example, if you have a proof and maybe just have the bullet points on a proof, you can say, <strong>“Here are the bullet points. Now flesh it out for me.”</strong></p>
+<p>You can imagine <strong>checking all of your references before you publish</strong>, making sure all of them are real and up to date. You can imagine having it generate your references based on the topic.</p>
+<p>There are just so many areas where AI can help. That’s a big problem when you’re trying to put together a paper: get all the references right.</p>
+<p>This is time that used to go to typing a paper, not science. And now it can go back to science.</p>
+<p>And that’s just one of the ways that we look at accelerating scientists all over the world.</p>
+<p>I would say definitely be careful about including references you haven’t read.</p>
+<p>Like that’s the point: you can put a hundred references, but if you didn’t read them, you might as well not have them.</p>
+<p>But yeah, I think that web connection is very important.
+<strong>And like, is this stock GPT five or is this like a fine tune?</strong>
+It’s <strong>GPT 5.2.</strong>
+Yeah.
+Yeah.</p>
+<p>But, and by the way, when you’re looking at <strong>references</strong>, you can also ask <strong>ChatGPT</strong> to help you understand the reference, you know, <strong>read this paper, tell me the relevance.</strong> So all of the things that you might want to do to accelerate your work, you can just do from within this interface.</p>
+<p>You still have to do your work, but it should make it faster, especially like even linking to the references. So you can go and verify like, okay, this is this one. So this might also make it easier to write the paper as you do the work, right? Rather than, rather than, oh, okay. Now I got to spend two days in LaTeX land, like trying to get my paper.</p>
+<p>Right. Like a <strong>tool for thought</strong> rather than just a publishing tool.
+Yeah.</p>
+<p><strong>What about collaboration?</strong>
+It’s great.
+Yeah.</p>
+<p>So it’s built for, I mean, you can speak to this. Well, it’s built for <strong>collaboration.</strong> So you can bring on as many collaborators as you want, which is nice. I think most other tools in the space have hard limits and charge you money and other things. In <strong>Prism,</strong> it’s as many collaborators as you want for <strong>free.</strong></p>
+<p><strong>Commenting.</strong>
+Yeah. So you’ve got commenting, you’ve got all the kind of collaboration tools that you would want.
+Yeah.</p>
+<p>Good.</p>
+<p>And then any of the like engineering choices, like, you know, what might engineers not appreciate when just looking at a tool like this?</p>
+<p>Often it would be like multi-line diff generation that you need to do because you’re editing a pretty complex document. It does get pretty complicated. I mean, we’re using, let me know if I’m getting too technical into the weeds, but, you know, we’re relying heavily on the <strong>Monaco JavaScript framework.</strong></p>
+<p>So that I’m very familiar with the lack of documentation of Monaco. That’s actually interesting you say that because it’s very true that it’s an extremely powerful library that is almost entirely undocumented.
+Yeah. It’s just types. But you can use <strong>codecs</strong> now to generate the documentation for you.
+Yeah. You think Microsoft should get on that.
+But yeah, yeah.</p>
+<p>You know, like just stuff like that. Like I like to hear about the behind the scenes of like building something like this.</p>
+<ul>
+<li>What do you struggle with?</li>
+<li>What’s the model really like surprisingly good at?</li>
+<li>And what’s the model it should be good at, but it’s not?</li>
+<li>What were some of the hardest problems as you were building this in the first place?</li>
+<li>What are some of the hardest things to get right?</li>
+</ul>
+<p>I think initially one of the, one interesting challenges was that we really pushed on it being <strong>WebAssembly</strong> and fully just running in the browser at first, the whole entire <strong>LaTeX compilation.</strong> That did help us in the sense that we were able to flesh out the design and the AI capabilities early on without having to invest heavily in the backend infrastructure.</p>
+<p>But eventually we did hit a wall with that approach. Once we switched it to a backend <strong>PDF rendering,</strong> that’s when we really started to hit an inflection point with usage.</p>
+<p>Now fast.
+Yeah.
+Yeah.</p>
+<p>I think we also, the AI in here benefits a lot from everything that we’ve learned building <strong>codecs.</strong> And as we go forward, I think we’ll likely just integrate the full codecs harness into the application here.</p>
+<p>So you get all the benefits of the tools and the skills and all the things that codecs can do today, and you just sort of automatically can bring that into your environment here.
+Yeah.</p>
+<p>Are they just the same app?
+Maybe. I think potentially it depends on…</p>
+<p>I mean, here’s the reason I’m hesitating: I think the interesting thing with this and with codecs is we’re still mostly in a world today where:</p>
+<ul>
+<li>You have your main screen which is your document</li>
+<li>Then you have your AI on the side</li>
+</ul>
+<p>But the more that AI improves, people trust it and they’re just YOLOing it, right? You’re generating code and you’re looking at the code sort of secondary to instructing the AI and driving from that.</p>
+<p>The UI probably changes for all of these things, right? You don’t need your document front and center because you’re actually not looking at your document as much. That’s sort of your backup and your interaction with your AI is primary.</p>
+<p>And as that happens, I think you might see these UIs kind of converge over time. So we’ll see.</p>
+<p>But I definitely would love to see a world where people needed to spend less time thinking about the actual syntax and much more about what they’re trying to create.
+Yeah.</p>
+<p>I feel like this plus a <strong>notebook</strong> would be amazing.
+Yeah.
+Because, because, and something that <strong>AI can run quite, run a analysis, generate plots</strong>. So stick that in the paper here. Like, “Oh, read, you know, like this paper, like this part of the paper, like take that equation and like, you know, do something with it.” That would be a really amazing integration.</p>
+<p>Yeah. Like think through the different corollaries of this thing from this paper and produce some alternatives. And then like, yeah, I completely agree. Yeah. Yeah.</p>
+<p>I do think that’s sort of the progression where it’s like doing, doing maybe work for a few seconds versus maybe we’re already at a point where it’s doing work for a few minutes, eventually doing work for hours, days, coming back with very complicated analysis.</p>
+<p>Yeah. I mean, that, that’s actually maybe a good segue into some of the other questions that I had about your initiative.</p>
+<p>I mean, so stepping back to <strong>AI for science in general</strong>, can you talk a little bit? I have a million questions, but maybe start with what I… okay. I feel that <strong>validation of AI for science</strong> is critical to its success, right? You have to have some sort of real world validation of the results that you produce with your AI, right?</p>
+<p>So what are the, I know that there’s been some publicity in the past. What are the latest and greatest hits of the things that big labs or any lab is doing with open AIs?</p>
+<p>I mean, when you step back and look at the trend, I think that’s the biggest thing. Because we can debate exactly – like you’ve probably seen in the last few weeks, even – there’ve been a bunch of different examples of like <strong>GPT 5.2 contributing to open research problems</strong> and things like that.</p>
+<p>And then you get into this debate of:</p>
+<ul>
+<li>Was it really just good at literature search?</li>
+<li>It found an example over here and example over here.</li>
+<li>When you combine the two, it was sort of a trivial step from there to the solution.</li>
+<li>Was that novel or did it really do something new?</li>
+</ul>
+<p>And you know, that’s a legitimate discussion. But when you step back two years ago, we were like, you know, this thing can <strong>pass the SAT</strong>. That’s amazing. And then you progress to like, it can do a little bit of contest math and it can start to solve harder problems. Wow.</p>
+<p>And then you keep going and it’s starting to solve <strong>graduate level problems</strong>. And then you have a model that gets a <strong>gold medal at the IMO</strong>. And now we’re sitting here talking about, you know, it solving <strong>open problems at the frontier of math and physics and biology</strong> and other fields.</p>
+<p>So it’s just, I mean, the progression is incredible. And if you think about where we are today, then you fast forward six months, 12 months. I am very optimistic about what the models are going to be able to do to accelerate science.</p>
+<p>Yeah. It’s like, it’s already happening. If there’s one thing that I’ve learned from my like two-ish years at <strong>OpenAI</strong>, it’s:</p>
+<blockquote>
+<p>“You go very quickly from this thing is just impossible for AI to do. Like it’s too hard. I can’t do it” to “Hey, I can just barely do it. And it kind of doesn’t work. Only early adopters are doing it because it’s not particularly reliable yet, but it sort of works,” to “Oh my God, AI does this thing really well. And I could never imagine not using AI for this in the future.”</p>
+</blockquote>
+<p>It’s like, once you start to get to, you know, five, 10% on some particular eval, you very quickly go to like 60, 70, 80. And we’re just at the phase where AI can help in some — not all, but in some elements of frontier science, math, biology, chemistry, et cetera. And it just means we’re like right at the cusp and it’s super exciting.</p>
+<p>So, I mean, fast forward a year or, you know, the end of the year, and we have AIs that can do a lot of this discovery process. Then the bottleneck becomes the wet lab or the lab, right?</p>
+<p>Yeah. So what are you seeing in that domain?</p>
+<p>Yeah. By the way, I totally — we were talking a little bit about software engineering before and the analogies. I think <strong>2026 for AI and science</strong> is going to look a lot like what <strong>2025 looked like for AI and software engineering</strong>.</p>
+<p>Where if you go back to the beginning of 2025, if you were using AI heavily to write your code, you were sort of an early adopter and it kind of worked, but it certainly wasn’t like everybody was doing it. And then you fast forward 12 months and at the end of 2025, if you were not using AI to write a lot of your code, you’re probably falling behind.
+I think we’re going to see that same kind of <strong>progression in AI and science</strong> where, today it’s early adopters, but you’re really starting to see some <strong>proof points</strong> and solving open problems, developing new kinds of proteins and things like that.</p>
+<p>But you’re right, as it really starts to work. <strong>I think this is the year that it’s really going to start to work.</strong> It shifts the bottleneck.</p>
+<p>And I think we’re going to be starting to talk a lot more about <strong>robotic labs</strong> and other things. Like, do you need to have a grad student pipetting things? No, probably not. Right now you do, but why shouldn’t we have robotic labs where you have AI models doing what they do best—<strong>reasoning over a huge amount of different information.</strong></p>
+<p>They have read substantially every paper in every field and can bring a lot of information to bear to help prune the search tree on, for example, a new material that you’re trying to create. Then you have a robotic lab that can roll out a bunch of experiments in parallel, do them while we sleep, and feed the results back into the AI, let it learn from them, design the next set of experiments, and go.</p>
+<p>So, it’s hard to imagine that doesn’t even have to be yellow science, right? To your point, you’re verifying it as you go because you have an actual lab building it in real life. But you can just do so much more in parallel. You can think harder upfront with AI to design the experiments, prune the search tree, search over a smaller number of higher-value targets, then automate the experimentation and turn it around faster.</p>
+<p>And again, like this is <strong>acceleration</strong>: if we’re successful, you end up doing maybe the <strong>next 25 years of science in five years instead</strong>. So in 2030, we could be doing <strong>2050 level science</strong>, and that would be an awesome outcome. The world is a better place if that happens.</p>
+<p>Absolutely. I guess we spoke recently with <strong>Heather Kulik at MIT</strong>, and one of the things she pointed out was that there’s an element of <strong>serendipity to working in a lab that you lose.</strong> She was of the opinion that there’s</p>
+<ul>
+<li>a class of problems, especially when you have a large search space, where robotics is going to really accelerate science</li>
+<li>another class where even experimental science will not move forward very fast because of robotics</li>
+</ul>
+<p>So again, you’re at a bottleneck, but humans need something to do.</p>
+<p>Well, what she said sounds totally reasonable to me. There are probably places where humans are adding no value because they’re literally just trying to pipette a certain amount of a thing and do another thing, or do some repeated motion in a bunch of different ways.</p>
+<p>And then there are places where it’s less well understood. You want the full flexibility of a really smart human thinking about the work they’re doing.</p>
+<p>By the way, the same is true in the <strong>more theoretical fields</strong> as well, where it’s not about automating all humans out of their jobs. This is about accelerating scientists. It’s <strong>scientists plus AI together being better than scientists alone or AI alone.</strong></p>
+<p>I think the same is true whether you’re talking about:</p>
+<pre tabindex="0"><code><span><span>- something happening in silico proving a theoretical problem</span></span>
+<span><span>- something happening in the real world with a lab</span></span></code></pre>
+<p>Find the parts that you don’t need a human to do and try to automate them as much as possible so the humans can spend their time on the most valuable things.</p>
+<p>I’m very pro the <strong>in silico acceleration</strong>, because you have more control over that and you can parallelize, repeat, and do all those things.</p>
+<p>I think there will be huge value because a lot of fields are heavily simulatable. For example, <strong>nuclear fusion</strong> runs a lot of simulations before experiments because experiments are very time-consuming and expensive.</p>
+<p>But I’m excited to see what you can do when you have a loop between a very intelligent reasoning model that understands fusion and a simulation: the model thinks about what parameters to set, runs a bunch of simulations in parallel, feeds that back, and you have the same sort of lab loop—except it’s all in silico, running on a giant GPU cluster.</p>
+<p>Then, when you’ve really gotten to the end of that calculation, you go run it <strong>IRL</strong>.</p>
+<p>This is bringing it back to <strong>prism</strong>.
+This is sort of a nice aspect that you’re getting a more sophisticated view of your result, right? Instead of just, you know, like a chat output in it, I would hope as it develops, it’s a way for a <strong>scientist to be able to interact with the information before you kick off your nuclear fusion experiment</strong> for, you know, $10 million or whatever.</p>
+<p>And the human can learn from more things, right? You just get more data that you can look at and evaluate. So, yeah.</p>
+<p>So this, by the way, this <strong>fusion discussion</strong> makes me think like, you know, if one day opening after science, you know, it gets serious enough and starts to self-accelerate, you should solve <strong>cold fusion</strong> and, you know, be your own power source.</p>
+<p>Well, I mean, this is why we’re so excited about this, right? I mean, imagine our mission is to bring <strong>AGI to the world in a way that’s beneficial to all of humanity</strong>.</p>
+<p>It’s right there at the lobby. Yeah. It’s amazing. You see it every day you walk in, you see it. Yeah, absolutely.</p>
+<p>And imagine, I mean, if we had <strong>GPT-9 inside of ChatGPT</strong> today, it would be awesome. You could do lots of things. But if you had GPT-9, which I’m using as a stand-in for AGI, and it could:</p>
+<ul>
+<li>Create new materials</li>
+<li>The devices we were using were all incredible and had 30-day battery lives</li>
+<li>We had personalized medicine and knew someone whose life was saved because we were developing personalized cancer treatments much faster</li>
+</ul>
+<p>Like, that’s the <strong>real benefit of AGI</strong>. That’s, I think, maybe the most tangible way that we’re all going to feel AGI as it starts to be real.</p>
+<p>Yeah. And that’s why this work is so <strong>mission-driven</strong> for us.</p>
+<p>So, that brings up two questions in my mind:</p>
+<ol>
+<li>Who owns the invention?</li>
+<li>Does <strong>OpenAI become a drug company and a fusion company</strong>?</li>
+</ol>
+<p>Because this is how—though you laugh, it’s a little bit serious—all the AI for drug discovery companies ended up being drug companies because they couldn’t sell the drug, so far, with some exceptions now like Noetic, for example.</p>
+<p>But they end up being drug companies because they can’t sell the drug. In any event, there’s a lot of precedence for using AI to basically build your own portfolio.</p>
+<p>So, are you thinking about that angle or this is right now just about enabling scientists outside of OpenAI?</p>
+<p>Yeah, I mean, my personal belief as we drive towards AGI is not that we’re going to create AGI and then all sit back and enjoy our universal basic income and write poetry. The future will involve, especially <strong>advanced science</strong>, experts helping to drive these models.</p>
+<p>I don’t believe any one company is going to do everything. That’s why we’re focusing, first and foremost, on <strong>accelerating scientists outside of these walls</strong>. Our goal is not to win a Nobel Prize ourselves, it is for a hundred scientists to win Nobel Prizes using our technology.</p>
+<p>Yeah.</p>
+<p>At the same time, I think there are places where sometimes, when you’re building for other people, you learn best if you actually go end to end on something.</p>
+<p>Yeah.</p>
+<p>Because then you’re your own customer and you understand it in a tighter loop than you would if you were purely building for people outside the walls.</p>
+<p>So, I think it makes sense for us to take a handful of bets like that, but by and large, we’re going to partner because the surface area of science is massive.</p>
+<p>Yeah.</p>
+<p>And we want to accelerate <strong>all of science</strong>.</p>
+<p>Yeah.</p>
+<p>We’re covering all sorts of disciplines from chemistry to structural biology to material science. It’s all over the place. There’s a lot to do.</p>
+<p>One thing I did want to bring across also was that <strong>AI for Science sits within the broader research org at OpenAI</strong>. One of the more interesting things is like <strong>self-acceleration</strong>, let’s call it.</p>
+<p>Where <strong>Jakub has very publicly declared that we’ll have an automated researcher by September 2026</strong>.</p>
+<p>Yeah. The beginnings of one, I think you said, right? Like the intern version this year?</p>
+<p>Right.</p>
+<p>First product.</p>
+<p>Yep.</p>
+<p>And I’m sure you have more cooking internally, but why so soon? That’s eight months away. What’s the goal there? Anything you can share?</p>
+<p>Yeah, I mean, eight months feels like forever in this industry. AGI by then? Basically infinite time.</p>
+<p>I mean, no, it’s exactly what you said, right?
+It’s if we can create a <strong>a model, an AI researcher</strong> that can actually do novel AI research, then we can move way faster, right? We will <strong>self-accelerate</strong>. We can discover more things quickly. We can apply <strong>GPUs and compute</strong> to moving our own research faster. And that just means that we can improve our models at a faster rate.</p>
+<p>And every bit that we improve our models means that we are a step closer to bringing <strong>AGI</strong> and all the things that we were talking about with <strong>personalized medicine</strong> and <strong>new materials</strong>. And, like, we can bring these amazing things into the world faster. So it is about <strong>self-acceleration</strong>.</p>
+<p>Yeah.</p>
+<p>I think one thing I’m most trying to figure out is how closely is <strong>machine learning research</strong>, which is a science, or <strong>high-performance compute</strong>, which is also something that you guys are doing a lot of, close to the traditional hard sciences, let’s call it, like <strong>physics and chemistry</strong>.</p>
+<p>I think in a lot of ways it’s sort of a <strong>parallel effort</strong> to this. Like, it is the work that we’re trying to do with <strong>AI, OpenAI for Science, and accelerating other scientists</strong>. The parallel internally is they’re trying to build products and models for AI researchers to accelerate them.</p>
+<p>So there’s a lot of sort of <strong>parallelism</strong> to these two work streams. They’re similar in goal, just for a different set of users.</p>
+<p>Yeah.</p>
+<p>Okay.</p>
+<p>Any parting thoughts, questions, anything we should have asked?</p>
+<p>Well, I hope everybody tries <strong>Prism</strong>. It’s available today at <strong>prism.openai.com</strong>. It’s totally free. You log in with your <strong>ChatGPT account</strong>, and you can go build anything you would like. We’re really excited to see what people use it for, and if you run into issues or have any feedback, let us know.</p>
+<p>I have a paper I’m going to write really soon on that.</p>
+<p>Amazing.</p>
+<p>We’ll just show notes on this thing. I don’t know. Let’s see what it does in <strong>LaTeX</strong>.</p>
+<p>Yeah. Totally.</p>
+<p>Yeah.</p>
+<p>Congrats on your first <strong>OpenAI launch</strong>.</p>
+<p>There you go. Congratulations.</p>
+<p>Congrats.</p>
+<p>Thanks for having us.</p>
+<p>Yeah.</p>
+<p>Thank you.</p>
+</div><details data-astro-cid-h4qngm3k><summary data-astro-cid-h4qngm3k>Questions and answers</summary><dl data-astro-cid-h4qngm3k><dt data-astro-cid-h4qngm3k><span data-excerpt="So we're launching Prism, which is a free AI-native LaTeX editor." data-astro-cid-h4qngm3k>What is Prism, and what problem does it aim to solve for scientists?</span></dt><dd data-astro-cid-h4qngm3k>Prism is a free AI-native LaTeX editor launched by OpenAI&#39;s AI for Science team. It aims to accelerate scientists&#39; work by integrating AI into the LaTeX writing workflow, addressing the long-standing difficulty and time consumption associated with typesetting scientific papers, especially those with complex diagrams and equations.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="If there was a lesson from what happened over the last year with software engineering, it's that part of the acceleration in software engineering came from better models." data-astro-cid-h4qngm3k>How does OpenAI envision AI accelerating science beyond just building better models?</span></dt><dd data-astro-cid-h4qngm3k>OpenAI believes that accelerating science involves not only building better AI models but also embedding AI directly into scientists&#39; workflows and products, similar to how AI accelerated software engineering by integrating into IDEs rather than just being a separate copy-paste tool.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="I found this thing about a company called Cricket. And I was looking around, I couldn't find who the founder was." data-astro-cid-h4qngm3k>What was the original name of Prism, and how did it come to be part of OpenAI?</span></dt><dd data-astro-cid-h4qngm3k>Prism originally started as a project called &quot;Cricket&quot; by Victor Powell. Kevin Weil discovered it on a Reddit forum, contacted Victor via Twitter DM, and eventually led to its integration into OpenAI.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="Help me proofread the introduction section paragraph by paragraph, suggest places where I can simplify." data-astro-cid-h4qngm3k>What are some of the practical applications and features demonstrated for Prism?</span></dt><dd data-astro-cid-h4qngm3k>Prism can proofread and simplify text, generate LaTeX diagrams from hand-drawn images, verify complex scientific equations using parallel AI chats, and generate full sets of lecture notes or problem sets.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="I think initially one of the, one interesting challenges was that we really pushed on it being WebAssembly and fully just running in the browser at first, the whole entire LaTeX compilation." data-astro-cid-h4qngm3k>What significant engineering challenge did the Prism team face, and how did they overcome it?</span></dt><dd data-astro-cid-h4qngm3k>Initially, the team tried running the entire LaTeX compilation fully in the browser using WebAssembly, which helped flesh out design and AI features. However, they &quot;hit a wall&quot; with this approach and achieved an &quot;inflection point with usage&quot; only after switching to backend PDF rendering.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="But the more that AI improves, people trust it and they're just YOLOing it, right?" data-astro-cid-h4qngm3k>How does OpenAI anticipate user interaction with AI-integrated tools like Prism changing in the future?</span></dt><dd data-astro-cid-h4qngm3k>OpenAI envisions that as AI models improve and users trust them more, the AI interaction will become primary, with the document serving as a secondary backup. This shift could lead to user interfaces converging, allowing users to focus less on syntax and more on instructing the AI to create.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="I mean, imagine our mission is to bring AGI to the world in a way that's beneficial to all of humanity." data-astro-cid-h4qngm3k>What is the ultimate goal of OpenAI&#39;s AI for Science initiative, and how does it relate to AGI?</span></dt><dd data-astro-cid-h4qngm3k>The ultimate goal is to accelerate science globally, aiming for scientists to achieve potentially 25 years of scientific progress in just five years, contributing to the broader mission of bringing AGI to the world in a way that benefits all of humanity, particularly in areas like new materials and personalized medicine.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="At the same time, I think there are places where sometimes, when you're building for other people, you learn best if you actually go end to end on something." data-astro-cid-h4qngm3k>Despite focusing on accelerating outside scientists, why might OpenAI also pursue some internal end-to-end scientific projects?</span></dt><dd data-astro-cid-h4qngm3k>While OpenAI&#39;s primary goal is to empower external scientists, they recognize that building for others is best learned by being their own customer and understanding the workflow in a tighter loop. Therefore, taking a &quot;handful of bets&quot; on internal projects makes sense for learning.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="Where Jakub has very publicly declared that we'll have an automated researcher by September 2026." data-astro-cid-h4qngm3k>What is Jakub&#39;s public declaration for OpenAI regarding an &quot;automated researcher,&quot; and what is the underlying motivation?</span></dt><dd data-astro-cid-h4qngm3k>Jakub has publicly stated that OpenAI will have the beginnings of an &quot;automated researcher&quot; by September 2026. The motivation is &quot;self-acceleration&quot;: to create an AI that can perform novel AI research, thereby accelerating OpenAI&#39;s own research, improving models faster, and bringing AGI benefits to the world sooner.</dd></dl></details></article></main></body></html><script type="module">var e=e=>e.toLowerCase().replace(/[\p{P}\s]/gu,``),t=[...document.querySelectorAll(`.transcript p`)],n=t.map(t=>e(t.textContent||``));for(let r of document.querySelectorAll(`[data-excerpt]`)){let i=e(r.dataset.excerpt||``),a=i?n.findIndex(e=>e.includes(i)):-1;if(a<0)continue;let o=t[a];o.id||=`paragraph-`+(a+1);let s=document.createElement(`a`);s.href=`#`+o.id,s.textContent=r.textContent,r.replaceWith(s)}</script>

@@ -1,0 +1,853 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Transcripts from podcasts and videos collected by Josherich."><link rel="canonical" href="https://podcast.josherich.me/podcast/the-changelog-software-development-open-source/the-era-of-the-small-giant-interview"><title>The era of the Small Giant (Interview) · Podcast Transcripts</title><style>:root{color-scheme:light dark;--background:#f8fafc;--foreground:#192234;--subtle:#495871;--border:#dbe2ed;--surface:#eef3fa;--accent:#2049a0;background:var(--background);color:var(--foreground);font-family:system-ui,sans-serif;font-size:1rem}@media (prefers-color-scheme:dark){:root{--background:#101621;--foreground:#edf1f7;--subtle:#aebbd0;--border:#303e54;--surface:#1a2537;--accent:#a7c7ff}}*,:before,:after{box-sizing:border-box}body{margin:0;line-height:1.55}a{color:var(--accent);text-underline-offset:.22em}a:hover{text-decoration-thickness:2px}:focus-visible{outline:2px solid var(--accent);outline-offset:3px}h1,h2,h3{text-wrap:pretty;line-height:1.17}h1{letter-spacing:-.025em;margin:0 0 .35em;font-family:Georgia,Noto Serif CJK SC,serif;font-size:clamp(2rem,6vw,3.6rem);font-weight:500}main,.site-header{max-width:65rem;margin-inline:auto;padding-inline:clamp(1rem,5vw,3rem)}main{padding-block:clamp(2rem,6vw,4rem) 5rem}.site-header{border-bottom:1px solid var(--border);justify-content:space-between;align-items:center;gap:1rem;min-height:4.2rem;font-size:.9rem;display:flex}.site-name{color:var(--foreground);font-weight:650}.skip-link{position:absolute;top:1rem;left:1rem;transform:translateY(-200%)}.skip-link:focus{background:var(--background);z-index:1;transform:none}[hidden]{display:none!important}
+article[data-astro-cid-h4qngm3k]{max-width:49rem;margin-inline:auto}h1[data-astro-cid-h4qngm3k]{overflow-wrap:anywhere;margin-bottom:1.5rem}.metadata[data-astro-cid-h4qngm3k]{color:var(--subtle);flex-wrap:wrap;gap:.5rem 1rem;margin:0 0 .8rem;display:flex}details[data-astro-cid-h4qngm3k]{background:var(--surface);border:1px solid var(--border);border-radius:.4rem;padding:.7rem 1rem}summary[data-astro-cid-h4qngm3k]{cursor:pointer;font-weight:600}ol[data-astro-cid-h4qngm3k],dl[data-astro-cid-h4qngm3k]{margin:.6rem 0 .4rem}ol[data-astro-cid-h4qngm3k]{padding-inline-start:1.5rem}li[data-astro-cid-h4qngm3k],dd[data-astro-cid-h4qngm3k]{margin-bottom:.55rem}dt[data-astro-cid-h4qngm3k]{font-weight:600}dd[data-astro-cid-h4qngm3k]{margin-inline-start:0}.transcript[data-astro-cid-h4qngm3k]{overflow-wrap:anywhere;font-size:1.1rem;line-height:1.7}.transcript[data-astro-cid-h4qngm3k] p:target{background:var(--surface);scroll-margin-block:1rem}.transcript[data-astro-cid-h4qngm3k] pre{background:var(--surface);padding:.9rem;overflow:auto}.transcript[data-astro-cid-h4qngm3k] blockquote{color:var(--subtle);border-inline-start:3px solid var(--border);margin-inline:0;padding-inline-start:1rem}.transcript[data-astro-cid-h4qngm3k] img,.transcript[data-astro-cid-h4qngm3k] iframe{max-width:100%}.transcript[data-astro-cid-h4qngm3k] table{border-collapse:collapse;display:block;overflow:auto}.transcript[data-astro-cid-h4qngm3k] th,.transcript[data-astro-cid-h4qngm3k] td{border:1px solid var(--border);padding:.3rem .65rem}
+</style></head><body><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><a class="site-name" href="/">Podcast Transcripts</a><a href="https://josherich.me">Josherich’s Blog</a></header><main id="main"><article data-astro-cid-h4qngm3k><p class="metadata" data-astro-cid-h4qngm3k><time datetime="2026-01-22" data-astro-cid-h4qngm3k>Jan 22, 2026</time><a href="/?show=the-changelog-software-development-open-source" data-astro-cid-h4qngm3k>the-changelog-software-development-open-source</a></p><h1 data-astro-cid-h4qngm3k>The era of the Small Giant (Interview)</h1><details data-astro-cid-h4qngm3k><summary data-astro-cid-h4qngm3k>Table of contents</summary><ol data-astro-cid-h4qngm3k><li data-astro-cid-h4qngm3k><span data-excerpt="My friends, welcome back. This is The Changelog. We feature the hackers, the leaders, and those living in this crazy world we're in." data-astro-cid-h4qngm3k>Welcome to The Changelog: Damian Tanner&#39;s Return</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="A massive thank you to our friends, our partners, our sponsor-yes, talking about fly.io, the home of changelog.com." data-astro-cid-h4qngm3k>Sponsor: fly.io</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well friends, I'm here again with a good friend of mine, Cal Galbraith, co-founder and CEO of Depot.dev." data-astro-cid-h4qngm3k>Sponsor: Depot.dev - Faster Builds</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="When it comes to optimizing build times to drive build times to zero, you really have to take a step back and think about the core components that make up a build." data-astro-cid-h4qngm3k>Optimizing Build Times with Depot</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="The other part of build performance is the stuff that's not the tech side of it-it's the observability side of it." data-astro-cid-h4qngm3k>Observability for Build Performance</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well friends, I'm here with a longtime friend, first-time sponsor of this podcast, Damian Tanner." data-astro-cid-h4qngm3k>Interview with Damian Tanner: The Changelog, Pusher, and the AI Agent Era</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="As you know, when Nehterland and I started this show back in 2009, I corrected myself recently." data-astro-cid-h4qngm3k>Pusher: From First Sponsor to Acquisition</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Pusher was basically a WebSockets push API so you could push anything to your web app in real time." data-astro-cid-h4qngm3k>What Was Pusher?</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Juxtapose the timelines: you got an acquisition ultimately but you mentioned Twilio was an opportunity." data-astro-cid-h4qngm3k>Twilio Acquisition Opportunity and Dev Rel</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="How are today's days different for you? It's exciting because the web and software is just completely changing again." data-astro-cid-h4qngm3k>The Post-SaaS Era and AI Agents</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="You said in the pre-column burst the bubble a little bit here. You did say, and I quote: All SaaS is dead." data-astro-cid-h4qngm3k>The Pronouncement: &#39;All SaaS is Dead&#39;</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Okay, I'll give you a bit of the story. So my company, Layer Code, we, I'll just give you a little short on that: we provide a voice agents platform so anyone can add voice to their agent." data-astro-cid-h4qngm3k>Journey to Post-SaaS: Building a CRM with LLMs</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah, that's going to have to change as well. Okay, take me there. I woke up this morning with that feeling, 'Okay, that's changing too.'" data-astro-cid-h4qngm3k>The Death of Code Review in the Agent-First World</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="This is the year we almost break the database. Let me explain. Where do agents actually store their stuff?" data-astro-cid-h4qngm3k>Sponsor: Tiger Data - Agentic Postgres</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="The MCP integration is the clever bit. Your agents can actually talk directly to the database." data-astro-cid-h4qngm3k>Native Model Context Protocol (MCP)</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Then there's hybrid search. Tiger Data merges vector similarity search with good old keyword search into a SQL query" data-astro-cid-h4qngm3k>Hybrid Search</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Okay, my favorite feature: the forks. Agents can spawn sub-second zero-copy database clones for isolated testing." data-astro-cid-h4qngm3k>Zero Copy Forks</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="What is replacing code review if there's no code review? Is it just nothing? I think as developers, we need to think more like-we need to put ourselves in the shoes of PMs, designers, managers, because they don't look at the code right?" data-astro-cid-h4qngm3k>Beyond Code Review: Trusting the Model</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Something I leaned on recently, and it was really with Opus 4.5, I feel like that's when things sort of changed because I'm with you on the trend from ChatGPT or GPT-3 on to now and feeling the incremental change." data-astro-cid-h4qngm3k>The Velocity of LLM Improvement and Trust</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Close this loop for me then: you said SaaS is dead or dying (I'm paraphrasing because you didn't say or dying, I'm just going to say or dying, I'll add it to your thing)." data-astro-cid-h4qngm3k>The Post-SaaS Vision: Agents and Just-in-Time Interfaces</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="You mentioned enabling them as builders. I think it is a window into that because when they want something, they get curious." data-astro-cid-h4qngm3k>The &#39;Claude Code Terminal&#39; and Co-work</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well, let's go there-I didn't take us there yet, but I do want to talk to you about what you're doing with Layer code." data-astro-cid-h4qngm3k>Layer Code: Voice Infrastructure for AI Agents</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Our first product is a voice infrastructure-a voice API for real-time building of voice AI agents." data-astro-cid-h4qngm3k>Real-time Voice AI Agents and API</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Yeah, we handle everything related to the voice basically, and we let you just handle text like a text chatbot." data-astro-cid-h4qngm3k>Layer Code&#39;s Real-Time Pipeline and Cloudflare Workers</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="The hardest part is working out when the user has finished speaking. It is so difficult because people pause, make sounds, pause again, and start again." data-astro-cid-h4qngm3k>Challenges of Real-time Conversation: User Utterance Detection</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="The reason we have to do this bundling and can't stream the user utterance continuously is because LLMs don't take streaming input." data-astro-cid-h4qngm3k>LLM Input Limitations and Time to First Token (TTFT)</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well, friends, you know this - you're smart - most AI tools out there are just fancy autocompletes with a chat interface." data-astro-cid-h4qngm3k>Sponsor: Notion Agent - Finishing Your Work with AI</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="You chose TypeScript to do all this. We're pretty set on Cloudflare Workers from day one, and it just solves so many infrastructure problems that you're going to run into later on." data-astro-cid-h4qngm3k>Layer Code&#39;s Architecture: TypeScript, Cloudflare Workers, and Durable Objects</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="We didn't touch on it, but interruptions are another really difficult dynamic part. Whilst the agent is speaking its response to you, if the user starts speaking again, you need to decide in real time whether the user is interrupting the agent or just agreeing with the agent - 'Oh gosh' or are they trying to say 'oh stop'?" data-astro-cid-h4qngm3k>Handling Interruptions in Voice Agents</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Do you focus on the false examples? The true examples? Do you have these 17 known cases to identify an interruption?" data-astro-cid-h4qngm3k>Configuring Interruption Detection with LLMs</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="So, why does your system not allow for a local LM to be just as smart? Then Gemini Flash might be, to answer that very simple question-like an interrupt, it's a pretty easy thing to determine." data-astro-cid-h4qngm3k>Local vs. Cloud LLMs: Reliability and Cost</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="There are some cool new transcription models from NVIDIA, and they've got some voice models." data-astro-cid-h4qngm3k>Plugin Architecture and LLM-Driven Refactoring</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="The bit that really got it over the finish line was when I gave it this script that we used to have to do manually to test our voice agent." data-astro-cid-h4qngm3k>TDD with Agents and Simulating Conversations</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="I kind of feel like a good place to begin to end, not actually end, is back to this idea that is on your about page." data-astro-cid-h4qngm3k>The Era of the Small Giant: Empowering Developers</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Let's truly end with this: What's over the horizon for you? What's over the horizon for Layer Code? What is coming?" data-astro-cid-h4qngm3k>Layer Code&#39;s Horizon: Lowering Voice Agent Costs</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well, the great thing is we've got a CLI single command you can run, and you'll get a Next.js demo app all connected to Layer Code voice agent." data-astro-cid-h4qngm3k>Trying Layer Code</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well, friends, right here at the last minute, the very last question-Damien's internet dropped off or something happened, I'm not sure." data-astro-cid-h4qngm3k>Concluding Thoughts</span></li><li data-astro-cid-h4qngm3k><span data-excerpt="Well, friends, the YOLO mode philosophy is out there. The code review is a bottleneck, maybe non-existent." data-astro-cid-h4qngm3k>Final Words and Sponsor Acknowledgments</span></li></ol></details><div class="transcript" data-astro-cid-h4qngm3k><p><a href="https://op3.dev/e/https://cdn.changelog.com/uploads/podcast/673/the-changelog-673.mp3">The era of the Small Giant (Interview)</a></p>
+<p>My friends, welcome back. This is <strong>the Changelog</strong>. We feature the hackers, the leaders, and those living in this crazy world we’re in. Can you believe it? Yeah, <strong>Damian Tanner</strong> is back on the show after <strong>17 years</strong>. Wow!</p>
+<p>Okay, some backstory. <strong>Damian Tanner</strong>, founder of <strong>Pusher</strong>, now building <strong>Layer Code</strong>, returned to the podcast technically officially for the first time, but he sponsored the show. He was one of our very first sponsors of this podcast <strong>17 years ago</strong>-almost, I want to say, I’m estimating, but it’s pretty close to that. I think that’s so cool. So he’s back officially talking about the seismic shift happening right now in software development. I know you’re feeling it, I’m feeling it, everyone’s feeling it.</p>
+<p>So from first-time sponsor of the podcast to a frontline builder in the <strong>AI agent era</strong>, Damian shares raw insights on:</p>
+<ul>
+<li>why <strong>SaaS is dying</strong></li>
+<li>why <strong>code review is becoming a bottleneck</strong>, maybe non-existent</li>
+<li>how <strong>small teams can build giant things</strong></li>
+</ul>
+<p>A massive thank you to our friends, our partners, our sponsor-yes, talking about <strong>fly.io</strong>, the home of <strong>changelog.com</strong>. Love Fly and you should too. Launch a sprite, launch a fly machine, launch an app, launch whatever on Fly we do-you should too. Learn more at <strong>fly.io</strong>.</p>
+<p>Okay, let’s do this.</p>
+<hr>
+<p>Well friends, I’m here again with a good friend of mine, <strong>Cal Galbraith</strong>, co-founder and CEO of <strong>Depot.dev</strong>. Slow builds suck. Depot knows it. Cal, tell me, how do you go about making builds faster? What’s the secret?</p>
+<p>When it comes to optimizing build times to drive build times to zero, you really have to take a step back and think about the core components that make up a build.</p>
+<ul>
+<li>You have your <strong>CPUs</strong></li>
+<li>You have your <strong>networks</strong></li>
+<li>You have your <strong>disks</strong></li>
+</ul>
+<p>All of that comes into play when you’re talking about reducing build time.</p>
+<p>Some of the things that we do at Depot:</p>
+<ul>
+<li>We’re always running on the latest generation of <strong>ARM CPUs</strong> and <strong>AMD CPUs</strong> from Amazon. Those in general are anywhere between <strong>30 and 40 percent faster</strong> than GitHub’s own hosted runners.</li>
+<li>We do a lot of cache tricks. Way back in the early days when we first started Depot, we focused on container image builds, but now we’re doing the same types of cache tricks inside of GitHub Actions where we essentially multiplex uploads and downloads of GitHub Actions cache inside of our runners so that we’re going directly to blob storage with as high of throughput as humanly possible.</li>
+<li>We cordon off portions of memory to act as disk inside of a GitHub Actions runner so that any kind of integration tests you’re doing inside of CI, that’s doing a lot of operations to disk (think like testing database migrations in CI), by using <strong>RAM disks instead inside of the runner</strong>, it’s not going to a physical drive-it’s going to memory-and that’s orders of magnitude faster.</li>
+</ul>
+<p>The other part of build performance is the stuff that’s not the tech side of it-it’s the <strong>observability side</strong> of it. You can’t actually make a build faster if you don’t know where it should be faster. We look for patterns and commonalities across customers and that’s what drives our product roadmap. This is the next thing we’ll start optimizing for.</p>
+<p>So when you build with Depot, you’re getting this: you’re getting the essential goodness of relentless pursuit of <strong>very, very fast builds</strong>, near zero speed builds. And that’s cool. Kyle and his team are relentless on this pursuit-you should use them: <strong>depot.dev</strong>. Free to start, check it out. One-liner change in your GitHub Actions:</p>
+<pre tabindex="0"><code><span><span>depot.dev</span></span></code></pre>
+<hr>
+<p>Well friends, I’m here with a longtime friend, first-time sponsor of this podcast, <strong>Damian Tanner</strong>. Damian, it’s been a journey, man. This is the <strong>18th year of producing The Changelog</strong>.</p>
+<p>As you know, when <strong>Netherlands</strong> and I started this show back in <strong>2009</strong>, I corrected myself recently. I thought it was November 19th, but it was actually <strong>November 9th</strong>-the very first birthday of The Changelog.</p>
+<p>November 9th, 2009.</p>
+<p>Back then, you ran <strong>Pusher, Pusher app</strong>, and that’s kind of when sponsoring a podcast was almost like charity, right? You didn’t get a ton of value because there wasn’t a huge audience, but you wanted to support the makers of the podcast. And we were learning, and obviously open source was moving fast and we were trying to keep up, and GitHub was one year old. I mean, this is a different world. But I do want to start off by saying-you were <strong>our first sponsor of this podcast</strong>. I appreciate that, man. Welcome to the show.</p>
+<p>Kind of you.</p>
+<p>You know, reflecting on Pusher, we kind of just ended up creating a lot of great community, especially around London and also around the world with Pusher.</p>
+<p>Yeah, and I really love everything we did. We started an event series, and in fact, another kind of like coming back around-<strong>Alex Booker</strong>, who works at Mastra, is coming to speak at the <strong>AI Engineer London meetup branch</strong> that I run. He started and ran the <strong>Pusher Sessions</strong>, which became…
+<strong>Really well-known talk series in London.</strong></p>
+<p>Okay, were you at the most recent <strong>AIE conference</strong>?
+I was in SF. Yeah.</p>
+<p>Okay, what was that like? I kind of jump in the shark a little bit because I kind of want to talk-I want to juxtapose like <strong>Pusher then time frame developer</strong> to like <strong>now</strong>, which is drastically different. So don’t-let’s not go too far there. But how was AIE in SF recently?</p>
+<p>It was a good experience. Always a good injection of energy going to SF. I live just outside London, but the venue was quite big and it didn’t have that like together feel as much as some conferences. But it was the first time that I sat in a huge conference hall, and I think it was like <strong>Windsurf</strong> or something. Chatting, I was like,</p>
+<blockquote>
+<p>“This is really like-we’re all miners at a conference about <strong>mining automation</strong>, and we’re like we’re engineers, so we’re super excited about it. But right, it’s kind of weird like it’s gonna change all of our jobs.”</p>
+</blockquote>
+<p>Alright, it’s like “I’m working right now to change everything I’m doing tomorrow.” I mean, that’s kind of how I viewed it.</p>
+<p>I was watching a lot of the playback. I wasn’t there personally this time around, but I do want to make it the next time around. But, you know, just the Sean Swicks wing, the content coming out of there-everybody’s speaking. I know a lot of great people are there, obviously pushing the boundaries of what’s next for us, the frontier so to speak.</p>
+<p>But a lot of the content-I mean almost all the content-was like <strong>top, top notch</strong>, and I feel like I was just watching the tip of humanity, right? Like just experiencing what’s to come.</p>
+<p>Because in tech, you know this as being a veteran in tech, we shape-we’re shaping the future of humanity in a lot of cases because <strong>technology drives that</strong>. Technology is a major driver of everything, and here we are at the precipice of the next, the next, next thing. And it’s just wild to see what people are doing with it, how it’s changing everything.</p>
+<p>Everything, I feel like, is like a flip. It’s a complete-not even a one-it’s like a <strong>720</strong>. You know what I mean? Like it’s three spins or four spins. It’s not just one spin around to change things. I feel like it’s a dramatic forever-don’t even know how it’s going to change things, changing things, thing.</p>
+<p>And, you know, bringing it back to the <strong>Pusher days</strong>, it’s the vibe we had then. You know, there was this period around just before Pusher and the first half of Pusher I felt like where we were going through this-maybe it’s called like the <strong>Web 2</strong>-but there was a lot of great software being built and a lot of, you know, the community.</p>
+<p>And I think the craft that went into, especially like the <strong>Rails community</strong>, and we-we’re just-we’re able to build incredible web-based software.</p>
+<p>And then, you know, we’ve gone through like the commercialization, industrialization of SaaS.</p>
+<p>And what gets me really excited is now when we’re, you know, we run this <strong>AI Engineer London branch</strong> and incredible communities come together and it’s got that energy again. And I guess the energy is-it’s very exciting. There’s new stuff, everyone can play a part in it, and we’re also just all completely working it out.</p>
+<p>And it’s like sure, you’ve got the, you know, folks on the main stage of the conference and then you’ve got-<strong>we’ll chat about it later maybe like Jeffrey Huntley posting his meme Ralph Wiggum blog post</strong>-it’s like that the crazy ideas and innovation is kind of coming from anywhere, which is brilliant.</p>
+<p>Yeah, there’s some satire happened too. I think there was a convo, a talk that was quite comedic. I can’t remember who the talk was from but I was really just enjoying the fun nature of what’s happening and having fun with it-not just being completely serious all the time with it.</p>
+<p>For those who are uninitiated-and I kind of am to some degree because it’s been a long time-remind me and our listeners what exactly was <strong>Pusher</strong>? And I suppose the tail end of that, how are things different today than they were then?</p>
+<p>Pusher was basically a <strong>WebSockets push API</strong> so you could push anything to your web app in real time. So just things like notifications into your application.</p>
+<p>We ended up having a bunch of customers maybe in:</p>
+<ul>
+<li>Finance</li>
+<li>Crypto</li>
+<li>Any kind of area where you needed live updating pricing</li>
+</ul>
+<p>In the early days, at one point <strong>Uber was using Pusher to update the cars in real time</strong>, and that was before they built their own infrastructure.</p>
+<p>It was funny. I remember the stand-up because we ran a consultancy where we were chatting about the WebSockets in browsers and we’re like,</p>
+<blockquote>
+<p>“Oh this is cool, how can we use this?”</p>
+</blockquote>
+<p>And the problem is, you know, we were all building Rails apps, so like:</p>
+<pre tabindex="0"><code><span><span>Okay, we need like a separate thing which manages all the WebSocket connections to the client, and then we can just post an API request and say, 'Push this message to all the clients.'</span></span></code></pre>
+<p>It was a simple idea and we took it seriously.
+and built it into a <strong>pretty formidable dev tool used by millions of developers</strong> and still use a lot today.</p>
+<p>We eventually exited the company to <strong>MessageBird</strong>, who are a kind of <strong>European Twilio competitor</strong>. Actually, at one point, we nearly sold the company to <strong>Twilio</strong>-that would have been a very different timeline.</p>
+<p>According to my notes, you raised <strong>9.2 million dollars</strong>, which is a lot of money back then. I mean, it’s a lot of money now, but like that was tremendous. That was probably <strong>2010, right? 2011 maybe</strong>. The bulk of that we raised later on from <strong>BoltOn</strong>. The first round was maybe half a million, very, very small.</p>
+<p>It started out as an agency, so we built the first version in the agency just for fun, I suppose, and maybe some tears on your part.</p>
+<p>Juxtapose the timelines: you got an acquisition ultimately but you mentioned <strong>Twilio was an opportunity</strong>. How would that have been different? If you can branch the timeline?</p>
+<blockquote>
+<p>“It would have been a great experience to work with the team at Twilio. They’re incredible people. I’ve worked at Twilio and moved through Twilio.”</p>
+</blockquote>
+<p>I haven’t calculated it, but we didn’t sell because the offer wasn’t good enough in our minds. It was a bit of a lowball and it was all stock. In hindsight, the stock hasn’t gone very well, so it turns out it was a good financial decision. But, yeah, would have loved that experience, I think.</p>
+<p><strong>Twilio became the kind of OG for dev rel and dev community.</strong> How we got to know them is we did a lot of combined events with them and hackathons. That was a fun time.</p>
+<p>They were like the origination. <strong>Daniel Moral</strong> was very much quintessential in that process of a whole new way to market developers. I think that might have been the beginning of what we call <strong>dev rel today</strong>. Would you agree with that?</p>
+<p>I mean, it’s like the - I mean, if there was a seed, that was one of many probably, but I think one of the earliest seeds to plant of what dev rel is today.</p>
+<p>Crazy times, man.</p>
+<p>So what do you… how do you think about those times of <strong>Pusher and the web, building APIs and SaaS services, etc., and pushing messages to Rails apps</strong>? How are today’s days different for you?</p>
+<p>It’s exciting because the web and software is just completely changing again. I feel like we had that with <strong>Web 2</strong>, right? That was the birth of software on the internet, hosted software on the internet. It’s such an embedded thing in our culture and our business as developers. A lot of us work on that kind of software but most businesses run on SaaS software now.</p>
+<p>I have to remind myself there was a time before SaaS, and therefore there can be a time after SaaS. There can be a thing that comes after SaaS. It’s not a given that SaaS sticks around.</p>
+<p>I mean, like any technology, we tend to kind of go in layers. For example:</p>
+<ul>
+<li>We still have a bunch of <strong>copper phone lines</strong> around the place and we use them for other things.</li>
+<li>We’re slowly replacing them.</li>
+</ul>
+<p>These changes, in the aggregate, take a lot of time.</p>
+<p>The thing that can shift more quickly is the <strong>direction things are going</strong>. Really, in the last few months, I think I’ve been more and more convinced by my own experiences and things I’ve seen playing with stuff that:</p>
+<blockquote>
+<p>it’s entirely possible - and probably pretty likely - that there is a <strong>post-SaaS</strong>.</p>
+</blockquote>
+<p>I don’t know if everyone realizes it or is with that intention but all of us playing with <strong>agents and LLMs</strong> - whether it’s to build software or to do things - we are doing that probably instead of building a SaaS or we’re using it to build a SaaS. It’s already playing out amongst the developers.</p>
+<p>It’s an interesting thought experiment to think about:</p>
+<ul>
+<li>The time before SaaS</li>
+<li>The potential time after SaaS</li>
+</ul>
+<p>I’m curious because I hold that opinion to some degree. I think there’s what SaaS stays and what SaaS goes if it dies.</p>
+<p>You said in the pre-column burst the bubble a little bit here. You did say, and I quote:</p>
+<blockquote>
+<p><strong>“All SaaS is dead.”</strong></p>
+</blockquote>
+<p>Can you explain, in your own words, <strong>all SaaS is dead</strong>?</p>
+<p>I think I should probably go through my journey to here to kind of illustrate it. But give us the TL;DR first, though. Give us the clip and then go into the journey.</p>
+<p>Okay, okay.</p>
+<p>The TL;DR is SaaS.</p>
+<p>So there’s a few layers:</p>
+<ul>
+<li>There’s the <strong>building of software</strong> or parts of software.</li>
+<li>There’s the <strong>building of software</strong>.</li>
+<li>Then there’s the <strong>operating of software</strong> to get something done.</li>
+</ul>
+<p>I think most developers are very familiar with the building of software is changing now. But the operating software, the operating of work, the doing of work in all industries and all knowledge work, can change.</p>
+<p>Like, we’ve changed software. SaaS is made for humans, slow humans to use the SaaS UI.
+Made for a <strong>puny human</strong> to go in, understand, work out this complex thing, and it has to be in a <strong>nice UI</strong>. If it’s not a human actually doing the work that they do in the SaaS, if it’s an <strong>AI</strong> doing that work, why is there a UI? Why is there a SaaS tool? The AI doesn’t need a SaaS tool to get the work done. It might need a little UI for you to tell you what it’s done, but the whole idea of humans using software, I think, is going to change.</p>
+<p>Yeah, well, you’ve been steeped in <strong>APIs and SaaS</strong> for a while, so I hold that opinion that you have. Then I agree that if the SaaS exists for UI for humans, that’s definitely changing, so I agree with that.</p>
+<p>What I’m not sure of, and I’m still questioning myself, is like what is the true solution here?</p>
+<p>There are SaaS services that can simply be an API. You built them; I don’t really need the web UI. Actually, I kind of just prefer the CLI. I prefer just JSON for my agents. I kind of prefer Markdown for me because I’m the human. I want those good pros; I want all of it local so my agents can mine it and create sentiment analysis, all this fun stuff. You could do that with <strong>DuckDB</strong> and <strong>Parquet</strong>-just super, super fast stuff across embeddings and vector databases like <strong>pgvector</strong>.</p>
+<p>All those fun things you could do on your own data.</p>
+<p>But that’s where I stop. I do agree that the web UI will go away or some version of it. Maybe it’s just a dashboard for those who don’t want to play in the dev world with CLIs and APIs and MCP and whatnot.</p>
+<p>But I feel like SaaS shifts. My take is:</p>
+<pre tabindex="0"><code><span><span>CLI is the new app</span></span></code></pre>
+<p>That’s my take: SaaS will shift, but I think it will shift into CLI for a human to instruct an agent and an agent to do, and it’s largely based on:</p>
+<ul>
+<li>API</li>
+<li>JSON</li>
+<li>clear defined endpoints</li>
+<li>great specifications</li>
+<li>standards that get more and more mature as a result of that</li>
+</ul>
+<p>Yeah, I guess we should probably kind of tease apart <strong>SaaS the business</strong> and <strong>SaaS the software</strong>.</p>
+<p>Okay, because, yeah, I agree that the interface is changing-the interface that we use, whether it’s visually a CLI or a chat conversation or something-but the way we communicate with the software is changing. It’s a much more <strong>natural language thing</strong>. We don’t have to dig in the UI to find the thing to click.</p>
+<p>But also so much of the software we use that we call SaaS, that we access remotely, if you can just magic that SaaS locally or within your company, right, there’s no need to access that SaaS anymore. You just have that functionality; you just ask for that functionality and it’s being built.</p>
+<p>But yeah, SaaS, the business-I guess this is the challenge for companies today-is they’re going to have to, if they want to stay in business, shift somehow because, yeah, I mean, there’s still got to be some… some harness-harness is the wrong word because you use that in coding agents-but like you should do some infrastructure, some cloud, some coordination, authentication, data storage-there’s still a lot to do.</p>
+<p>I think there’s going to be some great opportunities for companies to do that.</p>
+<p>And maybe a CRM, you know, Salesforce or something, manages to say, hey:</p>
+<blockquote>
+<p>“We are the place to run your sales agents, run your magically instantiated CRM code that you want just for your business.”</p>
+</blockquote>
+<p>Maybe there’ll be some winners there.</p>
+<p>But the idea that I think is going to change SaaS’s business-the SaaS software-is the idea that like everyone has to go and buy the same version of some software, which they remotely access and can’t really change.</p>
+<p>Okay, I’m feeling that for sure. Take us back into the journey because I feel like I cut you off, and I don’t want to disappoint you-but not letting you go and give the context, the keyword for most people these days, the context for that blanket statement that:</p>
+<blockquote>
+<p>“SaaS is dead or dying.”</p>
+</blockquote>
+<p>Okay, I’ll give you a bit of the story.</p>
+<p>So my company, <strong>Layer Code</strong>, we, I’ll just give you a little short on that: we provide a <strong>voice agents platform</strong> so anyone can add voice to their agent. It’s a developer tool, developer API platform for that.</p>
+<p>We’re now ramping up our sales and marketing, and we kind of started doing it the normal ways. We kind of got a CRM; we got some marketing tools, and I was just finding-we went through a CRM or two-and I was just finding them like these are the new CRMs that are supposed to be good, but they were just really, really slow.</p>
+<p>I just couldn’t work out how to do stuff. It was like I had to go and set up a workflow, and it felt like I needed training to use this CRM tool.
+And I’d been having a lot of fun with <strong>Claude Code</strong> and <strong>Codex</strong>, kind of both-both flipping between them, kind of getting a feel for them.</p>
+<p>So I just said, <strong>“Build me”</strong>. I just voice-dictated, you know, a brain dump for like 10-15 minutes:</p>
+<ul>
+<li>Here’s the <strong>CRM</strong> I need.</li>
+</ul>
+<p>And also, it wasn’t just like a boring CRM. It was like,</p>
+<blockquote>
+<p>“I need you to make a CRM that kind of engages me as a developer who doesn’t wake up and go, ‘Let’s do sales.’ Gamify it for me.”</p>
+</blockquote>
+<p>Then here are the ways I want you to do that. And it just did it. That was my kind of like <strong>coding agents moment</strong>.</p>
+<p>I think you have that moment when you do a new project where you use an <strong>LLM</strong> and a completely greenfield project. There’s no kind of existing code it’s going to mess up or get wrong, and the project’s not too big. It just built the whole freaking CRM, and it was really good.</p>
+<p>It was a good CRM, and it worked really well. So that was like my kind of level one awakening, which was this idea that
+<strong>you can just have the SaaS you want instantly</strong>. It suddenly felt true because I had done it.</p>
+<p>I have cancelled the <strong>old CRM system</strong> now, and there’s a bunch of other tools I plan to cancel, not because they’re all crap, but because it’s harder to use them than it is to just say what I want.</p>
+<p>Because I kind of have to learn how to use those tools, whereas I can just say,</p>
+<blockquote>
+<p><strong>“Make me the thing. Make me the website I want”</strong> instead of using a website builder tool, or
+<strong>“Make me the CRM that I want to use.”</strong></p>
+</blockquote>
+<p>Then there’s this different cycle, this loop of improvement where it’s not a once-off. It’s not build and then use the software.</p>
+<p>It’s like as you’re using the software, you can improve the software at any time.</p>
+<p>We’ve still got to work out how this works:</p>
+<ul>
+<li>Who has the power to change the software?</li>
+<li>How do you share that amongst a team?</li>
+<li>Do I have a branch of the software that I… or do I have different… my own views or something in the CRM that I can mess around with?</li>
+</ul>
+<p>Just within our team of three doing this stuff in the company, it was like:</p>
+<blockquote>
+<p>“Oh, you’re annoyed with this part of the software? Just change it. Just change it.”</p>
+</blockquote>
+<p>Yeah, when it annoys you at the exact point in time, and then continue with the work.</p>
+<p>I assume you’re probably still doing something like a <strong>GitHub</strong> or some sort of primary git repository as a hub for your work, and you probably have pull requests or merge requests.</p>
+<p>So even if your teammate is frustrated, improves the software, pushes it back, you’re still using the same software, and you’re still using the same traditional developer tooling such as:</p>
+<pre tabindex="0"><code><span><span>- pull requests</span></span>
+<span><span>- code review</span></span>
+<span><span>- merging</span></span></code></pre>
+<p>Yeah, that’s going to have to change as well.</p>
+<p>Okay, take me there.</p>
+<p>I woke up this morning with that feeling, <strong>“Okay, that’s changing too.”</strong></p>
+<p>How’s it changing with the CRM and with something we’ve been building this week?</p>
+<p>There were new pieces of software. There weren’t existing codebases. I didn’t have any prior ideas, tastes, or requirements about what the code should look like.</p>
+<p>I think this is the thing that slows people down with coding agents. When you use it on an existing repo, LLMs have bad taste - they just give you kind of the most common denominator, kind of bad taste version of anything, whether it’s writing a blog post or coding.</p>
+<p>So when you use it on an existing project and then you review the code, you just find all these things wrong with it. Like, right now, they love doing all this really defensive try-catch in JavaScript, or really verbose stuff, or writing a utility function that exists in a library already.</p>
+<p>But when you start on a new project and you just use <strong>YOLO mode</strong> and you’re just building static for yourself as well, right? And it works-where’s the code? Why review the code?</p>
+<p>I think we’re only in this temporary weird phase where we’re trying to jam these existing software processes that ensure we deliver:</p>
+<ul>
+<li>high-quality software</li>
+<li>secure software</li>
+<li>good software</li>
+</ul>
+<p>I think it’s hard. We can’t throw that out-we’ve got <strong>SOC2</strong> too, we can’t throw those out the window for everything that exists today.</p>
+<p>But for everything new that you’re building, you’ve got an opportunity to kind of pull apart, question, and collapse down all these processes we’ve built for ourselves - processes that were built to ensure humans don’t make mistakes, help humans collaborate, and manage change in the repository and everything.</p>
+<p>If humans aren’t writing the code anymore, we need to question these things.</p>
+<p>Are you moving into the land of <strong>agent-first</strong>? Then it sounds like that’s where you’re going.</p>
+<p>I feel like I’m being pulled into it by… yeah, I’m slight… I’m kind of like there. There is a tide.
+I can’t resist. <strong>I’m falling in the hole</strong> and we’re kind of like every-we’re dipping our toes in, right? Trying to try out an <strong>LLM</strong>, try out <strong>CursorTab</strong>, and then we’re kind of in there and we’re swimming, trying to swim the way we normally swim, the way we want to go. And suddenly I’ve just gone, just <strong>relax and just let the tide, let the river take you</strong>. Just let it go, man. Just let it go.</p>
+<p>It’s scary. It feels kind of terrifying.</p>
+<p>They’re gonna-and I don’t have the answers to how we do <strong>code review</strong>. But, you know, if you look at a lot of teams talking about using <strong>AI coding agents</strong> in the resisting project, everyone’s big problem now is <strong>code reviews</strong>. Why? Because everyone using coding agents is producing so many <strong>PRs</strong>; it’s piling up in this review process that has to be done. The new teams that don’t have that process in place are going multiple times faster right now.</p>
+<p>This is the year we almost <strong>break the database</strong>. Let me explain.</p>
+<p>Where do agents actually store their stuff? They’ve got:</p>
+<ul>
+<li>vectors</li>
+<li>relational data</li>
+<li>conversational history</li>
+<li>embeddings</li>
+</ul>
+<p>And they’re hammering the database at speeds that humans just never have before. Most teams are duct-taping together a <strong>Postgres instance</strong>, a vector database, maybe <strong>Elasticsearch</strong> for search. It’s a mess.</p>
+<p>Well, our friends at <strong>Tiger Data</strong> looked at this and said, <em>“What if the database just understood agents?”</em> That’s <strong>Agentic Postgres</strong>: it’s Postgres built specifically for AI agents, and it combines three things that usually require three separate systems:</p>
+<ol>
+<li><strong>Native model context protocol servers (MCP)</strong></li>
+<li><strong>Hybrid search</strong></li>
+<li><strong>Zero copy forks</strong></li>
+</ol>
+<p>The MCP integration is the clever bit. Your agents can actually talk directly to the database. They can:</p>
+<ul>
+<li>query data</li>
+<li>introspect schemas</li>
+<li>execute SQL</li>
+</ul>
+<p>without you writing fragile glue code. The database essentially becomes a tool your agent can wield safely.</p>
+<p>Then there’s hybrid search. <strong>Tiger Data</strong> merges vector similarity search with good old keyword search into a SQL query - no separate vector database, no Elasticsearch cluster. Semantic and keyword search in one transaction, one engine.</p>
+<p>Okay, my favorite feature: the <strong>forks</strong>. Agents can spawn sub-second zero-copy database clones for isolated testing.</p>
+<p>This is not a database they can destroy. It’s a fork, a copy off of your main production database if you so choose.</p>
+<p>We’re talking a <strong>one terabyte database fork in under one second</strong>. Your agent can run destructive experiments in a sandbox without touching production, and you only pay for the data that actually changes. That’s how copy-on-write works.</p>
+<p>It works.</p>
+<p>All your agent data-vectors, relational tables, time series metrics, conversational history-lives in one queryable engine. It’s the elegant simplification that makes you wonder why we’ve been doing it the hard way for so long.</p>
+<p>So if you’re building with AI agents and you’re tired of managing a zoo of data systems, check out our friends at <strong>Tiger Data</strong> at <a href="https://tigerdata.com">tigerdata.com</a>. They’ve got a free trial and a CLI with an MCP server you can download to start experimenting right now. Again, <strong>tigerdata.com</strong>.</p>
+<hr>
+<p>What is replacing code review if there’s no code review? Is it just nothing?</p>
+<p>I think as developers, we need to think more like-<strong>we need to put ourselves in the shoes of PMs, designers, managers</strong>, because they don’t look at the code right? They say <em>“We need this functionality.”</em></p>
+<p>We build it, we do our code reviews, we ensure it works, and the PM or whoever goes,</p>
+<blockquote>
+<p><em>“Oh yeah, great, I’ve used it, meets the requirements. It’s great.”</em></p>
+</blockquote>
+<p>They’re comfortable not looking at the code. They’re moving along, closing the deal, with the customer, integrating. They’re like,</p>
+<blockquote>
+<p><em>“I am confident that the intelligent being that created this code did a good job.”</em></p>
+</blockquote>
+<p>Now, I think the only reason we’re kind of stuck in this old process is because many of them are set in stone, but also because <strong>LLMs</strong> aren’t quite smart enough yet-they still make stupid mistakes. You still need a <strong>human in the loop</strong> (and on the loop).</p>
+<p>They’re still a bit dumb. They get done with silly things and they do stuff. They’ll go the wrong direction for a while and I’m like,</p>
+<blockquote>
+<p><em>“No, hang on a second, that’s a great thought here but let’s get back on track. This is the problem we’re solving and you’ve side-quested us.”</em></p>
+</blockquote>
+<p>It’s a fun side quest if that was the point, but that’s not the point.</p>
+<p>This is going to change, right?</p>
+<p>One of the hard things is trying to put ourselves in the mind of what it’s going to be like a year from now. I think I’ve only been, you know, after being able to play with LLMs for several years, it feels like I can feel the velocity of it now. Because I’ve felt <strong>Chat GPT-3, 4, 5, Claude, Code Codex</strong>, and now I can say,</p>
+<blockquote>
+<p><em>“Oh, okay, that’s what it feels like for it to get better.”</em></p>
+</blockquote>
+<p>And it’s gonna keep.
+Getting better for a few more years, so it’s kind of like <strong>self-driving cars</strong>, right? They’re like not very useful while they’re worse than humans, but suddenly when they’re safer than a human, <strong>“why would you have a human?”</strong> Yeah, and I think it’s the same with <strong>coding</strong>. Like all this process is to stop humans making mistakes. We make mistakes; our mistakes are not special, better mistakes. They’re still like we stuff in code we call security incidents.</p>
+<p>So I think as soon as the <strong>LLMs</strong> are twice as good, five times as good, ten times better at outputting good code that doesn’t cause these issues, we’re gonna start to let go of this concern, like these things right, we’re gonna start to trust them more.</p>
+<p>Something I leaned on recently, and it was really with <strong>Opus 4.5</strong>, I feel like that’s when things sort of changed because I’m with you on the trend from <strong>ChatGPT</strong> or <strong>GPT-3</strong> on to now and feeling the incremental change. I feel like Opus 4.5 really changed things.</p>
+<p>And I think I heard it in an <strong>AIE talk</strong> or at least in the intention of it. If it wasn’t verbatim, it was <strong>“trust the model, just trust the model.”</strong> As a matter of fact, I think it was one of the guys-they were building an agent and in the pro it was maybe his <strong>agent layer</strong>, layer agent or something like that, maybe borrowed something from your name layer code. I have to look it up, I’ll get the talk, I’ll put it in the show notes.</p>
+<p>But I think it was that talk and I was like, okay the next time I play I’m gonna trust the model. And I will sometimes like stop it from doing something because I think I’m trying to direct it a certain direction.</p>
+<p>And now I’ve been like, wait hang on a second, this code’s free basically, it’s just going to generate anyways. Let’s see what it does. Worst case, I’m like, you know, roll it back or worst case is just generate better, you know what I mean, like ultra think, right? You know what’s the worst that could happen? Because it’s going faster than that can anyways.</p>
+<p>So let’s see. Even if it’s a mistake, let’s see the mistake, let’s learn from the mistake because that’s how we learn even as humans. I’m sure <strong>Ellen’s</strong> the same.</p>
+<p>And so I’ve come back to this philosophy or this thought, almost to the way you describe it like falling into this hole, slipping in via gravity. Not excited at first but then kind of like excited because it’s good in there. Let’s just go, just <strong>trust the model man, just trust the model!</strong></p>
+<p>It can surprise you, and I think that still gives me that dopamine hit that I would have coding, right? When I was coding manually, you’d get a function right and you’d be like, <em>“ah it works.”</em></p>
+<p>And now it’s like you’ve got like the whole application right and you’re like, <em>“ah, I just did a problem, the whole thing works.”</em></p>
+<p>That’s really exciting. And yeah, it’s fun right now. And I mean it’s gonna keep changing. This is just a bit of a temporary phase here and now. But I think for many of us building software we love the craft of it, which you can still do, but also the making-a-thing is also one of the exciting bits of it.</p>
+<p>And the world is full of software still. Like you think about so many interactions you have with government services or whatever-not saying that they’re going to adopt coding agents particularly quickly, but there is a lot of bad software in the world.</p>
+<p>And software has been expensive to build and that’s because it’s been in high demand. So I don’t think we’re going to run out of stuff to build.</p>
+<p>I think even if we get 10 times faster, 100 times faster there’s so much useful software and products and things and jobs to be done.</p>
+<hr>
+<p><strong>Close this loop for me then:</strong> you said <strong>SaaS is dead or dying</strong> (I’m paraphrasing because you didn’t say or dying, I’m just going to say or dying, I’ll add it to your thing).</p>
+<p>How is it going to change then? If we’re making software there’s still tons of software to write but SaaS is dead, what exactly are we making then if it’s not SaaS?</p>
+<p>I know that not all software is SaaS but you do build something, a platform, and people buy the platform. Is that SaaS? What changes? You mentioned interfaces, like where do you see this moving?</p>
+<hr>
+<p>I think we’re moving. And so this is the next level, the next kind of revelation I had was I started using the <strong>CRM</strong> and I was like, this is cool, this is super fast, this is better than the other CRM, you know, and I can change it.</p>
+<p>Cool, I’m doing some important sales work, I’m enriching leads.</p>
+<p>And then I kind of woke up a few days later, I was like, “Why am I doing the work? What’s going on here?” I create an interface for me to use, right? Why can’t <strong>Claude Code</strong> just do the work that I need to do for me?</p>
+<p>I know it’s not going to be with the same taste that I have, and I know it’s going to make mistakes, but I can have 10 of…
+<strong>Them do it at the same time and I</strong> it’s not a particularly fun idea, fully automated sales and what that means for the world in general. But it’s the particular vertical where I had this kind of <strong>“right, well the enriching certainly makes sense for the LLN to do.”</strong> The enriching is like come on, that’s I’m just the API, I’m copying things, and a lot of it is still so manual.</p>
+<p>So the revelation was just waking up and then going, <strong>“Okay, Claude Code’s gonna do the work for me today,”</strong> like it does for software. It builds the software for me. I’m gonna give it a <strong>Chrome browser connection</strong>-that’s still an unsolved problem. There’s a lot of pain in LLMs chatting to the browser, but there are a few good ones. I’m gonna let it use my <strong>LinkedIn</strong>, I’m gonna let it use my <strong>X</strong>, and I’m gonna connect it to the APIs that I need that aren’t pieces of software but like <strong>data sources</strong>-right? And get enriched and search things.</p>
+<p>And then I just started getting it to just do it, and it was really quite good. It was slow but really quite good. That was a kind of - that was the moment where we typed in</p>
+<pre tabindex="0"><code><span><span>build this feature in cloud code</span></span>
+<span><span>build this</span></span></code></pre>
+<p>but it was suddenly like this thing can just do anything a human can do on a computer. The only thing holding it back right now is the access to tools and good integrations with the interfaces-the old software it still needs to use to do what a human does.</p>
+<p>Yeah, a bigger context window and it’d be great if it was faster, but I can run them in parallel so that the speed’s not a massive problem. In the space of a week, I built the CRM and then I got Claude code to just do the work. But I didn’t tell it to use the CRM; I just told it to use the database. I just ended up throwing away the CRM. Now we have this little Claude code harness that:</p>
+<ul>
+<li>Overrides the Claude code system prompt</li>
+<li>Sets up all the tools</li>
+<li>Gives it an escalate database</li>
+</ul>
+<p>I’ve just got like a database viewer that the non-technical team used to kind of look at the leads and stuff like that. It’s just a kind of beekeeper kind of database viewer. And now Claude code is just doing the work.</p>
+<p>We’ve only applied it there, but this is just like Claude code is this kind of little innovation in AI that can do work for a long time. We already know people use <strong>ChatGPT</strong> for all sorts of different things beyond coding, right? So suddenly I think these coding agents are a glimpse of all knowledge work being sped up or replaced. <strong>Administration work can be replaced with these things now.</strong></p>
+<p>Yeah, these non-technical folks, why not just invite them to the terminal and give them CLI outputs that they can easily run and just use the up arrow to repeat? Or just teach them certain things they maybe weren’t really comfortable with doing before. Now they’re also one step from being a developer or a builder because they’re already in the terminal. That’s where cloud’s at.</p>
+<p>Yeah, I mean, that’s what we’ve done now. I’ve seen some unexpected kind of teething issues with that. I think the terminal feels a bit scary to non-technical people even if you explain how to use it. When they quit Claude code or something, they’re just kind of lost; they’re like <strong>“Oh my gosh, where did Claude go?”</strong></p>
+<p>Yeah, and I was onboarding one of our team members, like <strong>“Hey, open the terminal,”</strong> and then I’m like, okay, we got a <code>cd</code>. What if the terminal was just Claude code though? What if you built your own terminal that was just - yeah, that’s what I actually think-that specific UI, whether it’s terminal or web UI, it’s kind of neither here nor there, but there is magic in a thing that can access everything on your computer or a computer.</p>
+<p>And they’re doing that, I think, with something called <strong>Co-work</strong>. Have you seen Co-work yet? I haven’t played with it enough to know what it can and can’t do. I think I unleashed it on a directory with some PDFs that I had collected that was around <strong>business structure</strong>. It was like an idea I had four months ago with just a different business structure that would just make more sense primarily around <strong>tax purposes</strong>.</p>
+<p>I was like, <strong>“Hey, revisit this idea I haven’t touched in forever.”</strong> It was a directory, and I think it went and just did a bunch of stuff. But then it was coming up with ideas, and I was like, “Nah, those are not good ideas.”</p>
+<p>So I don’t know if it’s less smart than Claude code in intent or whatever, but I think that’s what they’re trying to do with Co-work. You could just drop them into essentially a directory, which is what Claude code lives in-a directory of maybe files.
+That is an <strong>application</strong> or knows how to talk to the <strong>database</strong> as you said your <strong>CRM</strong> does, and they can just be in a <strong>cloud code instance</strong> just asking questions:</p>
+<ul>
+<li><strong>“Show me the latest leads.”</strong></li>
+</ul>
+<p>Yeah, I could use a <strong>skill</strong> if you want to go that route, or it can just be smart enough to be like,</p>
+<blockquote>
+<p>“Well, I have a Neon database here, the Neon CTL CLI is installed, I’m just going to query it directly, maybe I’ll write some Python to make it faster, maybe I’ll store some of this stuff locally and I’ll do it all behind the scenes.”</p>
+</blockquote>
+<p>But then it gives this <strong>non-technical person a list of leads</strong>. All they had to do is be like:</p>
+<blockquote>
+<p>“Give me the leads, man.”</p>
+</blockquote>
+<p>You mentioned enabling them as <strong>builders</strong>. I think it is a window into that because when they want something, they get curious. They’ll be like,</p>
+<ul>
+<li>“Build me a report for this.”</li>
+<li>“Build me a web app for this.”</li>
+<li>“Help me make this easier.”</li>
+</ul>
+<p>You’d be surprised how easy that is. Like, “help me make it easier” is one of those weird ones.
+<strong>Claude Code will also autocomplete and just let you tab and enter.</strong></p>
+<p>I’ve noticed those things have gotten more terse, like maybe the last one I did was super short. It was like:</p>
+<blockquote>
+<p><strong>“I like it, implement it”</strong>
+and that was the completion for them.</p>
+</blockquote>
+<p>I was like,</p>
+<blockquote>
+<p>“Okay, is that how easy it’s gotten now to just spit out a feature that we were just riffing on; you understand the bug we just got over, and now your response to me to tell you what to say - because you need me, the human, to get you back in the loop at least in today’s REPL - is ‘I like it, implemented’?”</p>
+</blockquote>
+<p>I found myself just responding with the letter “y” and a lot of the time it just knows what to do. Even if it’s a bit ambiguous, you’re kind of like,</p>
+<blockquote>
+<p>“You’ll work it out.”</p>
+</blockquote>
+<p>So I think it’s very exciting that <strong>Anthropic released this co-work thing</strong> because they’ve obviously seen that inside Anthropic, all sorts of people are using <strong>Claude Code</strong>.</p>
+<p>When we think about someone starting there for <strong>non-coding purposes</strong>, but stuff is done with code and CLI tools and some MCPs or whatever APIs, then the user says,</p>
+<blockquote>
+<p>“Make me a UI to make this easier.”</p>
+</blockquote>
+<p>For instance, I had to review a bunch of draft messages that I wrote and was like,</p>
+<blockquote>
+<p>“This is kind of janky in the terminal, make me a UI to do the review.”</p>
+</blockquote>
+<p>And I just did it.</p>
+<p>I think this is exactly where software is changing because when the <strong>LLM is 10 times faster</strong>-I mean if you use the <strong>Grok with a Q endpoint</strong>-they’re insanely fast, it’s going to be fast, then if you can have any interface you want within a second,</p>
+<blockquote>
+<p><strong>Why have static interfaces?</strong></p>
+</blockquote>
+<p>Yeah, I’m camping out there with you.</p>
+<p>What if everything was just in time? I think that interface-</p>
+<blockquote>
+<p>What if I didn’t need a shirt with you because you’re my teammate, but what if you could do the same thing for you and it solves your problem and you’re in your own branch, and what you do in your branch is like Vegas and it stays there?</p>
+</blockquote>
+<p>It doesn’t have to be said anywhere else, right? Like,</p>
+<blockquote>
+<p>“Just leave it in Vegas.”</p>
+</blockquote>
+<p>What if in your own branch, in your own little world as a <strong>Sales Development Representative (SDR)</strong> who’s trying to help the team and help the organization grow, and all they need is an interface, what if it was just in time for them only?</p>
+<p>It didn’t matter if it was maintainable. It didn’t matter how good the code was.
+All that mattered was that it solved their problem,
+<strong>got the opportunity,</strong> and enabled them to do what they’ve got to do to do their job.</p>
+<p>You just take that and multiply it or copy and paste it onto all the roles that make sense for that just-in-time world. It completely changes the idea of what software is.</p>
+<p>It also completely changes how we interact with a computer,
+what a computer does, and what it is for.</p>
+<p>I just love this notion that</p>
+<blockquote>
+<p><strong>Every user can change the computer, can change the software as they’re using it, as they like it.</strong></p>
+</blockquote>
+<p>I think that’s very exciting-it’s essentially <strong>everyone’s a developer.</strong></p>
+<p>Yeah, I mean, it’s the ultimate way to use a computer.
+All the gates are down.
+There’s no geeky pretty more.</p>
+<p>If I want software the way I want software, so long as I have authentication and authorization,
+I got the keys to my kingdom.
+I want to make it my way.</p>
+<p>And I think also the <strong>agents can preempt.</strong>
+I haven’t tried this yet, but I was thinking of giving it a little sales thing - we have a little prompt where it says,</p>
+<blockquote>
+<p>Even if a web UI is going to be better for the user to do this review, just do it.</p>
+</blockquote>
+<p>So instead of you asking it to do some work, it just comes.
+Back and be like <strong>“oh, what I’ve made you this UI where I’ve displayed it all for you. Have a look at it, let me know if you’re happy with it.”</strong> I mean, this is getting kind of wild-a bit of an idea-but it’s kind of how we can think about how we communicate with each other as humans, as employees. We have back-and-forth conversations. We have email, which is a bit more asynchronous.</p>
+<p>You know, we put up a preview URL of something. I think all of those communication channels can be enabled in the agent you’re chatting to. I haven’t liked this kind of product companies sell-the initial messaging where people are sort of like <strong>digital employees.</strong> But something like that’s going to happen, and I don’t think it’s the exciting bit.</p>
+<p>For me, the exciting bit is the <strong>human-computer interaction.</strong> It’s like, yeah, this is how it is-it’s quite exciting in the context of <strong>Layer code</strong> and why we love <strong>voice.</strong> Voice is this OG communication method, whereas humans-<strong>we started speaking before we were writing.</strong></p>
+<p>It’s a quite rich communication medium and a terrific way-if your agents can be really multi-medium, whether it’s:</p>
+<ul>
+<li><strong>voice</strong> with them</li>
+<li><strong>text</strong> with them</li>
+<li>they create a <strong>web UI</strong> for you</li>
+<li>you interact with the UI with them</li>
+</ul>
+<p>There doesn’t have to be these strict modes or delineations between those things. Well, let’s go there-I didn’t take us there yet, but I do want to talk to you about what you’re doing with <strong>Layer code</strong>.</p>
+<p>I obviously produce a podcast, so I’m kind of interested in <strong>speech-to-text</strong> to some degree because transcripts, right? Then you have the obvious version which is like you start out with speech and get something or even a voice prompt.</p>
+<p>What exactly is <strong>Layer code</strong>? I suppose we’ve been 51 minutes deep on nerding out on AI essentially, and not at all on your startup and what you’re doing, which was sort of the impetus of even getting back in touch. I saw you had something new you were doing, and I’m like, well, I haven’t talked to <strong>Damian</strong> since he sponsored the show almost 17 years ago. It’s probably a good time to talk, right?</p>
+<p>So there you go, that’s how it works out.</p>
+<p>Has your excitement and your dopamine hits on the daily or even by minute by minute changed how you feel about what you’re building with <strong>Layer code,</strong> and what exactly are you trying to do with it?</p>
+<p>Well, and we’ve talked a lot about the building of a company and the building of software now. I think founders today have that as important as the thing they’re building because if you just head into your company and operate it like you did even a few years ago-using no AI, using all your slow development practices, using slow sales and marketing practices-you’re going to really get left behind.</p>
+<p>So there is a lot to be done in working out and exploring:</p>
+<ul>
+<li>What the company of the future looks like</li>
+<li>What the software company of the future looks like</li>
+</ul>
+<p>I’m very excited about the idea that we can build large companies with <strong>small teams</strong>.</p>
+<p>I think a lot of developers-well, I mean, there is a lot of HR, politics, and culture change that happens when teams get truly large and companies get truly large. This was one of the founding principles when we started our startup:</p>
+<blockquote>
+<p><strong>“Let’s see how big we can make this with a small team.”</strong></p>
+</blockquote>
+<p>And that’s very exciting because I think you can move fast and keep a great culture.</p>
+<p>So that’s why we invest a lot of our energy into the building of the company and what we build and provide right now. Our first product is a <strong>voice infrastructure</strong>-a <strong>voice API</strong> for real-time building of voice AI agents.</p>
+<p>This is currently a pretty hard problem. We focus a lot on the <strong>real-time conversational aspect,</strong> and there’s a lot of wicked problems in that:</p>
+<ul>
+<li>Conversations are dynamic things.</li>
+<li>There are a lot of state changes.</li>
+<li>Interruptions.</li>
+<li>Back channeling.</li>
+<li>Everything that happens.</li>
+</ul>
+<p>If you’re a developer building an agent-whether it could be your <strong>sales agent</strong> or a <strong>developer coding agent</strong>-and you want to add voice AI, there’s a bunch of stuff you’ll bump into when you start building that.</p>
+<p>It’s interesting. We kind of see our customers, and we can predict where they are on that journey because there are a bunch of problems you don’t preempt, and then you quickly slam into them.</p>
+<p>We’ve solved a lot of those problems. So with <strong>Layer code</strong>, you can just take our API, plug it into your existing agent backend.</p>
+<p>You can use:</p>
+<pre tabindex="0"><code><span><span>- Any backend you want</span></span>
+<span><span>- Any agent LLM library you want</span></span>
+<span><span>- Any LLM you</span></span></code></pre>
+<p>The basic example is a <strong>Next.js application</strong> that uses the <strong>Versele AI SDK</strong>. We’ve also got <strong>Python examples</strong> as well. You connect to the Voice Layer code and put in our browser SDK, and then you get a little voice agent microphone button and everything within the web app.</p>
+<p>We also connect to the phone over <strong>Twilio</strong>, and for every turn of the conversation, whenever the user finishes speaking, we ship your backend that transcript. You call the LLM of your choice and do your tool calls-everything you need to generate a response as you normally do for a text agent. Then you start streaming the response tokens back to us. As soon as we get that first word, we start converting that text to speech and start streaming it back to the user.</p>
+<p>There’s a lot of complexity to make that really <strong>low latency</strong> and a <strong>real-time conversation</strong> where you’re not waiting more than a second or two for the agent to respond. We put a lot of work into refining that. There’s also a lot of exciting innovation happening in the model space for <strong>voice models</strong>, whether it’s transcription or text to speech.</p>
+<p>We give you the freedom to switch between those models. You can try out different voice models:</p>
+<ul>
+<li>Some that are really cheap and have casual voices</li>
+<li>Others like <strong>11 Labs</strong> that are more expensive but offer professional, clean voices</li>
+</ul>
+<p>You can find the right trade-off for your experience. There’s a lot of trade-offs in voice between:</p>
+<ul>
+<li>Latency</li>
+<li>Price</li>
+<li>Quality</li>
+</ul>
+<p>We let users explore that and find the right fit for their voice agent.</p>
+<hr>
+<p>That is interesting. So, the <strong>Next.js SDK streaming latency</strong>-is it meant to be the middleware between implementation and feedback to the user?</p>
+<p>Yeah, we handle everything related to the voice basically, and we let you just handle text like a text chatbot. There’s no heavy MP3 or WAV file coming down-everything is streaming.</p>
+<p>The very interesting problem to solve is that the whole system has to be <strong>real-time</strong>. The whole thing we call a pipeline. I don’t know if that’s a great name for it because it’s not like an ETL loading pipeline or something, but we call it a pipeline.</p>
+<hr>
+<p>The real-time agent system backend, when you start a new session, runs on <strong>Cloudflare Workers</strong>. It’s running right near the user who clicked to chat with your agent with voice. From that point on, everything is streaming.</p>
+<ul>
+<li>The microphone input from the user’s browser streams in real time.</li>
+<li>This stream goes directly to the transcription model.</li>
+<li>The transcription model spits out partial transcripts.</li>
+<li>We send those partial transcripts back to you, so you can show the user what they’re saying if you want.</li>
+</ul>
+<p>The hardest part is working out <strong>when the user has finished speaking</strong>. It is so difficult because people pause, make sounds, pause again, and start again. Conversation is very dynamic-it’s like a game almost.</p>
+<p>We have to do some clever things and use other AI models to help detect when the user has ended speaking. When we have enough confidence-there’s no certainty, but enough confidence-that the user has finished their thought, we finalize that transcript.</p>
+<p>We finish transcribing that last word and ship you the whole user utterance. Whether it’s a word, sentence, or paragraph the user has spoken, we bundle it up and choose an end.</p>
+<hr>
+<p>The reason we have to do this bundling and can’t stream the user utterance continuously is because <strong>LLMs don’t take streaming input</strong>.</p>
+<p>You can stream input, but you need the complete question to send to the LLM to then make a request and start generating a response. There is no duplex LLM that takes input and generates input/output simultaneously.</p>
+<hr>
+<p>Here’s a conceptual question:</p>
+<blockquote>
+<p>What if you constantly wrote to a file locally or wherever the system is, and then at some point, it just ends and you send a call that signals the end versus packaging it all up and sending once it’s done? Like incrementally line by line?</p>
+</blockquote>
+<p>I’m not sure how to describe it, but that’s how I think about it. You constantly write to something and then say,</p>
+<blockquote>
+<p>“Okay, it’s done,” and what was there becomes the final input.</p>
+</blockquote>
+<p>So yes, we can do that in terms of having partial transcripts. We can stream those partial transcripts and then say,</p>
+<blockquote>
+<p>“Okay, now it’s done, now make the LLM call.”</p>
+</blockquote>
+<p>Then you make the LLM call.</p>
+<hr>
+<p>Interestingly, sending text is actually super fast <strong>in the context of voice</strong>, very fast compared to all other steps involved.
+And actually the default example, <strong>this is crazy</strong>, I didn’t think this would work until we tried it. But it just uses a <strong>webhook</strong>. When the user finishes speaking, the basic example sends your <strong>Next.js API</strong> a webhook with the user text. And it turns out the webhook - sending a webhook with a few sentences in it - that’s fine, that’s fast.</p>
+<p>It’s all the other stuff like then waiting for the <strong>LLM</strong> to respond. Yeah, that’s actually not the hard part. I mean, you have maybe a millisecond-ish or a few milliseconds, but it’s not going to be a dramatic shift, right? The way I described it versus how, yeah.</p>
+<p>And we’ve got a <strong>web socket endpoint</strong> now, so we can kind of shave off that <strong>HTTP connection</strong> and everything. But yeah, then the big heavy latency items come in, so:</p>
+<ul>
+<li>
+<p><strong>Generating an LLM response</strong>.
+Most LLMs we use right now - the ones we’re using, coding agents - they’re optimized for intelligence, not really speed.</p>
+</li>
+<li>
+<p>When people optimize for speed, <strong>LLM labs</strong> tend to optimize for just <strong>token throughput</strong>.
+Very few people optimize for <strong>time to first token</strong>.</p>
+</li>
+</ul>
+<p>And that’s all that matters in voice: I give you the user utterance, how long is the user going to have to wait before I can start playing back an agent response to them? And <strong>time to first token</strong> is that, right? How long before I get the first kind of word or two that I can turn into voice, and they can start hearing?</p>
+<p>The only major LLM lab that actually optimizes for this or maintains a low latency of <strong>TTFT</strong> (time to first token) is:</p>
+<ul>
+<li><strong>Google and Gemini Flash</strong>.</li>
+</ul>
+<p>OpenAI, most voice agents now are doing it this way. We’re using <strong>GPT-4o or Gemini Flash</strong>. GPT-4o has some annoying, open API points with some annoying inconsistencies in latency, and that’s kind of the killer in voice, right?</p>
+<p>It’s a bad user experience if it works - the first few turns of the conversation are fast, and then suddenly the next turn the agent takes three seconds to respond. You’re like:</p>
+<blockquote>
+<p>“Is the agent wrong? Is the agent broken?”</p>
+</blockquote>
+<p>But then once you get that first token back, then you’re good, because then you can send that text to us, start streaming text to us, and then we can start turning it into full sentences.</p>
+<p>And then again, we get to this <strong>batching problem</strong>. The voice models that do <strong>text to voice</strong>, again, they don’t stream in the input. They require a full sentence of input before they can start generating any output, because again, how you speak and how things are pronounced depends on what comes later.</p>
+<p>So you have to buffer the LLM output into sentences, ship the buffered sentences one by one to the voice model, and then as soon as we get that first chunk of 20 millisecond audio, we chunk it up into streams, stream that straight back down web sockets from the Cloudflare worker straight into the user’s browser, and can start playing the agent response.</p>
+<p>Friends, you know this - you’re smart - most AI tools out there are just fancy autocompletes with a chat interface. They help you start the work, but they never do the fun thing you need to do, which is <strong>finish the work</strong>. That’s what you’re trying to do:</p>
+<ul>
+<li>The follow-ups</li>
+<li>The post-meeting admin</li>
+<li>The “I’ll get to that later” tasks</li>
+</ul>
+<p>Those pile up into your <strong>Notion workspace</strong> - looks like a crime scene. I know mine did.</p>
+<p>I’ve been using <strong>Notion Agent</strong>, and it’s changed how I think about delegation - not delegation to another team member, but delegation to something that already knows how I work, my workflows, my preferences, how I organize things.</p>
+<p>And here’s what got me: as you may know, we produce a podcast. It takes prep, a lot of details - there’s emails, calendars, notes here and there, and it’s kind of hard to get all that together.</p>
+<p>Well, now my <strong>Notion Agent</strong> helps me do all that. It organizes it for me. It’s got a template based on my preferences, and it’s easy.</p>
+<p>Notion brings all your notes, docs, projects into one connected space that just works. It’s:</p>
+<ul>
+<li>Seamless</li>
+<li>Flexible</li>
+<li>Powerful</li>
+<li>Kind of fun to use with AI built right in</li>
+</ul>
+<p>You spend less time switching between tools, and more time creating that great work you do - the art, the fun stuff. And now, with Notion Agent, your AI doesn’t just help you with your work; <strong>it finishes it for you</strong>, based on your preferences.</p>
+<p>Since everything you’re doing is inside Notion, you’re always in control. Everything the agent does is:</p>
+<ul>
+<li>Editable</li>
+<li>Transparent</li>
+<li>Undoable</li>
+</ul>
+<p>You can trust it with your most precious work.</p>
+<p>As you know, Notion is used by us - I use it every day. It’s used by over 50 percent of <strong>Fortune 500 companies</strong> and some of the fastest-growing companies out there like:</p>
+<ul>
+<li><strong>OpenAI</strong></li>
+<li><strong>Ramp</strong></li>
+<li><strong>Vercel</strong></li>
+</ul>
+<p>They all use Notion Agent to help their teams:</p>
+<ul>
+<li>Send less emails</li>
+<li>Cancel more meetings</li>
+<li>Stay ahead doing the fun work</li>
+</ul>
+<p>So try Notion now with Notion Agent at:</p>
+<pre tabindex="0"><code><span><span>notion.com/changelog</span></span></code></pre>
+<p>That’s all lowercase letters: <strong>notion.com/changelog</strong> to try your new AI.
+<strong>Teammate Notion Agent today</strong>, and we use our link as you know you’re supporting your favorite show:
+the <strong>changelog</strong> once again <strong>notion.com/changelog</strong>.</p>
+<p>You chose <strong>TypeScript</strong> to do all this. We’re pretty set on <strong>Cloudflare Workers</strong> from day one, and it just solves so many <strong>infrastructure problems</strong> that you’re going to run into later on.</p>
+<p>I like-I don’t think we’ll need a devops person ever. It’s such a-
+<strong>That’s interesting. It’s such a wonderful</strong>-there are constraints you have to build to, right? You’re using <strong>V8 JavaScript, browser JavaScript, in a Cloudflare Worker</strong>. Tons of Node APIs don’t work there. There is a bit of a <strong>compatibility layer</strong>; you do have to do things a bit differently.</p>
+<p>But what do you get in return?</p>
+<ul>
+<li>Your application runs everywhere-<strong>330 locations around the world</strong>.</li>
+<li>There is essentially <strong>zero cold start</strong>.
+Cloudflare workers start up in the time while the SSL negotiations are happening; the worker has already started.</li>
+<li>You have very few limitations to your scaling-<strong>extremely high concurrency</strong>.</li>
+<li>Every instance is very kind of isolated; that’s really important in voice as well.</li>
+</ul>
+<p>There’s often quite big spikes, like 9 a.m.-everyone’s calling up, there’s an agent somewhere, asking to kind of book an appointment or something. You get these big spikes. You want to be able to scale, and you need to scale very quickly because you don’t want people waiting around.</p>
+<p>If you throw tons of users on the same system and start overloading it, then suddenly people get this problem where the agent starts responding in three seconds instead of one second. It sounds weird, but yeah, Cloudflare gives you an incredible amount of that for no effort.</p>
+<p>Compared to Lambda and similar platforms, it’s also pretty nice: the interface is just an <strong>HTTP interface</strong> to your worker. There’s nothing in front, and you can do <strong>WebSockets very nicely</strong>.</p>
+<p>There’s this crazy thing called <strong>Durable Objects</strong>, which I think is a bad name and also kind of a weird piece of technology, but it’s basically:</p>
+<ul>
+<li>A little <strong>JavaScript runtime</strong> that is <strong>persistent</strong>, basically.</li>
+<li>Has a little <strong>SQLite database attached to it</strong>.</li>
+<li>It is, I don’t know what the right word is, but it’s kind of like-it’s not exactly the right term for JavaScript-but basically think of it like <strong>thread-safe</strong>.</li>
+</ul>
+<p>You can have it take a bunch of WebSocket connections and do many SQL writes to its SQLite database it has attached. You don’t have to do any kind of special stuff dealing with concurrency and atomic operations.</p>
+<p>A simple example is to implement a <strong>rate limiter</strong> or a <strong>counter</strong> or something like that very simply in Durable Objects.</p>
+<p>You can have as many Durable Objects as you want. Each one has a SQLite database attached. You can have 10 gigabytes per one, and you can do whatever you want.</p>
+<p>For example:</p>
+<pre tabindex="0"><code><span><span>- You could have a Durable Object per customer that tracks something that you need to be done in real time.</span></span>
+<span><span>- You could have a Durable Object per chat room.</span></span></code></pre>
+<p>As long as you don’t exceed the compute limits of a Durable Object, you can use it for all sorts of magical things.</p>
+<p>I think it is a real under-known thing that Cloudflare has. Coming from <strong>Pusher</strong>, it’s like the kind of <strong>real-time primitive</strong> now. A lot of the stuff we’d reach for something like Pusher, Durable Objects, especially when building fully real-time systems, is really, really valuable.</p>
+<p>You chose <strong>TypeScript</strong> based on Cloudflare Workers because that gave you:</p>
+<ul>
+<li><strong>330 locations across the world</strong></li>
+<li>Durable Objects</li>
+<li>Great ecosystem</li>
+<li>No devops</li>
+</ul>
+<p>For those who choose <strong>Go</strong>-or I don’t think you choose <strong>Rust</strong> for this because it’s not the kind of place you’d put Rust-but Go would compete for the same kind of mind share for you.</p>
+<p>How would the system have been different if you chose Go? Or can you even think about that?</p>
+<p>I haven’t actually written any Go, so I don’t know if I can give a good comparison. From the perspective of what we do have out there, there are similar <strong>real-time voice agent platforms in Python</strong>. I think because many people building the voice models then built coordination systems like layer code for coordinating real-time conversations, Python was the language they chose.</p>
+<p>I think what’s more important is the <strong>patterns rather than the specific languages</strong>.</p>
+<p>We actually wrote the first implementation with <strong>RxJS</strong>, which has implementations in most popular languages. I hadn’t used it before, but we chose it for <strong>stream processing</strong>. It’s not really for real-time systems, but it gives you…
+<strong>Subjects channel</strong> these kinds of has its own names for these things but basically it’s like a <strong>pub-sub</strong> kind of thing. Then it’s got this kind of <strong>functional chaining thing</strong> where you can pipe things, filter messages, split messages, and things like that.</p>
+<p>That did allow us to build the first version of this quite <strong>dynamic system</strong>.</p>
+<p>We didn’t touch on it, but <strong>interruptions</strong> are another really difficult dynamic part. Whilst the agent is speaking its response to you, if the user starts speaking again, you need to decide in real time whether the user is interrupting the agent or just agreeing with the agent -</p>
+<blockquote>
+<p>“Oh gosh” or are they trying to say “oh stop”?</p>
+</blockquote>
+<p>That’s a hard problem to solve.</p>
+<p>We still have to be transcribing audio even when the user is hearing it. We have to deal with background noise and everything. Then, when we’re confident the user is trying to interrupt the agent, we’ve got to do this whole kind of <strong>state change</strong> where we tear down all of this in-flight LLM request and in-flight voice generation request, and then as quickly as possible, start focusing on the user’s new question.</p>
+<p>Especially if their interruption is really short, like:</p>
+<ul>
+<li>“Stop”</li>
+</ul>
+<p>Suddenly you’ve got to tear down all the old stuff, transcribe that word <em>stop</em>, then ship that as a new LLM request to the back end, generate the response, and get the agent speaking back as quickly as possible.</p>
+<p>And that’s all happening down one pipe, as it were, at the end of the day - audio from the browser microphone, then audio replaying back.</p>
+<p>We would have bugs like:</p>
+<ul>
+<li>You’d interrupt the agent, but then when it started replying there’d still be a few chunks of 20-millisecond audio from the old response sneaking in.</li>
+<li>The old audio would be interleaved with the new audio from the agent.</li>
+</ul>
+<p>You’re kind of in <strong>Audacity</strong> or some audio editor, trying to work out:</p>
+<blockquote>
+<p>“Why does it sound like this?”</p>
+</blockquote>
+<p>You’re rearranging bits of audio, going:</p>
+<blockquote>
+<p>“Ah, okay, the responses are taking turns every 20 milliseconds, it’s interleaving the two responses.”</p>
+</blockquote>
+<p>Real, real pain in the ass.</p>
+<p>When you solve that problem of the interruption:</p>
+<ul>
+<li>Do you focus on the false examples?</li>
+<li>The true examples?</li>
+<li>Do you have these 17 known cases to identify an interruption?</li>
+</ul>
+<p>How do you direct that interrupt? It really depends on the <strong>use case</strong> - how you configure the <strong>voice agent</strong>, really depends on how the voice agent is being used.</p>
+<p>For example:</p>
+<ul>
+<li>A <strong>therapy voice agent</strong> needs to behave very differently than</li>
+<li>A <strong>vet appointment booking answering phone agent</strong> with a lot of dogs barking in the background.</li>
+</ul>
+<p>When we call those <strong>audio environments</strong>, it’s often an early issue users have, like:</p>
+<ul>
+<li>Users calling from cafes who get really misunderstood.</li>
+</ul>
+<p>Big problem with audio transcription is that it just transcribes any audio it hears. If someone’s talking behind you, it just transcribes that. The model doesn’t know that’s irrelevant conversation.</p>
+<p>If you imagine the therapy voice agent, it needs to:</p>
+<ul>
+<li>Not respond too quickly to the user.</li>
+<li>Let the user have long pondering thoughts, long sentences, big pauses.</li>
+</ul>
+<p>Maybe even tears or crying, or just some sort of human interrupt - but not a true interrupt. It’s something you should maybe even capture in parentheses.</p>
+<p>You can choose a few different levels of <strong>interruption</strong>:</p>
+<ul>
+<li>You can just interrupt when you hear any word.</li>
+</ul>
+<p>By default, we interrupt when we hear any word that’s not a filler word, so we filter out things like “um”, “uh”, etc.</p>
+<p>If you need more intelligence, you can ship off the partial transcripts to an LLM in real time.</p>
+<p>For example, let’s say the user starts interrupting the agent every word or every few words, you:</p>
+<ul>
+<li>Fire off a request to <strong>Gemini Flash</strong>.</li>
+<li>You say:</li>
+</ul>
+<pre tabindex="0"><code><span><span>Here's the previous thing the user said, here's what the agent said, here's what the user just said.</span></span>
+<span><span>Yes or no, do you think they're interrupting the agent?</span></span></code></pre>
+<p>You get that back in about 250-300 milliseconds.</p>
+<p>As you get new transcripts, you:</p>
+<ul>
+<li>Cancel the old ones.</li>
+<li>Constantly try to make that request until the user stops speaking.</li>
+</ul>
+<p>Then you get the response from that and can make a quite intelligent decision.</p>
+<p>These things feel very hacky but they actually work very well.</p>
+<p>The first thing I think about there is that <strong>Gemini Flash is not local</strong>, so you do have to deal with:</p>
+<ul>
+<li>Outage</li>
+<li>Latency</li>
+<li>Downtime</li>
+</ul>
+<p>Or in the <strong>Claude</strong> I would…
+Say <strong>Cloud Web’s case</strong>, most recently, a lot of downtime occurred because of really heavy usage. The last two days, I’ve had more interruptions on the web than ever, and I’m like that’s because, yeah, it’s the <strong>Ralph effect</strong>. I’m like, okay cool, I get it. You know, I’m not upset with you because I empathize with how in the world do you scale those services.</p>
+<p>So, why does your system not allow for a <strong>local LM</strong> to be just as smart? Then <strong>Gemini Flash</strong> might be, to answer that very simple question-like an interrupt, it’s a pretty easy thing to determine.</p>
+<p>Yeah, I think smaller LMs can do that. Gemini is just incredibly fast, I think because of their <strong>TPU infrastructure</strong>. They’ve got an incredibly low <strong>TTFT (time to first token)</strong>, which is the most important thing. But I agree that there are smaller LMs, and actually, I think probably maybe one of the Grok with a Q, <strong>Llamas</strong>, actually might even be a bit faster. We should try that.</p>
+<p>You make a point about <strong>reliability</strong>. People really notice it in voice agents when it doesn’t work right, especially if a business is relying on it to collect a bunch of calls for them.</p>
+<p>So, that is one of the other helpful things that platforms like ours provide-<strong>even just cost</strong>. I imagine over time, cost is a factor. Right now, you’re probably fine with it because you’re innovating and maybe finding out things like:</p>
+<ul>
+<li>Customer fit ability</li>
+<li>Reliability</li>
+<li>All those things</li>
+</ul>
+<p>You’re sort of just-in-time building a lot of this stuff, and you might be okay with the inherent cost of innovation. But at some point, you may flatten a little bit and think, “You know what? If it had been running locally for the last little bit, we just saved 50 grand.” I don’t know what the number is, but the local model becomes a version of free when you own:</p>
+<pre tabindex="0"><code><span><span>- The hardware</span></span>
+<span><span>- The compute</span></span>
+<span><span>- The pipe to it</span></span></code></pre>
+<p>You can own the SLA latency to it as well as the reliability that comes from that.</p>
+<p>There are some cool new transcription models from <strong>NVIDIA</strong>, and they’ve got some voice models. There was a great demo of a fully open-source local voice agent platform done with <strong>Pipecat</strong>, which is the Python coordination agent infrastructure open source project that I was mentioning.</p>
+<p>They’ve got a really great pattern: a <strong>plug-in in plug-in pattern</strong> for their voice agent. I think that’s the right pattern. We’ve adopted a similar one, and other frameworks have done that. We’ve adopted a similar pattern for ours when we rebuilt it recently.</p>
+<p>The important thing is the plugins. These are kind of independent things that you can test in isolation. That was the biggest problem we had with <strong>RxJS</strong>-the whole thing was kind of like mixing, kind of audio mixing things where you have cables going everywhere. It was kind of like that with RxJS subjects going absolutely everywhere.</p>
+<p>It was hard for us as humans to understand. It was the kind of code where you come back to a week later and ask, <strong>“What was happening here?”</strong> Often, we’d write code where the code at the top of the file was actually the thing that happened last in execution, just because that’s how RxJS was telling us to do it or guiding us on how we had to initialize things.</p>
+<p>One of the key things we did was move to a <strong>plug-in architecture</strong>. We moved to a very basic system with no kind of RxJS style stream processing plugin-just all very simple JavaScript with <strong>async iterables</strong>. We just pass a waterfall of messages down through plugins. It’s so much better.</p>
+<p>We can take out a plugin if we need to, unit test the plugin, write integration tests, and mock out plugins up and down. We’re about to launch that, and that’s just a game changer.</p>
+<p>Interestingly, tying back to LLMs, we ended up here because with the first implementation, we found it hard as developers to understand the code we’d written. The LLMs were hopeless; they just could not hold the state of this dynamic, crazy multi-subject stream system in their head. The context was everywhere-it was here and there.</p>
+<p>Even if I would take the whole file, copying and pasting files into <strong>ChatGPT Pro</strong>, being like:</p>
+<blockquote>
+<p>“You definitely have all the context here, fix this problem.”</p>
+</blockquote>
+<p>And they would solve the problem.</p>
+<p>Part of the problem was that complexity-<em>not having the ability to test things in isolation</em> meant we couldn’t have a kind of <strong>TDD loop</strong>, whether with a human or with an agent.</p>
+<p>Because of that, we couldn’t use agents to add features to this.
+The <strong>platform to the core of the platform</strong> was slowing us down, and so that’s when we really started to use coding agents called <strong>Code and Codex</strong> like really properly and hard. I spent two weeks just with <strong>Code, Codex</strong>, and the mission was:</p>
+<blockquote>
+<p>“If I can get the coding agent to write the new version of this, it was kind of not even a refactor; it had to be rewritten start from scratch, first principles.”</p>
+</blockquote>
+<p>Then, by virtue of it writing it, it’ll understand it, and I’ll be able to use coding agents to add features.</p>
+<p>I started with literally the <strong>API docs</strong> for our <strong>public API</strong> because I didn’t want to change that, and the API docs of all the providers and models we implement, with like the speech-to-text and text-to-speech model provider endpoints, and just some ideas about</p>
+<ul>
+<li>I think we should just use a simple waterfall pipe,</li>
+<li>pass messages through the plugins.</li>
+</ul>
+<p>That experience was really interesting because it felt like molding clay. I really cared about how the code looked because I wanted humans, as well as engineers, to read it. The agents aren’t quite good enough to build this whole thing from a prompt, but I think they will be in a year or two. It did an okay job and needed a lot of</p>
+<ul>
+<li>re-prompting,</li>
+<li>refactor this,</li>
+<li>re-architect that.</li>
+</ul>
+<p>But it felt like clay in one sense because, as you mentioned earlier, you can just write some code, and even if it’s wrong, you’ve kind of learned some experience.</p>
+<p>I was able to just say: “write this whole plugin architecture,” and it would do it. I’d be like, “Oh, that seems a bit wrong, that’s hard to understand.” Then I would say:</p>
+<blockquote>
+<p>“Write it again like this,”
+“Write it again like this.”</p>
+</blockquote>
+<p>I suddenly got that experience of throwing away code because it hadn’t taken me weeks and weeks to write this code; it had taken me 10 minutes, and I was like, “Doesn’t matter, just throw it away.”</p>
+<p>You still have your chat session too, so even if you have to scroll back up a little bit or maybe even copy that out to a file for long-term memory if you needed to, you still have that there as a reference point.</p>
+<p>I find myself doing similar things where it’s just like,</p>
+<ul>
+<li>trust the model,</li>
+<li>throw it away,</li>
+<li>do it again,</li>
+<li>if you need to learn the mistake, go down the wrong road for the learning,</li>
+<li>make the prompt better.</li>
+</ul>
+<p>It did a terrific job.</p>
+<p>The bit that really got it over the finish line was when I gave it this script that we used to have to do manually to test our <strong>voice agent</strong>. You know, it’s like:</p>
+<ul>
+<li>connect to the voice agent,</li>
+<li>say this to the voice agent,</li>
+<li>tell it to tell you a long story,</li>
+<li>interrupt the story,</li>
+<li>you shouldn’t hear any leftover audio from the long story.</li>
+</ul>
+<p>There are like 20 different tests you had to do. I gave it that script and was like,</p>
+<blockquote>
+<p>“Write the test suite for all of these tests.”</p>
+</blockquote>
+<p>It did. I gave it all these bugs we had in our backlog, I was like:</p>
+<blockquote>
+<p>“Write tests for this.”</p>
+</blockquote>
+<p>I started doing <strong>TDD</strong> (test-driven development) in our backlog, and it was great.</p>
+<p>Then I did a chaos monkey thing. I was like,</p>
+<blockquote>
+<p>“Write a bunch of tests for crazy stuff the users could do with the API.”</p>
+</blockquote>
+<p>Yes, it found a bunch of bugs and issues, including <strong>security issues</strong>.</p>
+<p>It got it working, had a bunch of unit tests, and I was still having to do a bit of manual testing. Then one day, I realized:</p>
+<blockquote>
+<p>“I really want a no one’s made integration test thing for voice agents.”</p>
+</blockquote>
+<p>There are a few observation platforms, observability platforms, and eval platforms, so I was like, I just wanted to simulate conversation.</p>
+<p>That’s part of the magic: trying something that you’re like,</p>
+<blockquote>
+<p>“This is a pain in the ass to build,” or
+“How is this even going to work?”</p>
+</blockquote>
+<p>I just got it to build it.</p>
+<p>I recorded some wav files of me saying things and gave them to it with:</p>
+<blockquote>
+<p>“Make an integration test suite for this and feed the wav files like you’re having a conversation and check the transcripts you get back.”</p>
+</blockquote>
+<p>It did a great job and was actually able to fully simulate those conversations and do all the tests.</p>
+<p>Then that - I mean, we’ve got these practices like TDD which are going to hold value. It was so valuable for the model, for the agent, to be running the test, fixing the test, running the test, fixing your tests, and that feels a bit like magic when you get it working.</p>
+<p>So much to cover in this journey. Wow, I’m so glad we had this conversation.</p>
+<p>I kind of feel like a good place to begin to end, not actually end, is back to this idea that is on your about page.</p>
+<p>I’m just amazed because I love to write and really hate paper because this thing has <strong>Linux</strong> on it, and I wrote an API that I now use with my <strong>Remarkable Pro tablet</strong>. So amazing. I’m loving it.
+You need to be able to <strong>code Codex from your tablet</strong>. That’s next. I just got it, so the next thing is I’m gonna have this little playground for me basically, but it’s <strong>real time</strong>. So if you see me looking over here writing, audience or even you Damian, I’m not not paying attention-I’m writing things down.</p>
+<p>One thing I wrote down earlier from your about page was <strong>the era of the small giant</strong>, which you alluded to but didn’t say those exact words. The reason why I think it might be a good place to begin to end is that I want to encourage the single developer, who may in the last couple months just begun to touch and not resist falling into this gravity hole or however we describe this resistance we’ve had as developers loving to read our own code and code review and all the things as humans.</p>
+<p>Now, not resist as much or if at all, and just trust the model. To give them this word of encouragement towards:</p>
+<blockquote>
+<p><em>“Hey, you’re a single developer, and in your case Damian, you don’t need a DevOps. It’s not that they’re not valuable or useful, but you chose a model, a way to develop your application to solve your problem that didn’t require a DevOps team.”</em></p>
+</blockquote>
+<p>Give them that <strong>encouragement</strong>. What does it mean to be in this era of the small giant world?</p>
+<p>I think the hardest thing is <strong>our own mindset</strong>, right? I just found this with coding agents-you start off putting in things where you kind of have an idea, you know what to expect out of it, and then you start just putting in stuff that seems a bit ridiculous and ambitious. Oftentimes it fails, but more and more it’s working. That’s a very magical feeling and a very revealing kind of experience.</p>
+<p>So, I think we can all be more ambitious now. Especially as engineers, we know how the whole thing works. There is a lot of power everyone’s being given with vibe coding, being able to vibe code. There are a lot of security issues; I think they’ll be solved over time, but as engineers, we have the knowledge to be able to:</p>
+<ul>
+<li>Take things fully through</li>
+<li>Deploy things</li>
+<li>Scale them</li>
+<li>Fix the issues that the LLMs can’t still get stuck on</li>
+</ul>
+<p>But we can do so much more now; we can be so much more ambitious.</p>
+<p>I think the thing that every engineer should be doing now is not only trying out Claude Code and Codex and doing something new and fun. The great thing is it’s so low risk, so easy to do that you can build something ridiculous and fun that you’ve always wanted to do.</p>
+<p>Heck yeah, you can just build something for a friend, for your wife-it’s like that. That’s really exciting.</p>
+<p>I think this <strong>Ralph Wiggum thing</strong>, a very kind of basic idea, is:</p>
+<pre tabindex="0"><code><span><span>Give a spec.md or a todo.md-just an ambitious task or a long list of tasks in a markdown file.</span></span>
+<span><span>Run a shell script that just says to Claude Code:</span></span>
+<span><span>-</span><span> "Do the next bit of work."</span></span>
+<span><span>-</span><span> When there's no more work to do, return "complete."</span></span>
+<span><span>The shell script just greps for "complete," and if it hasn't seen that word in some XML tags, it calls Claude Code again.</span></span></code></pre>
+<p>Like many of these things, it seems like a terrible idea; it seems ridiculous, but it’s also incredible what it can do. I think that’s probably one way to feel what the future is going to be like.</p>
+<p>I feel like you write down something very ambitious in a markdown file or transcribe an idea you’ve been thinking about for a while and you set a Ralph Wiggum script off in it. Then you just go for a long walk or have lunch. When you come back, it’s a very exciting feel.</p>
+<p>As a developer, it’s very fun because then you get to go through all this code and be like,</p>
+<blockquote>
+<p><em>“Why did it do that?”</em> and you’re like, <em>“Oh that was pretty smart that it did it like that.”</em></p>
+</blockquote>
+<p>Okay, that was quite a good idea. Then it messed up this bit, but that’s a very exciting experience-very cool.</p>
+<p>I definitely agree with that. I’m looking forward to writing that todo.md or spec.md and just going for that one because I haven’t done it yet.</p>
+<p>I’ve only peeked at some of the videos and demos, but I haven’t tried the Ralph Wiggum loop.</p>
+<p>I’m gonna post on X a one-liner Ralph as well because I think you can just copy and paste and go-there’s no blog post to read.</p>
+<p>Well, I feel like with everything, I want to make it more ceremonious-not because it needs to be, but because I want to know. I want to give myself space to think of something challenging for me even, and then give it to the thing and go away, like you said, and come back happy.</p>
+<p>I want to save space to do that when I can give it.
+Full mind share versus the incremental <strong>20 minutes or 10 minutes</strong> or whatever it might be that I have available to give it, I kind of want to give it a bit more <strong>ceremony</strong>, not because it deserves it, but because I want to actually do it for myself.</p>
+<p>I’m just in this like constant <strong>learning scenario</strong>. It’s a pretty wild era to be a developer and to be an enabled developer. You know, non-technical folks may get introduced to a <strong>terminal-like thing</strong> that basically is just Claude in a directory where they can ask questions and get a just-in-time interface that is managed to them only. That’s a really, really, really cool world to be in.</p>
+<p>It doesn’t mean that software goes away; it just means there’s going to be a heck of a lot more of it out there. I do concur that maybe code review doesn’t matter anymore. Maybe it won’t in a year, maybe it won’t in six weeks. I don’t know how many weeks it will take.</p>
+<p>Let’s truly end with this:</p>
+<blockquote>
+<p><strong>What’s over the horizon for you? What’s over the horizon for Layer Code? What is coming?</strong></p>
+</blockquote>
+<p>The show will release next Wednesday, so you’ve got a week. Given that horizon, and no one’s listening now, it’s a week from now. What’s on the horizon for you that you can give us a peek at? Is there anything?</p>
+<p>We are working really hard to bring down the <strong>cost of voice agents</strong>.</p>
+<ul>
+<li>There is a magic number of <strong>one dollar an hour</strong> for running a voice agent where suddenly a huge, huge number of use cases open up.</li>
+<li>Whether it’s consumer applications, gaming, there are so many places where <strong>voice AI</strong> will be super valuable, super fun, and isn’t implemented yet.</li>
+<li>With the choices we made, being on <strong>Cloudflare</strong> with the system we’ve built, we’re going to be able to bring out the <strong>lowest-cost platform</strong>.</li>
+</ul>
+<p>I’m very excited for that and, most of all, very excited just to see <strong>voice AI everywhere</strong>. Voice is just such a wonderful interface. I find myself dictating all the time to Claude Code, and you can kind of get out your thoughts so much better.</p>
+<p>I’m excited to see how many applications we can enable by adding voice AI into their application. Then</p>
+<blockquote>
+<p><em>we get an insight into the future of voice AI as well</em> with the companies that are working-most of them are startups-and they’re building some crazy, crazy new things with voice AI on our platform.</p>
+</blockquote>
+<p>So, there’s going to be some amazing stuff with voice coming out this year.</p>
+<hr>
+<p><strong>What’s the longing fruit? What’s the sweet spot for Layer Code right now that you can invite folks to come and try?</strong></p>
+<p>Well, the great thing is we’ve got a <strong>CLI single command</strong> you can run, and you’ll get a <strong>Next.js demo app</strong> all connected to Layer Code voice agent. You can get a voice agent running up and running within a minute. So, it’s super fun, worth trying.</p>
+<p>From that point, you can use Claude Code, Codex, and just start building from there.</p>
+<hr>
+<p>Well, friends, right here at the last minute, the very last question—Damian’s internet dropped off or something happened, I’m not sure. But it was a fun conversation with Damian.</p>
+<p>It’s kind of wild to be talking to somebody 17 years later after being one of the first, if not the first-I’m pretty sure the first-<strong>sponsor of this podcast</strong>. What a wild world it is to be this deep in years and experience, in history in software, and to just still be enamored by the possibilities.</p>
+<p>I hope you enjoyed today’s conversation with Damian, and we’ll see you next time.</p>
+<hr>
+<p>Well, friends, the <strong>YOLO mode philosophy</strong> is out there. The code review is a bottleneck, maybe non-existent. SaaS may be dying or dead. It’s time to trust the model, building a CRM just in time.</p>
+<p><strong>What kind of world is this we’re living in?</strong> Did you think the beginning of <strong>2026 would be this kind of year?</strong></p>
+<p>Now, I know if you’re listening to this podcast at the very end and you’re a Spotify hater, well, guess what, AI is here to stay. You should read the tea leaves. That’s just me being honest.</p>
+<p>But seriously, you can’t deny the impact that AI is having. Everyone is talking about it. Everyone is using it. And those who aren’t, well, we’ll see.</p>
+<p>I know our friends over at</p>
+<ul>
+<li>depot.dev</li>
+<li>notion.com/changelog</li>
+<li>tigerdata.com</li>
+</ul>
+<p>are all loving this podcast just like you. Much thanks, much love, appreciate the support.</p>
+<p>But hey friends, this show’s done, this show’s over. I’m glad you listened. We’ll see you again real soon.</p>
+</div><details data-astro-cid-h4qngm3k><summary data-astro-cid-h4qngm3k>Questions and answers</summary><dl data-astro-cid-h4qngm3k><dt data-astro-cid-h4qngm3k><span data-excerpt="So he's back officially talking about the seismic shift happening right now in software development." data-astro-cid-h4qngm3k>What significant topics did Damian Tanner discuss regarding the current state of software development upon his return to The Changelog podcast?</span></dt><dd data-astro-cid-h4qngm3k>Damian Tanner discussed several significant shifts in software development, including why SaaS is dying, why code review is becoming a bottleneck and potentially non-existent, and how small teams can build giant things.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="Some of the things that we do at Depot: We're always running on the latest generation of ARM CPUs and AMD CPUs from Amazon." data-astro-cid-h4qngm3k>How does Depot.dev achieve significantly faster build times compared to standard GitHub hosted runners?</span></dt><dd data-astro-cid-h4qngm3k>Depot.dev achieves faster build times by running on the latest generation of ARM and AMD CPUs from Amazon, which are 30 to 40 percent faster than GitHub&#39;s own hosted runners. They also employ cache tricks, multiplexing GitHub Actions cache uploads and downloads directly to blob storage with high throughput, and cordon off portions of memory to act as RAM disks for disk-intensive CI operations.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="Pusher was basically a WebSockets push API so you could push anything to your web app in real time." data-astro-cid-h4qngm3k>What was Pusher&#39;s core functionality, and what impact did it have on applications in its early days?</span></dt><dd data-astro-cid-h4qngm3k>Pusher was essentially a WebSockets push API that allowed real-time updates to web applications, such as notifications or live pricing. In its early days, Uber utilized Pusher to update car locations in real time before building their own infrastructure.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="SaaS is made for humans, slow humans to use the SaaS UI." data-astro-cid-h4qngm3k>Damian Tanner claims &quot;All SaaS is dead.&quot; What is the primary reasoning behind this provocative statement, especially concerning the role of AI?</span></dt><dd data-astro-cid-h4qngm3k>The core reasoning is that traditional SaaS is designed for &quot;slow humans&quot; to interact with UIs. If AI agents are performing the work, they do not require a graphical user interface; they can directly interact with underlying APIs and data. This shift fundamentally changes the need for many SaaS tools as they currently exist.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="It just built the whole freaking CRM, and it was really good." data-astro-cid-h4qngm3k>How did Damian Tanner&#39;s experience with building a custom CRM using coding agents lead to his &quot;level one awakening&quot; about the future of SaaS?</span></dt><dd data-astro-cid-h4qngm3k>Damian used Claude Code and Codex to voice-dictate and instantly build a gamified CRM tailored to his specific needs, finding it superior to existing commercial CRMs. This experience made him realize that &quot;you can just have the SaaS you want instantly&quot; and continuously improve it, leading him to cancel his old CRM system.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="So when you use it on an existing project and then you review the code, you just find all these things wrong with it." data-astro-cid-h4qngm3k>Why does Damian Tanner believe that traditional code review processes are becoming a bottleneck or potentially obsolete in the age of AI coding agents?</span></dt><dd data-astro-cid-h4qngm3k>Damian argues that current LLMs, while capable, often produce code with &quot;bad taste,&quot; including verbose defensive patterns or recreating existing utility functions, making human code review cumbersome for existing projects. However, for new projects built with a &quot;YOLO mode&quot; approach where the code simply works, the necessity for reviewing the code diminishes.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="And they're hammering the database at speeds that humans just never have before." data-astro-cid-h4qngm3k>What significant challenges do AI agents pose to traditional database systems, and how does Agentic Postgres aim to address them?</span></dt><dd data-astro-cid-h4qngm3k>AI agents &quot;hammer the database at speeds that humans just never have before,&quot; requiring management of vectors, relational data, conversational history, and embeddings, which often leads to a messy setup of multiple systems. Agentic Postgres addresses this by combining native model context protocol servers (MCP), hybrid search, and zero-copy database forks into a single engine designed specifically for AI agents.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="I just love this notion that Every user can change the computer, can change the software as they're using it, as they like it." data-astro-cid-h4qngm3k>In the envisioned post-SaaS world, how might the interaction between non-technical users and software evolve, particularly with AI agents and custom interfaces?</span></dt><dd data-astro-cid-h4qngm3k>In this future, non-technical users might interact with a &quot;Claude code terminal&quot; or a just-in-time UI, allowing them to ask for specific functionalities or reports rather than navigating complex SaaS interfaces. The goal is for every user to be able to &quot;change the computer, can change the software as they&#39;re using it, as they like it,&quot; effectively making everyone a developer.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="We focus a lot on the real-time conversational aspect, and there's a lot of wicked problems in that:" data-astro-cid-h4qngm3k>What specific challenges does Layer Code address in enabling real-time conversational voice AI agents, and what is a crucial metric for its performance?</span></dt><dd data-astro-cid-h4qngm3k>Layer Code tackles &quot;wicked problems&quot; such as dynamic conversations, state changes, interruptions, and back-channeling in real-time voice AI. A crucial metric for its performance is &quot;time to first token&quot; (TTFT), which measures how quickly the agent can start playing back a response after receiving the user&#39;s utterance.</dd><dt data-astro-cid-h4qngm3k><span data-excerpt="We're pretty set on Cloudflare Workers from day one, and it just solves so many infrastructure problems that you're going to run into later on." data-astro-cid-h4qngm3k>Why did Layer Code choose Cloudflare Workers with TypeScript as its foundational infrastructure, and what unique benefits do Durable Objects offer for their real-time voice AI platform?</span></dt><dd data-astro-cid-h4qngm3k>Layer Code chose Cloudflare Workers for its global reach (330 locations), zero cold start times, high concurrency, and isolated instances for scaling, allowing them to avoid needing a dedicated DevOps team. Durable Objects provide persistent JavaScript runtimes with integrated SQLite databases, acting as &quot;thread-safe&quot; real-time primitives that simplify managing concurrency and atomic operations for features like rate limiters or per-customer tracking.</dd></dl></details></article></main></body></html><script type="module">var e=e=>e.toLowerCase().replace(/[\p{P}\s]/gu,``),t=[...document.querySelectorAll(`.transcript p`)],n=t.map(t=>e(t.textContent||``));for(let r of document.querySelectorAll(`[data-excerpt]`)){let i=e(r.dataset.excerpt||``),a=i?n.findIndex(e=>e.includes(i)):-1;if(a<0)continue;let o=t[a];o.id||=`paragraph-`+(a+1);let s=document.createElement(`a`);s.href=`#`+o.id,s.textContent=r.textContent,r.replaceWith(s)}</script>
