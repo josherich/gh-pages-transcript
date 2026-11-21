@@ -1,0 +1,105 @@
+name: Publish podcast archive
+
+on:
+  pull_request:
+    branches: [main]
+    paths: [site/**, .github/workflows/publish-podcasts.yml]
+  push:
+    branches: [main]
+    paths: [site/**, .github/workflows/publish-podcasts.yml]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: podcast-pages-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    outputs:
+      source_sha: ${{ steps.source.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.ref || 'refs/heads/main' }}
+          persist-credentials: false
+      - name: Record source revision
+        id: source
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - uses: actions/configure-pages@v5
+        id: pages
+        if: github.event_name != 'pull_request'
+      - name: Build archive
+        working-directory: site
+        env:
+          PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: |
+          npm ci
+          npm run build
+      - uses: actions/upload-artifact@v6
+        if: github.event_name != 'pull_request'
+        with:
+          name: podcast-site
+          path: site/dist/
+          include-hidden-files: true
+          if-no-files-found: error
+
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v7
+        with:
+          name: podcast-site
+          path: site-dist
+      - name: Update gh-pages
+        env:
+          SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
+        run: |
+          export GIT_INDEX_FILE="$RUNNER_TEMP/pages-index"
+          git read-tree --empty
+          git --git-dir="$PWD/.git" --work-tree="$PWD/site-dist" add --force --all
+          tree=$(git write-tree)
+
+          parents=()
+          if git ls-remote --exit-code --heads origin refs/heads/gh-pages; then
+            git fetch --no-tags origin refs/heads/gh-pages
+            if [ "$(git rev-parse 'FETCH_HEAD^{tree}')" = "$tree" ]; then
+              exit 0
+            fi
+            parents=(-p "$(git rev-parse FETCH_HEAD)")
+          else
+            status=$?
+            [ "$status" -eq 2 ] || exit "$status"
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          commit=$(git commit-tree "$tree" "${parents[@]}" -m "Publish archive from $SOURCE_SHA")
+          git push origin "$commit:refs/heads/gh-pages"
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site-dist
+      - name: Deploy archive
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,95 @@
+---
+import { sitePath } from "../lib/transcripts";
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+}
+
+const {
+  title,
+  description = "Transcripts from podcasts and videos collected by Josherich.",
+  lang = "en",
+} = Astro.props;
+const siteTitle = "Podcast Transcripts";
+const canonicalPath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(canonicalPath, Astro.site)} />
+    <title>{title ? title + " · " + siteTitle : siteTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="site-name" href={sitePath()}>Podcast Transcripts</a>
+      <a href="https://josherich.me">Josherich’s Blog</a>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+    --background: #f8fafc;
+    --foreground: #192234;
+    --subtle: #495871;
+    --border: #dbe2ed;
+    --surface: #eef3fa;
+    --accent: #2049a0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: system-ui, sans-serif;
+    font-size: 1rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #101621;
+      --foreground: #edf1f7;
+      --subtle: #aebbd0;
+      --border: #303e54;
+      --surface: #1a2537;
+      --accent: #a7c7ff;
+    }
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; line-height: 1.55; }
+  a { color: var(--accent); text-underline-offset: 0.22em; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  h1, h2, h3 { line-height: 1.17; text-wrap: pretty; }
+  h1 {
+    font-family: Georgia, "Noto Serif CJK SC", serif;
+    font-size: clamp(2rem, 6vw, 3.6rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    margin: 0 0 0.35em;
+  }
+  main, .site-header {
+    max-width: 65rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 5vw, 3rem);
+  }
+  main { padding-block: clamp(2rem, 6vw, 4rem) 5rem; }
+  .site-header {
+    min-height: 4.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .site-name { color: var(--foreground); font-weight: 650; }
+  .skip-link { position: absolute; left: 1rem; top: 1rem; transform: translateY(-200%); }
+  .skip-link:focus { transform: none; background: var(--background); z-index: 1; }
+  [hidden] { display: none !important; }
+</style>

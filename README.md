@@ -9,7 +9,7 @@ Install Python 3.11 or newer and run `uv sync --locked`. Install `ffmpeg` for au
 | Settings | Purpose |
 | --- | --- |
 | `PCUSER`, `PCPW` | Pocket Casts credentials and web UI login |
-| `GH_TOKEN` | GitHub publishing |
+| `GH_TOKEN` | GitHub token with Contents and Pull requests write access to `josherich/gh-pages-transcript` |
 | `OPENAI_API_KEY` | Hosted Whisper transcription and OpenAI-compatible formatting for the OpenAI and Basement providers |
 | `G_TOKEN` | Gemini formatting, table of contents, and FAQ |
 | `LM_PROVIDER` | Formatting provider. Defaults to `google`; also supports `openai`, `ollama`, and `basement`. Google and OpenAI models are accessed through OpenRouter. |
@@ -38,6 +38,20 @@ uv run python -m unittest discover -s tests
 
 Omit `--env-file .env` if the variables are already exported. Both commands accept `--mode local` (the default) or `--mode sqs`. The web and worker commands replace `python main.py` and `python q.py` respectively.
 
+## Publish transcripts
+
+When the worker finishes generating a transcript, it opens a pull request against `main` with the Markdown in `site/transcripts/`. The pull request runs an Astro build. Merging it triggers the GitHub Pages workflow, which builds the archive, updates the generated `gh-pages` branch, and publishes that build at [podcast.josherich.me](https://podcast.josherich.me/).
+
+The repository's Pages source is **GitHub Actions**. The custom domain points to `josherich.github.io` through a DNS-only CNAME. The built files on `gh-pages` are generated from `main` on each release.
+
+To preview the archive locally with Node.js 24:
+
+```sh
+cd site
+npm ci
+npm run dev
+```
+
 ## Paths
 
 | Purpose | Default | Override |
@@ -49,7 +63,7 @@ Omit `--env-file .env` if the variables are already exported. Both commands acce
 | YouTube authorization | `<state root>/youtube-token.json` | Follows the state root |
 | RAG notebook’s Chroma store | `<state root>/chroma/` | Follows the state root |
 | Downloaded audio, conversion output, and chunks | A unique system temporary directory per job, cleaned up when the job ends | `TMPDIR` |
-| Published Markdown | `_posts/podcast/` in the target GitHub repository | |
+| Published Markdown | `site/transcripts/` in this repository | |
 
 For an existing checkout, stop the old web app and worker before starting the new commands. Use the same queue directory in both processes. On first startup, the app imports `transcript_queue.episodes_items.json` from that directory, falling back to `queue.json` if the items file is absent. It leaves the original JSON in place. The legacy upserts and removes files are bookkeeping. You can point to the old directory or copy the items file to the default queue directory before first startup. Transfer settings from your old `env.py` to your environment or `.env`.
 

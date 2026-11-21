@@ -20,3 +20,7 @@ __pycache__/
 .ipynb_checkpoints/
 /chroma_langchain_db/
 /test_data/
+
+/site/node_modules/
+/site/.astro/
+/site/dist/
