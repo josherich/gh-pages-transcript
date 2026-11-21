@@ -10,7 +10,7 @@ from unittest.mock import patch
 from starlette.testclient import TestClient
 
 from gh_transcript_fetch import transcription
-from gh_transcript_fetch.db import open_episode_db
+from gh_transcript_fetch.episode_queue import open_episode_db
 from gh_transcript_fetch.paths import load_session_key, youtube_client_secrets_path
 from gh_transcript_fetch.web import create_app
 
@@ -27,11 +27,11 @@ class RuntimePathTests(unittest.TestCase):
                 "GH_TRANSCRIPT_YOUTUBE_CLIENT_SECRETS": "",
             }):
                 db = open_episode_db()
-                db.episodes.upsert({"_id": "example", "status": "queued"})
+                db.add({"_id": "example", "status": "queued"})
                 self.assertTrue(
-                    (root / "state" / "queue" / "transcript_queue.episodes_items.json").is_file()
+                    (root / "state" / "queue" / "episodes.sqlite3").is_file()
                 )
-                self.assertEqual(open_episode_db().episodes.find_one({"_id": "example"})["status"], "queued")
+                self.assertEqual(open_episode_db().get("example")["status"], "queued")
                 key = load_session_key()
                 self.assertEqual(load_session_key(), key)
                 self.assertEqual((root / "state" / "session.key").read_text(), key)
@@ -66,7 +66,17 @@ class RuntimePathTests(unittest.TestCase):
                     )
                     self.assertEqual(response.status_code, 303)
                     self.assertIn("Example", client.get("/").text)
-                self.assertIsNotNone(open_episode_db().episodes.find_one({"title": "Example"}))
+
+                    worker_db = open_episode_db()
+                    episode, = worker_db.list_episodes()
+                    self.assertEqual(episode["title"], "Example")
+                    response = client.post("/update", data={
+                        "id": episode["_id"], "status": "queued", "url": episode["url"],
+                    })
+                    self.assertEqual(response.status_code, 200)
+                    claimed, _ = worker_db.claim_next()
+                    self.assertEqual(claimed["_id"], episode["_id"])
+                    self.assertIn("Example", client.get("/?status=processing").text)
 
 
 class TemporaryAudioTests(unittest.IsolatedAsyncioTestCase):

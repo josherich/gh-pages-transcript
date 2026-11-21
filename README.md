@@ -35,19 +35,29 @@ Omit `--env-file .env` if the variables are already exported. Both commands acce
 | Purpose | Default | Override |
 | --- | --- | --- |
 | State root | `~/.local/state/gh-transcript-fetch/` | `GH_TRANSCRIPT_STATE_DIR` or `XDG_STATE_HOME` |
-| Queue JSON | `<state root>/queue/` | `GH_TRANSCRIPT_QUEUE_DIR` |
+| SQLite queue | `<state root>/queue/episodes.sqlite3` | `GH_TRANSCRIPT_QUEUE_DIR` |
 | Web session key | `<state root>/session.key` | `GH_TRANSCRIPT_SESSION_KEY_FILE` |
 | YouTube OAuth client JSON | `~/.config/gh-transcript-fetch/client_secret.json` | `GH_TRANSCRIPT_YOUTUBE_CLIENT_SECRETS` or `XDG_CONFIG_HOME` |
 | RAG notebook’s Chroma store | `<state root>/chroma/` | Follows the state root |
 | Downloaded audio, conversion output, and chunks | A unique system temporary directory per job, cleaned up when the job ends | `TMPDIR` |
 | Published Markdown | `_posts/podcast/` in the target GitHub repository | |
 
-For an existing checkout, set these values to reuse its queue, session key, and OAuth client file. Use the same settings in both processes. You can also copy the existing files into the new default paths while both processes are stopped. Transfer the settings from your old `env.py` to your environment or `.env`.
+For an existing checkout, stop the old web app and worker before starting the new commands. Use the same queue directory in both processes. On first startup, the app imports `transcript_queue.episodes_items.json` from that directory, falling back to `queue.json` if the items file is absent. It leaves the original JSON in place. The legacy upserts and removes files are bookkeeping. You can point to the old directory or copy the items file to the default queue directory before first startup. Transfer settings from your old `env.py` to your environment or `.env`.
+
+The following settings reuse an existing checkout’s queue directory, session key, and OAuth client file.
 
 ```dotenv
 GH_TRANSCRIPT_QUEUE_DIR=/absolute/path/to/checkout/data
 GH_TRANSCRIPT_SESSION_KEY_FILE=/absolute/path/to/checkout/.sesskey
 GH_TRANSCRIPT_YOUTUBE_CLIENT_SECRETS=/absolute/path/to/checkout/client_secret.json
 ```
+
+If your current queue is the `queue.json` in the repository root, run this from the checkout before the SQLite database is initialized. The explicit file takes precedence when both legacy formats are available.
+
+```sh
+export GH_TRANSCRIPT_LEGACY_QUEUE_FILE="$PWD/queue.json"
+```
+
+Local workers claim jobs atomically. If a worker is forcibly terminated while an episode is processing, select **queued** for that episode after the old worker has stopped.
 
 Application code and the read-only Whisper context are in `src/gh_transcript_fetch/`. Database checks and sample transcripts live under `tests/`, the formatting example lives under `examples/`, and the RAG experiment lives under `notebooks/`.

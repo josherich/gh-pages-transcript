@@ -4,7 +4,6 @@ import asyncio
 from datetime import datetime
 import argparse
 import traceback
-from dataclasses import dataclass
 import boto3
 from xml.etree.ElementTree import ParseError
 
@@ -14,7 +13,7 @@ from .captions import download_caption
 from .transcription import transcribe_from_url
 from .publishing import create_branch_and_pr, format_pr_content
 from .formatting import format_transcript, extract_toc, extract_faq
-from .db import open_episode_db
+from .episode_queue import open_episode_db
 
 async def get_caption_worker(url: str, show_notes: str, type='pocketcasts'):
     print(f"Processing caption for URL {type}: {url}")
@@ -27,104 +26,37 @@ async def get_caption_worker(url: str, show_notes: str, type='pocketcasts'):
     print(f"Processed caption for URL {type}: {url}")
     return transcription
 
-@dataclass
-class PocketCast:
-    url: str
-    title: str
-    prog_slug: str
-    author: str
-    pod_notes: str
-    episode_notes: str
-    published_date: str
-    status: str = 'todo'
-    type: str = 'pocketcasts'
-    def __str__(self):
-        return json.dump({
-            'url': self.url,
-            'title': self.title,
-            'author': self.author,
-            'pod_notes': self.pod_notes,
-            'episode_notes': self.episode_notes,
-            'published_date': self.published_date,
-            'status': self.status,
-            'type': self.type
-        })
-
-@dataclass
-class Youtube:
-    url: str
-    title: str
-    prog_slug: str
-    published_date: str
-    status: str = 'todo'
-    type: str = 'youtube'
-    def __str__(self):
-        return json.dump({
-            'url': self.url,
-            'title': self.title,
-            'published_date': self.published_date,
-            'status': self.status,
-            'type': self.type
-        })
-
 def pull_history(db):
     print("Fetching new Podcasts episode URLs...")
-    all_messages = []
-
-    # --------- Add Pocketcasts URLs ---------
     urls, _ = get_pocketcasts_history()
-    i = 0
+    added = 0
     for item in urls:
-        if not db.episodes.find_one({'url': item['url']}):
-            i += 1
-            all_messages.append(PocketCast(
-                url=item['url'],
-                title=item['title'],
-                prog_slug=item['podcastSlug'],
-                author=item['author'],
-                pod_notes=item['pod_notes'],
-                episode_notes=item['episode_notes'],
-                published_date=item['published'].split('T')[0]
-            ))
-            episode_data = {
-                'type': 'pocketcasts',
-                'url': item['url'],
-                'status': 'todo',
-                'title': item['title'],
-                'prog_slug': item['podcastSlug'],
-                'author': item['author'],
-                'pod_notes': item['pod_notes'],
-                'episode_notes': item['episode_notes'],
-                'published_date': item['published'].split('T')[0]
-            }
-            db.episodes.upsert(episode_data)
-    print(f"Added {i} new Pocketcasts URLs to queue")
+        added += db.add({
+            "type": "pocketcasts",
+            "url": item["url"],
+            "status": "todo",
+            "title": item["title"],
+            "prog_slug": item["podcastSlug"],
+            "author": item["author"],
+            "pod_notes": item["pod_notes"],
+            "episode_notes": item["episode_notes"],
+            "published_date": item["published"].split("T")[0],
+        }, only_if_new_url=True)
+    print(f"Added {added} new Pocketcasts URLs to queue")
 
-    # ----------- Add Youtube URLs -----------
     print("Fetching new Youtube liked video URLs...")
-    yt_urls = get_youtube_liked_videos()
-    i = 0
-    for item in yt_urls:
-        if not db.episodes.find_one({'url': item['url']}):
-            i += 1
-            all_messages.append(Youtube(
-                url=item['url'],
-                title=item['title'],
-                prog_slug=item['prog_slug'],
-                published_date=item['published_date']
-            ))
-            episode_data = {
-                'type': 'youtube',
-                'url': item['url'],
-                'status': 'todo',
-                'title': item['title'],
-                'prog_slug': item['prog_slug'],
-                'published_date': item['published_date']
-            }
-            db.episodes.upsert(episode_data)
+    added = 0
+    for item in get_youtube_liked_videos():
+        added += db.add({
+            "type": "youtube",
+            "url": item["url"],
+            "status": "todo",
+            "title": item["title"],
+            "prog_slug": item["prog_slug"],
+            "published_date": item["published_date"],
+        }, only_if_new_url=True)
+    print(f"Added {added} new Youtube URLs to queue")
 
-    print(f"Added {i} new Youtube URLs to queue")
-    return all_messages
 
 async def producer(db):
     """Producer that fetches URLs and adds them to the queue"""
@@ -144,29 +76,10 @@ async def producer(db):
 
         await asyncio.sleep(60)
 
-def move_to_status(db, id, status):
-    try:
-        # Find the item by URL and update its status
-        item = db.episodes.find_one({'_id': id})
-        if not item:
-            raise Exception(f"Can not find episode: ")
-        item['status'] = status
-        db.episodes.upsert(item)
-    except Exception as e:
-        print(f"Error updating status for {id}: {e}")
-
-def move_to_processing(db, id):
-    move_to_status(db, id, 'processing')
-
-def move_to_done(db, id):
-    move_to_status(db, id, 'done')
-
-def move_to_error(db, id):
-    move_to_status(db, id, 'error')
-
 async def sqs_consumer(name, db, sqs, queue_url):
     print(f"Starting sqs consumer {name}...")
     while True:
+        processing_id = None
         try:
             response = sqs.receive_message(
                 QueueUrl=queue_url,
@@ -181,7 +94,14 @@ async def sqs_consumer(name, db, sqs, queue_url):
             else:
                 print(message['Body'])
                 item = json.loads(message['Body'])
-                move_to_processing(db, item["_id"])
+                episode = db.get(item["_id"])
+                if episode is None:
+                    raise LookupError(f"Episode {item['_id']} is missing from the queue")
+                if episode["status"] == "done":
+                    sqs.delete_message(QueueUrl=queue_url, ReceiptHandle=message["ReceiptHandle"])
+                    continue
+                db.set_status(item["_id"], "processing")
+                processing_id = item["_id"]
                 print(f"Consumer {name}: Processing message {item}")
                 try:
                     show_notes = ''
@@ -190,7 +110,6 @@ async def sqs_consumer(name, db, sqs, queue_url):
 
                     result = await get_caption_worker(item["url"], show_notes, item['type'])
                     if result == None:
-                        move_to_error(db, item["_id"])
                         raise Exception(f"Failed to fetch raw transcription for {item['url']}")
 
                     formatted_result = await format_transcript(result) # format using llm
@@ -205,11 +124,12 @@ async def sqs_consumer(name, db, sqs, queue_url):
                     )
                     print(f"Consumer {name}: Created PR: {pr_url}")
 
+                    db.set_status(processing_id, "done")
+                    processing_id = None
                     sqs.delete_message(
                         QueueUrl=queue_url,
                         ReceiptHandle=message['ReceiptHandle']
                     )
-                    move_to_done(db, item["_id"])
                 except ParseError as e:
                     print(f"Excepted no element found in xml.etree.ElementTree.ParseError: {e}")
                     print(f"SQS message will be visibile after 30 minutes.")
@@ -217,8 +137,8 @@ async def sqs_consumer(name, db, sqs, queue_url):
         except Exception as e:
             print(f"Consumer {name}: error: {e}")
             traceback.print_exc()
-            if 'item' in dir() and item:
-                move_to_error(db, item["_id"])
+            if processing_id is not None:
+                db.set_status(processing_id, "error")
             await asyncio.sleep(60)
 
 
@@ -228,15 +148,14 @@ async def local_consumer(name, db):
 
     while True:
         try:
-            # FIXME: Race condition: the other consumer could grab the same item
-            item = db.episodes.find_one({ 'status': 'queued' })
-            if not item:
+            claim = db.claim_next()
+            if claim is None:
                 print(f"Consumer {name}: No URLs to process, sleeping...")
                 await asyncio.sleep(60)
                 continue
 
-            move_to_processing(db, item["_id"])
-
+            item, claim_token = claim
+            episode_id = item["_id"]
             print(f"Consumer {name}: Processing {item['url']}")
             try:
                 if "transcript" not in item:
@@ -246,22 +165,20 @@ async def local_consumer(name, db):
 
                     result = await get_caption_worker(item["url"], show_notes, item['type'])
                     if result == None:
-                        move_to_error(db, item["_id"])
                         raise Exception(f"Failed to fetch raw transcription for {item['url']}")
-                    else:
-                        # Update the item with transcript
-                        item = db.episodes.find_one({'url': item['url']})
-                        item['transcript'] = result
-                        db.episodes.upsert(item)
-                        print(f"Consumer: Completed fetching raw transcription {item['url']}: {result[0:20]}")
+                    if not db.save_transcript(episode_id, result, claim_token):
+                        continue
+                    print(f"Consumer: Completed fetching raw transcription {item['url']}: {result[0:20]}")
                 else:
                     result = item["transcript"]
-                    print(f"Consumer {name}: Fetching raw transcription from json {item['url']}: {result[0:20]}")
+                    print(f"Consumer {name}: Fetching saved raw transcription {item['url']}: {result[0:20]}")
 
                 formatted_result = await format_transcript(result) # format using llm
                 blog_post = ''
                 toc = extract_toc(formatted_result) # extract table of contents
                 faq = extract_faq(formatted_result) # extract faq
+                if not db.owns_claim(episode_id, claim_token):
+                    continue
                 pr_url, _ = create_branch_and_pr(
                     item["title"],
                     format_pr_content(item['title'], item['url'], formatted_result, blog_post, toc, faq),
@@ -270,13 +187,16 @@ async def local_consumer(name, db):
                 )
                 print(f"Consumer {name}: Created PR: {pr_url}")
 
-                move_to_done(db, item["_id"])
+                db.set_status(episode_id, "done", claim_token=claim_token)
 
+            except asyncio.CancelledError:
+                db.set_status(episode_id, "queued", claim_token=claim_token)
+                raise
             except Exception as e:
                 print(f"Consumer {name}: Error processing {item['url']}: {e}")
                 traceback.print_exc()
                 # mark error and skip, e.g. yt fail to download subtitle
-                move_to_error(db, item["_id"])
+                db.set_status(episode_id, "error", claim_token=claim_token)
                 await asyncio.sleep(60)
 
         except Exception as e:

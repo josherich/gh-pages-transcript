@@ -4,7 +4,6 @@ import copy
 from typing import Dict, List, Any, Optional, Union, Callable
 from pathlib import Path
 
-from .paths import queue_directory
 from .selector import compile_document_selector
 
 class LocalStorageDb:
@@ -556,11 +555,3 @@ class FindResult:
         except Exception as e:
             if error:
                 error(e)
-
-
-
-def open_episode_db() -> LocalStorageDb:
-    """Open the transcript queue using the shared application paths."""
-    db = LocalStorageDb({"namespace": "transcript_queue", "storage_path": queue_directory()})
-    db.add_collection("episodes")
-    return db

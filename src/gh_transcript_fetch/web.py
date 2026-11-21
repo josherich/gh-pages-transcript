@@ -11,10 +11,10 @@ import boto3
 import uvicorn
 from fasthtml.common import (
     A, B, Body, Beforeware, Button, Card, Container, Div, FastHTML, Form, Head,
-    Hidden, Html, Input, NotStr, RedirectResponse, Script, Span, Textarea, Title, picolink,
+    Hidden, Html, HTTPException, Input, NotStr, RedirectResponse, Script, Span, Textarea, Title, picolink,
 )
 
-from .db import open_episode_db
+from .episode_queue import open_episode_db
 from .paths import load_session_key
 from .worker import pull_history
 from .youtube import authenticate_youtube_from_code, get_youtube_playlist_videos
@@ -40,9 +40,6 @@ def create_app(mode="local"):
 
     beforeware = Beforeware(check_auth, skip=[r"/login", r"/oauth"])
     app = FastHTML(before=beforeware, secret_key=session_secret, hdrs=(picolink,))
-
-    def insert_episode(ep):
-        db.episodes.upsert(ep)
 
     def login_page(error=''):
         return Html(
@@ -139,17 +136,9 @@ def create_app(mode="local"):
             style="margin-bottom:0.5rem; padding:0.35rem 0.5rem; border:1px solid #ccc; font-size:0.8rem;"
         )
 
-    def load_episodes_filtered(status=None, source=None):
-        selector = {}
-        if status:
-            selector['status'] = status
-        if source:
-            selector['type'] = source
-        return db.episodes.find(selector, {'sort': {'published_date': -1}}).fetch()
-
     @app.get("/")
     def list_episodes(status: str = 'todo', source: str = ''):
-        episodes = load_episodes_filtered(status, source if source else None)
+        episodes = db.list_episodes(status or None, source or None)
         forms = [episode_form(ep['_id'], ep) for ep in episodes]
 
         def status_link(s, label):
@@ -211,15 +200,15 @@ function playEpisodeUrl(url, title) {
 
     @app.post("/update")
     def update_episode(id: str, status: str, url: str):
-        ep = db.episodes.find_one({ '_id': id })
-        ep['status'] = status
+        ep = db.set_status(id, status)
+        if ep is None:
+            raise HTTPException(status_code=404, detail="Episode not found")
 
         if mode == 'sqs' and status == 'queued':
             print(f"Sending message to queue {queue_url}: {ep}")
             response = sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(ep))
             print("SQS MessageId: ", response['MessageId'])
 
-        insert_episode(ep)
         return episode_form(id, ep)
 
     @app.post("/new")
@@ -250,7 +239,7 @@ function playEpisodeUrl(url, title) {
             }]
 
         for ep in episodes:
-            insert_episode(ep)
+            db.add(ep)
         return RedirectResponse('/', status_code=303)
 
     @app.post("/pull")
